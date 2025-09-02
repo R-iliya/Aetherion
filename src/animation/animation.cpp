@@ -9,7 +9,7 @@
 #include "renderer/pose.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 Animation::Animation(const Path& path, ResourceManager& resource_manager, IAllocator& allocator)
@@ -27,7 +27,7 @@ Animation::Animation(const Path& path, ResourceManager& resource_manager, IAlloc
 
 struct AnimationSampler {
 
-	static LUMIX_FORCE_INLINE LocalRigidTransform maskRootMotion(Animation::Flags flags, const LocalRigidTransform& transform) {
+	static AETHERION_FORCE_INLINE LocalRigidTransform maskRootMotion(Animation::Flags flags, const LocalRigidTransform& transform) {
 		LocalRigidTransform root_motion;
 		root_motion.pos = Vec3::ZERO;
 		root_motion.rot = Quat::IDENTITY;
@@ -346,7 +346,7 @@ bool Animation::load(Span<const u8> mem) {
 	}
 
 	if (header.version <= Version::COMPRESSION) {
-		logError(getPath(), ": version too old. Please delete '.lumix' directory and try again");
+		logError(getPath(), ": version too old. Please delete '.Aetherion' directory and try again");
 		return false;
 	}
 
@@ -442,4 +442,4 @@ void Animation::unload()
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion

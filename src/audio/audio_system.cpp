@@ -10,7 +10,7 @@
 #include "engine/world.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -21,11 +21,11 @@ struct ClipManager final : ResourceManager {
 	{}
 
 	Resource* createResource(const Path& path) override {
-		return LUMIX_NEW(m_allocator, Clip)(path, *this, m_allocator);
+		return AETHERION_NEW(m_allocator, Clip)(path, *this, m_allocator);
 	}
 
 	void destroyResource(Resource& resource) override {
-		LUMIX_DELETE(m_allocator, static_cast<Clip*>(&resource));
+		AETHERION_DELETE(m_allocator, static_cast<Clip*>(&resource));
 	}
 
 	IAllocator& m_allocator;
@@ -78,11 +78,11 @@ struct AudioSystemImpl final : AudioSystem {
 };
 
 
-LUMIX_PLUGIN_ENTRY(audio) {
+AETHERION_PLUGIN_ENTRY(audio) {
 	PROFILE_FUNCTION();
-	return LUMIX_NEW(engine.getAllocator(), AudioSystemImpl)(engine);
+	return AETHERION_NEW(engine.getAllocator(), AudioSystemImpl)(engine);
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion
 

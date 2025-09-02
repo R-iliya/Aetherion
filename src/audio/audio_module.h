@@ -6,7 +6,7 @@
 
 
 //@ module AudioModule audio "Audio"
-namespace Lumix {
+namespace Aetherion {
 
 
 struct AudioSystem;
@@ -84,4 +84,4 @@ struct AudioModule : IModule
 };
 
 
-} // namespace Lumix
+} // namespace Aetherion

@@ -9,7 +9,7 @@
 #include "renderer/model.h"
 #include "renderer/pose.h"
 
-namespace Lumix::anim_editor {
+namespace Aetherion::anim_editor {
 
 static constexpr u32 OUTPUT_FLAG = 1 << 31;
 
@@ -427,7 +427,7 @@ void Blend1DNode::deserialize(InputMemoryStream& stream, Controller& ctrl, u32 v
 }
 
 anim::Node* AnimationNode::compile(anim::Controller& controller) {
-	anim::AnimationNode* node = LUMIX_NEW(controller.m_allocator, anim::AnimationNode);
+	anim::AnimationNode* node = AETHERION_NEW(controller.m_allocator, anim::AnimationNode);
 	node->m_flags = m_flags;
 	node->m_slot = m_slot;
 	return node;
@@ -489,7 +489,7 @@ LayersNode::LayersNode(Node* parent, Controller& controller, IAllocator& allocat
 
 LayersNode::~LayersNode() {
 	for (Layer& l : m_layers) {
-		LUMIX_DELETE(m_allocator, l.node);
+		AETHERION_DELETE(m_allocator, l.node);
 	}
 }
 
@@ -538,7 +538,7 @@ bool InputNode::propertiesGUI(Model& skeleton) {
 
 anim::Node* InputNode::compile(anim::Controller& controller) {
 	if (m_input_index >= (u32)m_controller.m_inputs.size()) return nullptr;
-	anim::InputNode* node = LUMIX_NEW(controller.m_allocator, anim::InputNode);
+	anim::InputNode* node = AETHERION_NEW(controller.m_allocator, anim::InputNode);
 	node->m_input_index = m_input_index;
 	return node;
 }
@@ -569,7 +569,7 @@ bool ConstNode::onGUI() {
 }
 
 anim::Node* ConstNode::compile(anim::Controller& controller) {
-	anim::ConstNode* node = LUMIX_NEW(controller.m_allocator, anim::ConstNode);
+	anim::ConstNode* node = AETHERION_NEW(controller.m_allocator, anim::ConstNode);
 	node->m_value = m_value;
 	return node;
 }
@@ -831,7 +831,7 @@ TreeNode::TreeNode(Node* parent, Controller& controller, IAllocator& allocator)
 	: PoseNode(parent, controller, allocator)
 	, m_name("new tree", allocator)
 {
-	LUMIX_NEW(m_allocator, OutputNode)(this, controller, m_allocator);
+	AETHERION_NEW(m_allocator, OutputNode)(this, controller, m_allocator);
 }
 
 anim::Node* TreeNode::compile(anim::Controller& controller) {
@@ -853,7 +853,7 @@ bool TreeNode::onGUI() {
 }
 
 void TreeNode::deserialize(InputMemoryStream& stream, Controller& ctrl, u32 version) {
-	LUMIX_DELETE(m_allocator, m_nodes[0]);
+	AETHERION_DELETE(m_allocator, m_nodes[0]);
 	m_nodes.clear();
 	Node::deserialize(stream, ctrl, version);
 	stream.read(m_name);
@@ -997,7 +997,7 @@ void SwitchNode::serialize(OutputMemoryStream& stream) const {
 
 Node::~Node() {
 	for (Node* node : m_nodes) {
-		LUMIX_DELETE(m_allocator, node);
+		AETHERION_DELETE(m_allocator, node);
 	}
 } 
 
@@ -1081,34 +1081,34 @@ bool Node::nodeGUI() {
 
 Node* Node::create(Node* parent, Type type, Controller& controller, IAllocator& allocator) {
 	switch (type) {
-		case anim::NodeType::ANIMATION: return LUMIX_NEW(allocator, AnimationNode)(parent, controller, allocator);
-		case anim::NodeType::BLEND1D: return LUMIX_NEW(allocator, Blend1DNode)(parent, controller, allocator);
-		case anim::NodeType::BLEND2D: return LUMIX_NEW(allocator, Blend2DNode)(parent, controller, allocator);
-		case anim::NodeType::LAYERS: return LUMIX_NEW(allocator, LayersNode)(parent, controller, allocator);
-		case anim::NodeType::SELECT: return LUMIX_NEW(allocator, SelectNode)(parent, controller, allocator);
-		case anim::NodeType::TREE: return LUMIX_NEW(allocator, TreeNode)(parent, controller, allocator);
-		case anim::NodeType::OUTPUT: return LUMIX_NEW(allocator, OutputNode)(parent, controller, allocator);
-		case anim::NodeType::INPUT: return LUMIX_NEW(allocator, InputNode)(parent, controller, allocator);
-		case anim::NodeType::PLAYRATE: return LUMIX_NEW(allocator, PlayRateNode)(parent, controller, allocator);
-		case anim::NodeType::CONSTANT: return LUMIX_NEW(allocator, ConstNode)(parent, controller, allocator);
-		case anim::NodeType::SWITCH: return LUMIX_NEW(allocator, SwitchNode)(parent, controller, allocator);
-		case anim::NodeType::CMP_EQ: return LUMIX_NEW(allocator, MathNode)(parent, controller, anim::NodeType::CMP_EQ, allocator);
-		case anim::NodeType::CMP_NEQ: return LUMIX_NEW(allocator, MathNode)(parent, controller, anim::NodeType::CMP_NEQ, allocator);
-		case anim::NodeType::CMP_GT: return LUMIX_NEW(allocator, MathNode)(parent, controller, anim::NodeType::CMP_GT, allocator);
-		case anim::NodeType::CMP_GTE: return LUMIX_NEW(allocator, MathNode)(parent, controller, anim::NodeType::CMP_GTE, allocator);
-		case anim::NodeType::CMP_LT: return LUMIX_NEW(allocator, MathNode)(parent, controller, anim::NodeType::CMP_LT, allocator);
-		case anim::NodeType::CMP_LTE: return LUMIX_NEW(allocator, MathNode)(parent, controller, anim::NodeType::CMP_LTE, allocator);
-		case anim::NodeType::AND: return LUMIX_NEW(allocator, MathNode)(parent, controller, anim::NodeType::AND, allocator);
-		case anim::NodeType::OR: return LUMIX_NEW(allocator, MathNode)(parent, controller, anim::NodeType::OR, allocator);
-		case anim::NodeType::ADD: return LUMIX_NEW(allocator, MathNode)(parent, controller, anim::NodeType::ADD, allocator);
-		case anim::NodeType::DIV: return LUMIX_NEW(allocator, MathNode)(parent, controller, anim::NodeType::DIV, allocator);
-		case anim::NodeType::MUL: return LUMIX_NEW(allocator, MathNode)(parent, controller, anim::NodeType::MUL, allocator);
-		case anim::NodeType::SUB: return LUMIX_NEW(allocator, MathNode)(parent, controller, anim::NodeType::SUB, allocator);
-		case anim::NodeType::IK: return LUMIX_NEW(allocator, IKNode)(parent, controller, allocator);
+		case anim::NodeType::ANIMATION: return AETHERION_NEW(allocator, AnimationNode)(parent, controller, allocator);
+		case anim::NodeType::BLEND1D: return AETHERION_NEW(allocator, Blend1DNode)(parent, controller, allocator);
+		case anim::NodeType::BLEND2D: return AETHERION_NEW(allocator, Blend2DNode)(parent, controller, allocator);
+		case anim::NodeType::LAYERS: return AETHERION_NEW(allocator, LayersNode)(parent, controller, allocator);
+		case anim::NodeType::SELECT: return AETHERION_NEW(allocator, SelectNode)(parent, controller, allocator);
+		case anim::NodeType::TREE: return AETHERION_NEW(allocator, TreeNode)(parent, controller, allocator);
+		case anim::NodeType::OUTPUT: return AETHERION_NEW(allocator, OutputNode)(parent, controller, allocator);
+		case anim::NodeType::INPUT: return AETHERION_NEW(allocator, InputNode)(parent, controller, allocator);
+		case anim::NodeType::PLAYRATE: return AETHERION_NEW(allocator, PlayRateNode)(parent, controller, allocator);
+		case anim::NodeType::CONSTANT: return AETHERION_NEW(allocator, ConstNode)(parent, controller, allocator);
+		case anim::NodeType::SWITCH: return AETHERION_NEW(allocator, SwitchNode)(parent, controller, allocator);
+		case anim::NodeType::CMP_EQ: return AETHERION_NEW(allocator, MathNode)(parent, controller, anim::NodeType::CMP_EQ, allocator);
+		case anim::NodeType::CMP_NEQ: return AETHERION_NEW(allocator, MathNode)(parent, controller, anim::NodeType::CMP_NEQ, allocator);
+		case anim::NodeType::CMP_GT: return AETHERION_NEW(allocator, MathNode)(parent, controller, anim::NodeType::CMP_GT, allocator);
+		case anim::NodeType::CMP_GTE: return AETHERION_NEW(allocator, MathNode)(parent, controller, anim::NodeType::CMP_GTE, allocator);
+		case anim::NodeType::CMP_LT: return AETHERION_NEW(allocator, MathNode)(parent, controller, anim::NodeType::CMP_LT, allocator);
+		case anim::NodeType::CMP_LTE: return AETHERION_NEW(allocator, MathNode)(parent, controller, anim::NodeType::CMP_LTE, allocator);
+		case anim::NodeType::AND: return AETHERION_NEW(allocator, MathNode)(parent, controller, anim::NodeType::AND, allocator);
+		case anim::NodeType::OR: return AETHERION_NEW(allocator, MathNode)(parent, controller, anim::NodeType::OR, allocator);
+		case anim::NodeType::ADD: return AETHERION_NEW(allocator, MathNode)(parent, controller, anim::NodeType::ADD, allocator);
+		case anim::NodeType::DIV: return AETHERION_NEW(allocator, MathNode)(parent, controller, anim::NodeType::DIV, allocator);
+		case anim::NodeType::MUL: return AETHERION_NEW(allocator, MathNode)(parent, controller, anim::NodeType::MUL, allocator);
+		case anim::NodeType::SUB: return AETHERION_NEW(allocator, MathNode)(parent, controller, anim::NodeType::SUB, allocator);
+		case anim::NodeType::IK: return AETHERION_NEW(allocator, IKNode)(parent, controller, allocator);
 		case anim::NodeType::NONE: ASSERT(false); return nullptr;
 	}
 	ASSERT(false);
 	return nullptr;
 }
 
-} // namespace Lumix::anim
+} // namespace Aetherion::anim

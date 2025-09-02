@@ -7,18 +7,18 @@
 int main(int argc, char* argv[])
 {
 	SetProcessDPIAware();
-	void* shcore = Lumix::os::loadLibrary("shcore.dll");
+	void* shcore = Aetherion::os::loadLibrary("shcore.dll");
 	if (shcore) {
-		auto setter = (decltype(&SetProcessDpiAwareness))Lumix::os::getLibrarySymbol(shcore, "SetProcessDpiAwareness");
+		auto setter = (decltype(&SetProcessDpiAwareness))Aetherion::os::getLibrarySymbol(shcore, "SetProcessDpiAwareness");
 		if (setter) setter(PROCESS_PER_MONITOR_DPI_AWARE);
 	}
 
-	Lumix::DefaultAllocator allocator;
-	Lumix::debug::Allocator debug_allocator(allocator);
-	auto* app = Lumix::StudioApp::create(debug_allocator);
+	Aetherion::DefaultAllocator allocator;
+	Aetherion::debug::Allocator debug_allocator(allocator);
+	auto* app = Aetherion::StudioApp::create(debug_allocator);
 	app->run();
 	const int exit_code = app->getExitCode();
-	Lumix::StudioApp::destroy(*app);
-	if(shcore) Lumix::os::unloadLibrary(shcore);
+	Aetherion::StudioApp::destroy(*app);
+	if(shcore) Aetherion::os::unloadLibrary(shcore);
 	return exit_code;
 }

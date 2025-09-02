@@ -22,7 +22,7 @@
 #include "renderer/render_module.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 struct Animation;
@@ -847,22 +847,22 @@ UniquePtr<AnimationModule> AnimationModule::create(Engine& engine, ISystem& syst
 }
 
 void AnimationModule::reflect(Engine& engine) {
-	LUMIX_MODULE(AnimationModuleImpl, "animation")
-		.LUMIX_CMP(PropertyAnimator, "property_animator", "Animation / Property animator")
-			.LUMIX_PROP(PropertyAnimatorAnimation, "Animation").resourceAttribute(PropertyAnimation::TYPE)
+	AETHERION_MODULE(AnimationModuleImpl, "animation")
+		.AETHERION_CMP(PropertyAnimator, "property_animator", "Animation / Property animator")
+			.AETHERION_PROP(PropertyAnimatorAnimation, "Animation").resourceAttribute(PropertyAnimation::TYPE)
 			.prop<&AnimationModule::isPropertyAnimatorEnabled, &AnimationModule::enablePropertyAnimator>("Enabled")
 			.prop<&AnimationModule::isPropertyAnimatorLooped, &AnimationModule::setPropertyAnimatorLooped>("Looped")
-		.LUMIX_CMP(Animator, "animator", "Animation / Animator")
+		.AETHERION_CMP(Animator, "animator", "Animation / Animator")
 			.function<(void (AnimationModule::*)(EntityRef, u32, float))&AnimationModule::setAnimatorInput>("setFloatInput", "AnimationModule::setAnimatorInput")
 			.function<(void (AnimationModule::*)(EntityRef, u32, bool))&AnimationModule::setAnimatorInput>("setBoolInput", "AnimationModule::setAnimatorInput")
 			.function<(void (AnimationModule::*)(EntityRef, u32, Vec3))&AnimationModule::setAnimatorInput>("setVec3Input", "AnimationModule::setAnimatorInput")
-			.LUMIX_FUNC_EX(AnimationModule::getAnimatorInputIndex, "getInputIndex")
-			.LUMIX_PROP(AnimatorSource, "Source").resourceAttribute(anim::Controller::TYPE)
-			.LUMIX_PROP(AnimatorDefaultSet, "Default set")
-			.LUMIX_PROP(AnimatorUseRootMotion, "Use root motion")
-		.LUMIX_CMP(Animable, "animable", "Animation / Animable")
-			.LUMIX_PROP(AnimableAnimation, "Animation").resourceAttribute(Animation::TYPE)
+			.AETHERION_FUNC_EX(AnimationModule::getAnimatorInputIndex, "getInputIndex")
+			.AETHERION_PROP(AnimatorSource, "Source").resourceAttribute(anim::Controller::TYPE)
+			.AETHERION_PROP(AnimatorDefaultSet, "Default set")
+			.AETHERION_PROP(AnimatorUseRootMotion, "Use root motion")
+		.AETHERION_CMP(Animable, "animable", "Animation / Animable")
+			.AETHERION_PROP(AnimableAnimation, "Animation").resourceAttribute(Animation::TYPE)
 	;
 }
 
-} // namespace Lumix
+} // namespace Aetherion

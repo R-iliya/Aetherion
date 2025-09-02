@@ -11,7 +11,7 @@
 #include "editor/utils.h"
 
 
-namespace Lumix {
+namespace Aetherion {
 
 struct Model;
 struct Pose;
@@ -293,4 +293,4 @@ struct LayersNode final : PoseNode {
 };
 
 } // namespace anim
-} // namespace Lumix
+} // namespace Aetherion

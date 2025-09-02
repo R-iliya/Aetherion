@@ -23,7 +23,7 @@
 #include "renderer/render_module.h"
 
 
-namespace Lumix::anim_editor {
+namespace Aetherion::anim_editor {
 
 
 Controller::Controller(const Path& path, IAllocator& allocator) 
@@ -34,12 +34,12 @@ Controller::Controller(const Path& path, IAllocator& allocator)
 	, m_bone_masks(allocator)
 	, m_path(path)
 {
-	m_root = LUMIX_NEW(m_allocator, TreeNode)(nullptr, *this, m_allocator);
+	m_root = AETHERION_NEW(m_allocator, TreeNode)(nullptr, *this, m_allocator);
 	m_root->m_name = "Root";
 }
 
 Controller::~Controller() {
-	LUMIX_DELETE(m_allocator, m_root);
+	AETHERION_DELETE(m_allocator, m_root);
 }
 
 void Controller::clear() {
@@ -47,7 +47,7 @@ void Controller::clear() {
 	m_animation_slots.clear();
 	m_bone_masks.clear();
 	m_inputs.clear();
-	LUMIX_DELETE(m_allocator, m_root);
+	AETHERION_DELETE(m_allocator, m_root);
 	m_root = nullptr;
 }
 
@@ -136,9 +136,9 @@ bool Controller::deserialize(InputMemoryStream& stream) {
 		entry.animation = stream.readString();
 	}
 
-	LUMIX_DELETE(m_allocator, m_root);
+	AETHERION_DELETE(m_allocator, m_root);
 
-	m_root = LUMIX_NEW(m_allocator, TreeNode)(nullptr, *this, m_allocator);
+	m_root = AETHERION_NEW(m_allocator, TreeNode)(nullptr, *this, m_allocator);
 	m_root->m_name = "Root";
 	m_root->deserialize(stream, *this, (u32)header.version);
 	OutputMemoryStream blob(m_allocator);
@@ -722,7 +722,7 @@ struct ControllerEditorImpl : ControllerEditor, AssetBrowser::IPlugin, AssetComp
 				Node* n = m_current_node->m_nodes[i];
 				if (n->m_selected) {
 					m_current_node->m_links.eraseItems([&](const NodeEditorLink& link){ return link.getFromNode() == n->m_id || link.getToNode() == n->m_id; });
-					LUMIX_DELETE(m_allocator, n);
+					AETHERION_DELETE(m_allocator, n);
 					m_current_node->m_nodes.swapAndPop(i);
 				}
 			}
@@ -1227,4 +1227,4 @@ UniquePtr<ControllerEditor> ControllerEditor::create(StudioApp& app) {
 	return UniquePtr<ControllerEditorImpl>::create(app.getAllocator(), app);
 }
 
-} // namespace Lumix::Anim
+} // namespace Aetherion::Anim

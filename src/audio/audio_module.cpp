@@ -16,7 +16,7 @@
 #include "engine/world.h"
 #include "imgui/IconsFontAwesome5.h"
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -501,24 +501,24 @@ UniquePtr<AudioModule> AudioModule::createInstance(AudioSystem& system,
 }
 
 void AudioModule::reflect(Engine& engine) {
-	LUMIX_MODULE(AudioModuleImpl, "audio")
-		.LUMIX_FUNC(setMasterVolume)
+	AETHERION_MODULE(AudioModuleImpl, "audio")
+		.AETHERION_FUNC(setMasterVolume)
 		.function<(SoundHandle (AudioModule::*)(EntityRef, const Path&, bool))&AudioModule::play>("play", "AudioModule::play")
-		.LUMIX_FUNC(stop)
-		.LUMIX_FUNC(isEnd)
-		.LUMIX_FUNC(setFrequency)
-		.LUMIX_FUNC(setVolume)
-		.LUMIX_FUNC(setEcho)
-		.LUMIX_CMP(AmbientSound, "ambient_sound", "Audio / Ambient sound")
-			.LUMIX_FUNC_EX(AudioModule::pauseAmbientSound, "pause")
-			.LUMIX_FUNC_EX(AudioModule::resumeAmbientSound, "resume")
+		.AETHERION_FUNC(stop)
+		.AETHERION_FUNC(isEnd)
+		.AETHERION_FUNC(setFrequency)
+		.AETHERION_FUNC(setVolume)
+		.AETHERION_FUNC(setEcho)
+		.AETHERION_CMP(AmbientSound, "ambient_sound", "Audio / Ambient sound")
+			.AETHERION_FUNC_EX(AudioModule::pauseAmbientSound, "pause")
+			.AETHERION_FUNC_EX(AudioModule::resumeAmbientSound, "resume")
 			.prop<&AudioModule::getAmbientSound3D, &AudioModule::setAmbientSound3D>("3D")
-			.LUMIX_PROP(AmbientSoundClip, "Sound").resourceAttribute(Clip::TYPE)
-		.LUMIX_CMP(Listener, "audio_listener", "Audio / Listener").icon(ICON_FA_HEADPHONES)
-		.LUMIX_CMP(EchoZone, "echo_zone", "Audio / Echo zone")
+			.AETHERION_PROP(AmbientSoundClip, "Sound").resourceAttribute(Clip::TYPE)
+		.AETHERION_CMP(Listener, "audio_listener", "Audio / Listener").icon(ICON_FA_HEADPHONES)
+		.AETHERION_CMP(EchoZone, "echo_zone", "Audio / Echo zone")
 			.var_prop<&AudioModule::getEchoZone, &EchoZone::radius>("Radius").minAttribute(0)
 			.var_prop<&AudioModule::getEchoZone, &EchoZone::delay>("Delay (ms)").minAttribute(0)
-		.LUMIX_CMP(ChorusZone, "chorus_zone", "Audio / Chorus zone")
+		.AETHERION_CMP(ChorusZone, "chorus_zone", "Audio / Chorus zone")
 			.var_prop<&AudioModule::getChorusZone, &ChorusZone::radius>("Radius").minAttribute(0)
 			.var_prop<&AudioModule::getChorusZone, &ChorusZone::delay>("Delay (ms)").minAttribute(0)
 	;
@@ -526,4 +526,4 @@ void AudioModule::reflect(Engine& engine) {
 
 
 
-} // namespace Lumix
+} // namespace Aetherion

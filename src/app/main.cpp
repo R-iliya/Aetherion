@@ -29,7 +29,7 @@
 	#include "stb/stb_image.h"
 #endif
 
-using namespace Lumix;
+using namespace Aetherion;
 
 static const ComponentType ENVIRONMENT_TYPE = reflection::getComponentType("environment");
 
@@ -126,7 +126,7 @@ struct Runner final
 	void loadProject() {
 		FileSystem& fs = m_engine->getFileSystem();
 		OutputMemoryStream data(m_allocator);
-		if (!fs.getContentSync(Path("lumix.prj"), data)) return;
+		if (!fs.getContentSync(Path("Aetherion.prj"), data)) return;
 
 		InputMemoryStream tmp(data);
 		const DeserializeProjectResult res = m_engine->deserializeProject(tmp, m_startup_world);
@@ -155,13 +155,13 @@ struct Runner final
 		if (os::fileExists("main.pak")) {
 			init_data.file_system = FileSystem::createPacked("main.pak", m_allocator);
 		}
-		init_data.log_path = "lumix_app.log";
+		init_data.log_path = "Aetherion_app.log";
 
 		m_engine = Engine::create(static_cast<Engine::InitArgs&&>(init_data), m_allocator);
 		m_imgui.m_engine = m_engine.get();
 
 		os::InitWindowArgs init_window_args;
-		init_window_args.name = "Lumix App";
+		init_window_args.name = "Aetherion App";
 		m_window = os::createWindow(init_window_args);
 		m_engine->setMainWindow(m_window);
 
@@ -336,7 +336,7 @@ int main(int args, char* argv[])
 #include "core/profiler.h"
 #include "renderer/gpu/gpu.h"
 
-using namespace Lumix;
+using namespace Aetherion;
 
 static void logToDebugOutput(LogLevel level, const char* message)
 {

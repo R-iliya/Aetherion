@@ -11,7 +11,7 @@
 #include "engine/world.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 struct Animation;
@@ -27,11 +27,11 @@ struct AnimResourceManager final : ResourceManager
 	{}
 
 	Resource* createResource(const Path& path) override {
-		return LUMIX_NEW(m_allocator, T)(path, *this, m_allocator);
+		return AETHERION_NEW(m_allocator, T)(path, *this, m_allocator);
 	}
 
 	void destroyResource(Resource& resource) override {
-		LUMIX_DELETE(m_allocator, static_cast<T*>(&resource));
+		AETHERION_DELETE(m_allocator, static_cast<T*>(&resource));
 	}
 
 	IAllocator& m_allocator;
@@ -88,8 +88,8 @@ void AnimationSystemImpl::createModules(World& world)
 }
 
 
-LUMIX_PLUGIN_ENTRY(animation) {
+AETHERION_PLUGIN_ENTRY(animation) {
 	PROFILE_FUNCTION();
-	return LUMIX_NEW(engine.getAllocator(), AnimationSystemImpl)(engine);
+	return AETHERION_NEW(engine.getAllocator(), AnimationSystemImpl)(engine);
 }
 }

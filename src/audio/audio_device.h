@@ -5,15 +5,15 @@
 
 
 #ifdef STATIC_PLUGINS
-	#define LUMIX_AUDIO_API
+	#define AETHERION_AUDIO_API
 #elif defined BUILDING_AUDIO
-	#define LUMIX_AUDIO_API LUMIX_LIBRARY_EXPORT
+	#define AETHERION_AUDIO_API AETHERION_LIBRARY_EXPORT
 #else
-	#define LUMIX_AUDIO_API LUMIX_LIBRARY_IMPORT
+	#define AETHERION_AUDIO_API AETHERION_LIBRARY_IMPORT
 #endif
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -25,7 +25,7 @@ struct Path;
 template <typename T> struct UniquePtr;
 
 
-struct LUMIX_AUDIO_API AudioDevice
+struct AETHERION_AUDIO_API AudioDevice
 {
 	enum class BufferFlags {
 		IS3D = 1,
@@ -75,4 +75,4 @@ struct LUMIX_AUDIO_API AudioDevice
 };
 
 
-} // namespace Lumix
+} // namespace Aetherion

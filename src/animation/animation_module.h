@@ -1,13 +1,13 @@
 #pragma once
 
-#include "engine/lumix.h"
+#include "engine/Aetherion.h"
 
 #include "core/allocator.h"
 
 #include "animation/animation.h"
 #include "engine/plugin.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 namespace anim {
 	struct Controller;
@@ -68,4 +68,4 @@ struct AnimationModule : IModule {
 };
 
 
-} // namespace Lumix
+} // namespace Aetherion

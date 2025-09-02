@@ -21,7 +21,7 @@
 #include "engine/world.h"
 
 
-using namespace Lumix;
+using namespace Aetherion;
 
 
 namespace
@@ -245,8 +245,8 @@ struct StudioAppPlugin : StudioApp::IPlugin
 } // anonymous namespace
 
 
-LUMIX_STUDIO_ENTRY(audio) {
+AETHERION_STUDIO_ENTRY(audio) {
 	PROFILE_FUNCTION();
 	IAllocator& allocator = app.getAllocator();
-	return LUMIX_NEW(allocator, StudioAppPlugin)(app);
+	return AETHERION_NEW(allocator, StudioAppPlugin)(app);
 }

@@ -33,7 +33,7 @@
 #include "renderer/editor/world_viewer.h"
 
 
-using namespace Lumix;
+using namespace Aetherion;
 
 
 static const ComponentType ANIMABLE_TYPE = reflection::getComponentType("animable");
@@ -1061,9 +1061,9 @@ struct StudioAppPlugin : StudioApp::IPlugin {
 } // anonymous namespace
 
 
-LUMIX_STUDIO_ENTRY(animation) {
+AETHERION_STUDIO_ENTRY(animation) {
 	PROFILE_FUNCTION();
 	IAllocator& allocator = app.getAllocator();
-	return LUMIX_NEW(allocator, StudioAppPlugin)(app);
+	return AETHERION_NEW(allocator, StudioAppPlugin)(app);
 }
 

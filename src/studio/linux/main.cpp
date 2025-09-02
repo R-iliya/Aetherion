@@ -3,10 +3,10 @@
 
 int main(int argc, char* argv[])
 {
-	Lumix::os::setCommandLine(argc, argv);
-	auto* app = Lumix::StudioApp::create();
+	Aetherion::os::setCommandLine(argc, argv);
+	auto* app = Aetherion::StudioApp::create();
 	app->run();
 	int exit_code = app->getExitCode();
-	Lumix::StudioApp::destroy(*app);
+	Aetherion::StudioApp::destroy(*app);
 	return exit_code;
 }

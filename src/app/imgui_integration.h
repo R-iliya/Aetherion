@@ -1,7 +1,7 @@
 #pragma once
 
 // see ../../docs/app_imgui.md for more info about this file
-// #define LUMIX_APP_IMGUI_INTEGRATION
+// #define AETHERION_APP_IMGUI_INTEGRATION
 
 #include <imgui/imgui.h>
 #include "core/array.h"
@@ -12,9 +12,9 @@
 #include "renderer/gpu/gpu.h"
 #include "renderer/renderer.h"
 
-namespace Lumix {
+namespace Aetherion {
 
-#ifdef LUMIX_APP_IMGUI_INTEGRATION
+#ifdef AETHERION_APP_IMGUI_INTEGRATION
 
 struct ImGuiIntegration {
 	ImGuiIntegration(IAllocator& allocator)

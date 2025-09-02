@@ -2,7 +2,7 @@
 
 #include "editor/studio_app.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 template <typename T> struct UniquePtr;
 
@@ -54,4 +54,4 @@ struct ControllerEditor {
 };
 
 } // namespace anim
-} // namespace Lumix
+} // namespace Aetherion

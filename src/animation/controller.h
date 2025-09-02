@@ -5,7 +5,7 @@
 #include "animation.h"
 #include "engine/resource.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 struct BoneMask;
 struct LocalRigidTransform;
@@ -107,4 +107,4 @@ private:
 };
 
 } // namespace anim
-} // ns Lumix
+} // ns Aetherion

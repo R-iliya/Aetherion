@@ -12,7 +12,7 @@
 #include <alsa/asoundlib.h>
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -283,7 +283,7 @@ struct AudioDeviceImpl : AudioDevice
 		{
 			m_task->m_finished = true;
 			m_task->destroy();
-			LUMIX_DELETE(m_allocator, m_task);
+			AETHERION_DELETE(m_allocator, m_task);
 		}
 		if (m_device) m_api.snd_pcm_close(m_device);
 		if (m_alsa_lib) os::unloadLibrary(m_alsa_lib);
@@ -363,7 +363,7 @@ struct AudioDeviceImpl : AudioDevice
 		logInfo("PCM name: '", m_api.snd_pcm_name(m_device), "'");
 		logInfo("PCM state: '", m_api.snd_pcm_state(m_device), "'");
 
-		m_task = LUMIX_NEW(m_allocator, AudioTask)(*this, m_allocator);
+		m_task = AETHERION_NEW(m_allocator, AudioTask)(*this, m_allocator);
 		m_task->create("AudioTask", true);
 
 		return true;
@@ -527,4 +527,4 @@ UniquePtr<AudioDevice> AudioDevice::create(Engine& engine, IAllocator& allocator
 
 
 
-} // namespace Lumix
+} // namespace Aetherion
