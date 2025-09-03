@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/lumix.h"
+#include "engine/aetherion.h"
 
 #include "core/array.h"
 #include "core/atomic.h"
@@ -13,7 +13,7 @@
 #include "renderer/renderer.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -142,7 +142,7 @@ private:
 struct ResourceManagerHub;
 
 
-struct LUMIX_RENDERER_API ParticleSystem {
+struct AETHERION_RENDERER_API ParticleSystem {
 	struct Channel {
 		alignas(16) float* data = nullptr;
 		u32 name = 0;
@@ -213,4 +213,4 @@ private:
 };
 
 
-} // namespace Lumix
+} // namespace Aetherion

@@ -33,7 +33,7 @@
 #include "terrain.h"
 #include "texture.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 // sort key:
 // bucket 64-56
@@ -455,7 +455,7 @@ struct PipelineImpl final : Pipeline {
 	// float float_value = 0;
 	// u32 sort_key = floatFlip(*(u32*)&float_value);
 	// http://stereopsis.com/radix.html
-	static LUMIX_FORCE_INLINE u32 floatFlip(u32 float_bits_value) {
+	static AETHERION_FORCE_INLINE u32 floatFlip(u32 float_bits_value) {
 		u32 mask = -i32(float_bits_value >> 31) | 0x80000000;
 		return float_bits_value ^ mask;
 	}
@@ -2516,13 +2516,13 @@ struct PipelineImpl final : Pipeline {
 		profiler::pushInt("Count", keys_count);
 		if (keys_count == 0) return;
 		
-		const u64* LUMIX_RESTRICT renderables = view.sorter.values.begin();
-		const u64* LUMIX_RESTRICT sort_keys = view.sorter.keys.begin();
+		const u64* AETHERION_RESTRICT renderables = view.sorter.values.begin();
+		const u64* AETHERION_RESTRICT sort_keys = view.sorter.keys.begin();
 
 		const World& world = m_module->getWorld();
 		const ShiftedFrustum frustum = view.cp.frustum;
-		ModelInstance* LUMIX_RESTRICT model_instances = m_module->getModelInstances().begin();
-		const Transform* LUMIX_RESTRICT transforms = world.getTransforms(); 
+		ModelInstance* AETHERION_RESTRICT model_instances = m_module->getModelInstances().begin();
+		const Transform* AETHERION_RESTRICT transforms = world.getTransforms(); 
 		const DVec3 camera_pos = view.cp.pos;
 		
 		gpu::VertexDecl dyn_instance_decl(gpu::PrimitiveType::NONE);
@@ -2643,7 +2643,7 @@ struct PipelineImpl final : Pipeline {
 						}
 						else {
 							const u32 mesh_idx = u32(renderables[i] >> SORT_KEY_MESH_IDX_SHIFT);
-							ModelInstance* LUMIX_RESTRICT mi = &model_instances[entity.index];
+							ModelInstance* AETHERION_RESTRICT mi = &model_instances[entity.index];
 							const Mesh& mesh = mi->meshes[mesh_idx];
 							const MeshMaterial& mesh_mat = mi->mesh_materials[mesh_idx];
 							const float mesh_lod = mesh.lod;
@@ -2740,7 +2740,7 @@ struct PipelineImpl final : Pipeline {
 					case RenderableTypes::FUR:
 					case RenderableTypes::SKINNED: {
 						const u32 mesh_idx = u32(renderables[i] >> SORT_KEY_MESH_IDX_SHIFT);
-						ModelInstance* LUMIX_RESTRICT mi = &model_instances[entity.index];
+						ModelInstance* AETHERION_RESTRICT mi = &model_instances[entity.index];
 						const Transform& tr = transforms[entity.index];
 						const Vec3 rel_pos = Vec3(tr.pos - camera_pos);
 						const Mesh& mesh = mi->meshes[mesh_idx];
@@ -3366,8 +3366,8 @@ struct PipelineImpl final : Pipeline {
 		jobs::runOnWorkers([&](){
 			PROFILE_BLOCK("create keys");
 			int total = 0;
-			ModelInstance* LUMIX_RESTRICT model_instances = m_module->getModelInstances().begin();
-			const Transform* LUMIX_RESTRICT transforms = m_module->getWorld().getTransforms();
+			ModelInstance* AETHERION_RESTRICT model_instances = m_module->getModelInstances().begin();
+			const Transform* AETHERION_RESTRICT transforms = m_module->getWorld().getTransforms();
 			const DVec3 camera_pos = view.cp.pos;
 			const DVec3 lod_ref_point = m_viewport.pos;
 			Sorter::Inserter inserter(view.sorter);
@@ -3380,7 +3380,7 @@ struct PipelineImpl final : Pipeline {
 				const CullResult* page = iterator.next();
 				if(!page) break;
 				total += page->header.count;
-				const EntityRef* LUMIX_RESTRICT renderables = page->entities;
+				const EntityRef* AETHERION_RESTRICT renderables = page->entities;
 				const RenderableTypes type = (RenderableTypes)page->header.type;
 				const u64 type_mask = (u64)type << 32;
 				
@@ -3825,5 +3825,5 @@ UniquePtr<Pipeline> Pipeline::create(Renderer& renderer, PipelineType type)
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion
 

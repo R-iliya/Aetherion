@@ -14,7 +14,7 @@
 #include "gpu/gpu.h"
 
 
-namespace Lumix {
+namespace Aetherion {
 
 struct Material;
 struct Mesh;
@@ -41,7 +41,7 @@ enum class AttributeSemantic : u8 {
 	NONE = 0xff
 };
 
-struct LUMIX_RENDERER_API RayCastModelHit {
+struct AETHERION_RENDERER_API RayCastModelHit {
 	bool is_hit;
 	float t;
 	DVec3 origin;
@@ -66,7 +66,7 @@ struct MeshMaterial {
 	Flags flags;
 };
 
-struct LUMIX_RENDERER_API Mesh {
+struct AETHERION_RENDERER_API Mesh {
 	struct Skin {
 		Vec4 weights;
 		i16 indices[4];
@@ -122,7 +122,7 @@ struct LODMeshIndices
 };
 
 
-struct LUMIX_RENDERER_API Model final : Resource
+struct AETHERION_RENDERER_API Model final : Resource
 {
 public:
 	using BoneMap = HashMap<BoneNameHash, int>;
@@ -232,4 +232,4 @@ private:
 };
 
 
-} // namespace Lumix
+} // namespace Aetherion

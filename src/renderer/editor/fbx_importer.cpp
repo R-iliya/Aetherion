@@ -35,7 +35,7 @@
 #include "renderer/renderer.h"
 #include "renderer/shader.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 namespace {
 
@@ -117,10 +117,10 @@ struct FBXImporter : ModelImporter {
 		return false;
 	}
 
-	static Vec3 toLumixVec3(const ofbx::DVec3& v) { return {(float)v.x, (float)v.y, (float)v.z}; }
-	static Vec3 toLumixVec3(const ofbx::FVec3& v) { return {(float)v.x, (float)v.y, (float)v.z}; }
+	static Vec3 toAetherionVec3(const ofbx::DVec3& v) { return {(float)v.x, (float)v.y, (float)v.z}; }
+	static Vec3 toAetherionVec3(const ofbx::FVec3& v) { return {(float)v.x, (float)v.y, (float)v.z}; }
 
-	static Matrix toLumix(const ofbx::DMatrix& mtx) {
+	static Matrix toAetherion(const ofbx::DMatrix& mtx) {
 		Matrix res;
 		for (int i = 0; i < 16; ++i) (&res.columns[0].x)[i] = (float)mtx.m[i];
 		return res;
@@ -567,7 +567,7 @@ struct FBXImporter : ModelImporter {
 		for (Bone& bone : m_bones) {
 			const ofbx::Object* node = (const ofbx::Object*)bone.id;
 			const ofbx::Mesh* mesh = getAnyMeshFromBone(node, i32(&bone - m_bones.begin()));
-			Matrix tr = toLumix(getBindPoseMatrix(mesh, node));
+			Matrix tr = toAetherion(getBindPoseMatrix(mesh, node));
 			tr.normalizeScale(); // TODO why?
 			tr.setTranslation(tr.getTranslation() * m_scene_scale);
 			bone.bind_pose_matrix = fixOrientation(tr);
@@ -575,7 +575,7 @@ struct FBXImporter : ModelImporter {
 		}
 	}
 	
-	LUMIX_FORCE_INLINE Quat fixOrientation(const Quat& v) const {
+	AETHERION_FORCE_INLINE Quat fixOrientation(const Quat& v) const {
 		switch (m_orientation) {
 			case Orientation::Y_UP: return v;
 			case Orientation::Z_UP: return Quat(v.x, v.z, -v.y, v.w);
@@ -587,7 +587,7 @@ struct FBXImporter : ModelImporter {
 		return Quat(v.x, v.y, v.z, v.w);
 	}
 
-	LUMIX_FORCE_INLINE Vec3 fixOrientation(const Vec3& v) const {
+	AETHERION_FORCE_INLINE Vec3 fixOrientation(const Vec3& v) const {
 		switch (m_orientation) {
 			case Orientation::Y_UP: return v;
 			case Orientation::Z_UP: return Vec3(v.x, v.z, -v.y);
@@ -599,7 +599,7 @@ struct FBXImporter : ModelImporter {
 		return v;
 	}
 
-	LUMIX_FORCE_INLINE Matrix fixOrientation(const Matrix& m) const {
+	AETHERION_FORCE_INLINE Matrix fixOrientation(const Matrix& m) const {
 		switch (m_orientation) {
 			case Orientation::Y_UP: return m;
 			case Orientation::Z_UP:{
@@ -621,8 +621,8 @@ struct FBXImporter : ModelImporter {
 		return m;
 	}
 
-	LUMIX_FORCE_INLINE u32 getPackedVec3(ofbx::Vec3 vec) const {
-		Vec3 v = toLumixVec3(vec);
+	AETHERION_FORCE_INLINE u32 getPackedVec3(ofbx::Vec3 vec) const {
+		Vec3 v = toAetherionVec3(vec);
 		return packF4u(v);
 	}
 
@@ -722,7 +722,7 @@ struct FBXImporter : ModelImporter {
 			ASSERT(tri_count == (polygon.vertex_count - 2) * 3);
 			for (u32 i = 0; i < tri_count; ++i) {
 				ofbx::Vec3 cp = positions.get(tri_indices[i]);
-				write(toLumixVec3(cp));
+				write(toAetherionVec3(cp));
 		
 				if (normals.values) write(getPackedVec3(normals.get(tri_indices[i])));
 				else write(u32(0));
@@ -871,7 +871,7 @@ struct FBXImporter : ModelImporter {
 	}
 
 	static void convert(const ofbx::DMatrix& mtx, Vec3& pos, Quat& rot) {
-		Matrix m = toLumix(mtx);
+		Matrix m = toAetherion(mtx);
 		m.normalizeScale();
 		rot = m.getRotation();
 		pos = m.getTranslation();
@@ -1073,7 +1073,7 @@ struct FBXImporter : ModelImporter {
 		m_lights.reserve(m_scene->getLightCount());
 		for (i32 i = 0, c = m_scene->getLightCount(); i < c; ++i) {
 			const ofbx::Light* light = m_scene->getLight(i);
-			const Matrix mtx = toLumix(light->getGlobalTransform());
+			const Matrix mtx = toAetherion(light->getGlobalTransform());
 			// TODO check if meta.scene_scale is applied everywhere
 			Vec3 v = mtx.getTranslation() * meta.scene_scale * m_scene_scale;
 			v = fixOrientation(v);
@@ -1153,8 +1153,8 @@ struct FBXImporter : ModelImporter {
 				}
 
 				Matrix transform_matrix;
-				Matrix geometry_matrix = toLumix(fbx_mesh->getGeometricMatrix());
-				transform_matrix = toLumix(fbx_mesh->getGlobalTransform()) * geometry_matrix;
+				Matrix geometry_matrix = toAetherion(fbx_mesh->getGeometricMatrix());
+				transform_matrix = toAetherion(fbx_mesh->getGlobalTransform()) * geometry_matrix;
 				transform_matrix.multiply3x3(m_scene_scale);
 				transform_matrix.setTranslation(transform_matrix.getTranslation() * m_scene_scale);
 				mesh.matrix = fixOrientation(transform_matrix);
@@ -1424,14 +1424,14 @@ struct FBXImporter : ModelImporter {
 };
 
 ModelImporter* createFBXImporter(StudioApp& app, IAllocator& allocator) {
-	return LUMIX_NEW(allocator, FBXImporter)(app, allocator);
+	return AETHERION_NEW(allocator, FBXImporter)(app, allocator);
 }
 
 void destroyFBXImporter(ModelImporter& importer) {
 	FBXImporter& fbx_importer = static_cast<FBXImporter&>(importer);
 	IAllocator& allocator = fbx_importer.m_allocator;
-	LUMIX_DELETE(allocator, &fbx_importer);
+	AETHERION_DELETE(allocator, &fbx_importer);
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion

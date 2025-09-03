@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Lumix {
+namespace Aetherion {
 
 struct ModelImporter;
 struct StudioApp;
@@ -9,4 +9,4 @@ struct IAllocator;
 ModelImporter* createFBXImporter(StudioApp& app, IAllocator& allocator);
 void destroyFBXImporter(ModelImporter& importer);
 
-} // namespace Lumix
+} // namespace Aetherion

@@ -9,7 +9,7 @@
 
 struct ImVec2;
 
-namespace Lumix {
+namespace Aetherion {
 
 struct Path;
 struct Pipeline;
@@ -17,7 +17,7 @@ struct PlatformData;
 struct RenderModule;
 struct StudioApp;
 
-struct LUMIX_RENDERER_API GameView : StudioApp::GUIPlugin {
+struct AETHERION_RENDERER_API GameView : StudioApp::GUIPlugin {
 	friend struct GUIInterface;
 
 	explicit GameView(StudioApp& app);
@@ -67,4 +67,4 @@ private:
 };
 
 
-} // namespace Lumix
+} // namespace Aetherion

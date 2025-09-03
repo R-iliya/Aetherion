@@ -1,12 +1,12 @@
 #pragma once
 
-#include "engine/lumix.h"
+#include "engine/aetherion.h"
 
 #include "core/hash_map.h"
 #include "core/math.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 template <typename T> struct Array;

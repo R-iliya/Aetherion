@@ -20,7 +20,7 @@
 #include "renderer/texture.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -220,7 +220,7 @@ void GameView::controlsGUI(WorldEditor& editor) {
 		option("Probe clusters", Pipeline::DebugShow::PROBE_CLUSTERS);
 		option("AO", Pipeline::DebugShow::AO);
 		Renderer& renderer = m_pipeline->getRenderer();
-		for (Lumix::RenderPlugin* plugin : renderer.getPlugins()) {
+		for (Aetherion::RenderPlugin* plugin : renderer.getPlugins()) {
 			plugin->debugUI(*m_pipeline);
 		}
 		ImGui::EndPopup();
@@ -344,4 +344,4 @@ void GameView::onGUI()
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion

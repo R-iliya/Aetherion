@@ -11,7 +11,7 @@
 #include "renderer/render_module.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -242,4 +242,4 @@ UniquePtr<EditorIcons> EditorIcons::create(WorldEditor& editor, RenderModule& mo
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion

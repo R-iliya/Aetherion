@@ -16,7 +16,7 @@
 #include "engine/world.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 static const ComponentType TERRAIN_HASH = reflection::getComponentType("terrain");
@@ -565,4 +565,4 @@ void Terrain::onMaterialLoaded(Resource::State, Resource::State new_state, Resou
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion

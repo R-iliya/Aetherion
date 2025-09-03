@@ -10,7 +10,7 @@
 #include "gpu/gpu.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -29,7 +29,7 @@ struct Texture;
 struct World;
 
 
-struct LUMIX_RENDERER_API Terrain {
+struct AETHERION_RENDERER_API Terrain {
 	struct GrassQuad {
 		gpu::BufferHandle instances = gpu::INVALID_BUFFER;
 		u32 instances_count = 0;
@@ -130,4 +130,4 @@ private:
 };
 
 
-} // namespace Lumix
+} // namespace Aetherion

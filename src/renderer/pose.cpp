@@ -5,7 +5,7 @@
 #include "renderer/model.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -85,4 +85,4 @@ void Pose::computeRelative(Model& model)
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion

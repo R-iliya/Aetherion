@@ -5,7 +5,7 @@
 #include "editor/utils.h"
 #include "renderer/voxels.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 struct VoxelizerUI : StudioApp::GUIPlugin {
 	VoxelizerUI(StudioApp& app);
@@ -41,4 +41,4 @@ private:
 	u32 m_ray_count = 16;
 };
 
-} // namespace Lumix
+} // namespace Aetherion

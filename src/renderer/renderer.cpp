@@ -30,7 +30,7 @@
 #include "renderer/terrain.h"
 #include "renderer/texture.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 static const ComponentType MODEL_INSTANCE_TYPE = reflection::getComponentType("model_instance");
 
@@ -56,7 +56,7 @@ struct Renderbuffer {
 		TO_REMOVE
 	};
 	
-	#ifdef LUMIX_DEBUG
+	#ifdef AETHERION_DEBUG
 		StaticString<32> debug_name;
 	#endif
 	gpu::TextureHandle handle;
@@ -194,13 +194,13 @@ struct RenderResourceManager : ResourceManager
 
 	Resource* createResource(const Path& path) override
 	{
-		return LUMIX_NEW(m_allocator, T)(path, *this, m_renderer, m_allocator);
+		return AETHERION_NEW(m_allocator, T)(path, *this, m_renderer, m_allocator);
 	}
 
 
 	void destroyResource(Resource& resource) override
 	{
-		LUMIX_DELETE(m_allocator, &resource);
+		AETHERION_DELETE(m_allocator, &resource);
 	}
 
 	Renderer& m_renderer;
@@ -427,9 +427,9 @@ struct RendererImpl final : Renderer {
 
 		RenderModule::reflect();
 
-		LUMIX_GLOBAL_FUNC(Model::getBoneCount);
-		LUMIX_GLOBAL_FUNC(Model::getBoneName);
-		LUMIX_GLOBAL_FUNC(Model::getBoneParent);
+		AETHERION_GLOBAL_FUNC(Model::getBoneCount);
+		AETHERION_GLOBAL_FUNC(Model::getBoneName);
+		AETHERION_GLOBAL_FUNC(Model::getBoneParent);
 
 		m_shader_defines.reserve(32);
 
@@ -468,7 +468,7 @@ struct RendererImpl final : Renderer {
 		m_material_manager.destroy();
 		m_shader_manager.destroy();
 		m_font_manager->destroy();
-		LUMIX_DELETE(m_allocator, m_font_manager);
+		AETHERION_DELETE(m_allocator, m_font_manager);
 		
 		frame();
 		frame();
@@ -647,7 +647,7 @@ struct RendererImpl final : Renderer {
 		m_material_manager.create(Material::TYPE, manager);
 		m_particle_emitter_manager.create(ParticleSystemResource::TYPE, manager);
 		m_shader_manager.create(Shader::TYPE, manager);
-		m_font_manager = LUMIX_NEW(m_allocator, FontManager)(*this, m_allocator);
+		m_font_manager = AETHERION_NEW(m_allocator, FontManager)(*this, m_allocator);
 		m_font_manager->create(FontResource::TYPE, manager);
 		m_layers.emplace("default");
 
@@ -731,7 +731,7 @@ struct RendererImpl final : Renderer {
 			if (rb.flags != desc.flags) continue;
 
 			rb.state = Renderbuffer::ACTIVE;
-			#ifdef LUMIX_DEBUG
+			#ifdef AETHERION_DEBUG
 				rb.debug_name = desc.debug_name;
 			#endif
 			StaticString<128> name(desc.debug_name, " ", u32(&rb - m_renderbuffers.begin()));
@@ -747,7 +747,7 @@ struct RendererImpl final : Renderer {
 			rb.flags = desc.flags;
 			rb.format = desc.format;
 			rb.size = desc.size;
-			#ifdef LUMIX_DEBUG
+			#ifdef AETHERION_DEBUG
 				rb.debug_name = desc.debug_name;
 			#endif
 			return RenderBufferHandle(u32(&rb - m_renderbuffers.begin()));
@@ -759,7 +759,7 @@ struct RendererImpl final : Renderer {
 		rb.flags = desc.flags;
 		rb.format = desc.format;
 		rb.size = desc.size;
-		#ifdef LUMIX_DEBUG		
+		#ifdef AETHERION_DEBUG		
 			rb.debug_name = desc.debug_name;
 		#endif
 		return RenderBufferHandle(m_renderbuffers.size() - 1);
@@ -1397,13 +1397,13 @@ FrameData::FrameData(struct RendererImpl& renderer, IAllocator& allocator, PageA
 	jobs::turnRed(&can_setup);
 }
 
-LUMIX_PLUGIN_ENTRY(renderer) {
+AETHERION_PLUGIN_ENTRY(renderer) {
 	PROFILE_FUNCTION();
-	return LUMIX_NEW(engine.getAllocator(), RendererImpl)(engine);
+	return AETHERION_NEW(engine.getAllocator(), RendererImpl)(engine);
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion
 
 
 

@@ -9,7 +9,7 @@
 #include "texture.h"
 #include <imgui/imgui.h>
 
-namespace Lumix {
+namespace Aetherion {
 
 struct Atmo : public RenderPlugin {
 	Renderer& m_renderer;

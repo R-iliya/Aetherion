@@ -1,4 +1,4 @@
-#include "engine/lumix.h"
+#include "engine/aetherion.h"
 
 #include "core/array.h"
 #include "core/crt.h"
@@ -18,7 +18,7 @@
 #include "renderer/renderer.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 static LocalRigidTransform invert(const LocalRigidTransform& tr)
@@ -625,4 +625,4 @@ void Model::unload()
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion

@@ -33,7 +33,7 @@
 #include "stb/stb_image.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -672,12 +672,12 @@ TerrainEditor::~TerrainEditor()
 	if (m_brush_texture)
 	{
 		m_brush_texture->destroy();
-		LUMIX_DELETE(m_app.getAllocator(), m_brush_texture);
+		AETHERION_DELETE(m_app.getAllocator(), m_brush_texture);
 	}
 	m_app.removePlugin(*this);
 	
 	Engine& engine = m_app.getEngine();
-	Lumix::ISystem* system = engine.getSystemManager().getSystem("renderer");
+	Aetherion::ISystem* system = engine.getSystemManager().getSystem("renderer");
 	Renderer& renderer = *static_cast<Renderer*>(system);
 	DrawStream& stream = renderer.getDrawStream();
 	for (gpu::TextureHandle t : m_layer_views) stream.destroy(t);
@@ -1334,7 +1334,7 @@ static void thumbnail(gpu::TextureHandle texture, float size, bool selected) {
 
 Renderer& TerrainEditor::getRenderer() {
 	Engine& engine = m_app.getEngine();
-	Lumix::ISystem* system = engine.getSystemManager().getSystem("renderer");
+	Aetherion::ISystem* system = engine.getSystemManager().getSystem("renderer");
 	return *static_cast<Renderer*>(system);
 }
 
@@ -1355,7 +1355,7 @@ void TerrainEditor::layerGUI(ComponentUID cmp) {
 		if (ImGuiEx::ToolbarButton(m_app.getBigIconFont(), ICON_FA_TIMES, ImGui::GetStyle().Colors[ImGuiCol_Text], "Clear brush mask"))
 		{
 			m_brush_texture->destroy();
-			LUMIX_DELETE(m_app.getAllocator(), m_brush_texture);
+			AETHERION_DELETE(m_app.getAllocator(), m_brush_texture);
 			m_brush_mask.clear();
 			m_brush_texture = nullptr;
 		}
@@ -1390,10 +1390,10 @@ void TerrainEditor::layerGUI(ComponentUID cmp) {
 				if (m_brush_texture)
 				{
 					m_brush_texture->destroy();
-					LUMIX_DELETE(m_app.getAllocator(), m_brush_texture);
+					AETHERION_DELETE(m_app.getAllocator(), m_brush_texture);
 				}
 
-				m_brush_texture = LUMIX_NEW(m_app.getAllocator(), Texture)(
+				m_brush_texture = AETHERION_NEW(m_app.getAllocator(), Texture)(
 					Path("brush_texture"), *rm.get(Texture::TYPE), getRenderer(), m_app.getAllocator());
 				m_brush_texture->create(image_width, image_height, gpu::TextureFormat::RGBA8, data, image_width * image_height * 4);
 
@@ -2036,4 +2036,4 @@ void TerrainEditor::paint(const DVec3& hit_pos, ActionType action_type, bool old
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion

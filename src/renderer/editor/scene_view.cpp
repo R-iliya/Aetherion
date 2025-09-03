@@ -37,7 +37,7 @@
 #include "renderer/shader.h"
 #include "scene_view.h"
 
-namespace Lumix
+namespace Aetherion
 {
 
 static const ComponentType MODEL_INSTANCE_TYPE = reflection::getComponentType("model_instance");
@@ -610,14 +610,14 @@ void SceneView::setViewportRotation(const Quat& rot) {
 }
 
 static volatile bool once = [](){
-	LUMIX_GLOBAL_FUNC(SceneView::getViewportRotation);
-	LUMIX_GLOBAL_FUNC(SceneView::setViewportRotation);
-	LUMIX_GLOBAL_FUNC(SceneView::getViewportPosition);
-	LUMIX_GLOBAL_FUNC(SceneView::setViewportPosition);
+	AETHERION_GLOBAL_FUNC(SceneView::getViewportRotation);
+	AETHERION_GLOBAL_FUNC(SceneView::setViewportRotation);
+	AETHERION_GLOBAL_FUNC(SceneView::getViewportPosition);
+	AETHERION_GLOBAL_FUNC(SceneView::setViewportPosition);
 	return true;
 }();
 
-struct SceneView::RenderPlugin : Lumix::RenderPlugin {
+struct SceneView::RenderPlugin : Aetherion::RenderPlugin {
 	RenderPlugin(SceneView& view, Renderer& renderer)
 		: m_scene_view(view)
 	{
@@ -888,7 +888,7 @@ void SceneView::toggleProjection() {
 }
 
 void SceneView::init() {
-	m_view = LUMIX_NEW(m_app.getAllocator(), WorldViewImpl)(*this);
+	m_view = AETHERION_NEW(m_app.getAllocator(), WorldViewImpl)(*this);
 	m_editor.setView(m_view);
 
 	Engine& engine = m_app.getEngine();
@@ -910,7 +910,7 @@ SceneView::~SceneView()
 	renderer->removePlugin(*m_render_plugin.get());
 
 	m_editor.setView(nullptr);
-	LUMIX_DELETE(m_app.getAllocator(), m_view);
+	AETHERION_DELETE(m_app.getAllocator(), m_view);
 }
 
 
@@ -1332,7 +1332,7 @@ void SceneView::onToolbar()
 		option("Light clusters", Pipeline::DebugShow::LIGHT_CLUSTERS);
 		option("Probe clusters", Pipeline::DebugShow::PROBE_CLUSTERS);
 		Renderer& renderer = m_pipeline->getRenderer();
-		for (Lumix::RenderPlugin* plugin : renderer.getPlugins()) {
+		for (Aetherion::RenderPlugin* plugin : renderer.getPlugins()) {
 			plugin->debugUI(*m_pipeline);
 		}
 		ImGui::EndPopup();
@@ -1776,4 +1776,4 @@ void SceneView::onGUI() {
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/lumix.h"
+#include "engine/aetherion.h"
 
 #include "core/color.h"
 #include "core/array.h"
@@ -14,7 +14,7 @@
 
 
 //@ module RenderModule renderer "Render"
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -333,7 +333,7 @@ enum class RenderModuleVersion : i32 {
 };
 
 
-struct LUMIX_RENDERER_API RenderModule : IModule
+struct AETHERION_RENDERER_API RenderModule : IModule
 {
 	static UniquePtr<RenderModule> createInstance(Renderer& renderer,
 		Engine& engine,

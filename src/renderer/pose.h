@@ -4,7 +4,7 @@
 #include "engine/aetherion.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -15,7 +15,7 @@ struct Quat;
 struct Vec3;
 
 
-struct LUMIX_RENDERER_API Pose
+struct AETHERION_RENDERER_API Pose
 {
 	explicit Pose(IAllocator& allocator);
 	~Pose();
@@ -37,4 +37,4 @@ struct LUMIX_RENDERER_API Pose
 };
 
 
-} // namespace Lumix
+} // namespace Aetherion

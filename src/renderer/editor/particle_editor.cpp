@@ -21,7 +21,7 @@
 #include "renderer/renderer.h"
 #include <imgui/imgui.h>
 
-namespace Lumix {
+namespace Aetherion {
 
 namespace {
 
@@ -303,7 +303,7 @@ struct ParticleEmitterEditorResource {
 	{}
 	
 	~ParticleEmitterEditorResource() {
-		for (Node* node : m_nodes) LUMIX_DELETE(m_allocator, node);
+		for (Node* node : m_nodes) AETHERION_DELETE(m_allocator, node);
 	}
 
 	i32 findChannel(const char* name) const {
@@ -2602,43 +2602,43 @@ struct EmitNode : Node {
 Node* ParticleEmitterEditorResource::addNode(Node::Type type) {
 	Node* node = nullptr;
 	switch(type) {
-		case Node::CMP: node = LUMIX_NEW(m_allocator, CompareNode)(*this); break;
-		case Node::MESH: node = LUMIX_NEW(m_allocator, MeshNode)(*this); break;
-		case Node::SPLINE: node = LUMIX_NEW(m_allocator, SplineNode)(*this); break;
-		case Node::NOISE: node = LUMIX_NEW(m_allocator, NoiseNode)(*this); break;
-		case Node::CACHE: node = LUMIX_NEW(m_allocator, CacheNode)(*this); break;
-		case Node::EMIT_INPUT: node = LUMIX_NEW(m_allocator, EmitInputNode)(*this); break;
-		case Node::EMIT: node = LUMIX_NEW(m_allocator, EmitNode)(*this); break;
-		case Node::GRADIENT_COLOR: node = LUMIX_NEW(m_allocator, GradientColorNode)(*this); break;
-		case Node::CHANNEL_MASK: node = LUMIX_NEW(m_allocator, ChannelMaskNode)(*this); break;
-		case Node::CURVE: node = LUMIX_NEW(m_allocator, CurveNode)(*this); break;
-		case Node::VEC3: node = LUMIX_NEW(m_allocator, VectorNode<Node::VEC3>)(*this); break;
-		case Node::VEC4: node = LUMIX_NEW(m_allocator, VectorNode<Node::VEC4>)(*this); break;
-		case Node::SELECT: node = LUMIX_NEW(m_allocator, SelectNode)(*this); break;
-		case Node::SET_CHANNEL: node = LUMIX_NEW(m_allocator, SetChannelNode)(*this); break;
-		case Node::FUNCTION_INPUT: node = LUMIX_NEW(m_allocator, FunctionInputNode)(*this); break;
-		case Node::FUNCTION_OUTPUT: node = LUMIX_NEW(m_allocator, FunctionOutputNode)(*this); break;
-		case Node::FUNCTION_CALL: node = LUMIX_NEW(m_allocator, FunctionCallNode)(*this); break;
-		case Node::VEC3_LENGTH: node = LUMIX_NEW(m_allocator, Vec3LengthNode)(*this); break;
-		case Node::OR: node = LUMIX_NEW(m_allocator, LogicOpNode<InstructionType::OR>)(*this); break;
-		case Node::AND: node = LUMIX_NEW(m_allocator, LogicOpNode<InstructionType::AND>)(*this); break;
-		case Node::MADD: node = LUMIX_NEW(m_allocator, MaddNode)(*this); break;
-		case Node::SWITCH: node = LUMIX_NEW(m_allocator, SwitchNode)(*this); break;
-		case Node::RANDOM: node = LUMIX_NEW(m_allocator, RandomNode)(*this); break;
-		case Node::INIT: node = LUMIX_NEW(m_allocator, InitNode)(*this); break;
-		case Node::UPDATE: node = LUMIX_NEW(m_allocator, UpdateNode)(*this); break;
-		case Node::STREAM: node = LUMIX_NEW(m_allocator, StreamNode)(*this); break;
-		case Node::OUTPUT: node = LUMIX_NEW(m_allocator, OutputNode)(*this); break;
-		case Node::PIN: node = LUMIX_NEW(m_allocator, PinNode)(*this); break;
-		case Node::DIV: node = LUMIX_NEW(m_allocator, BinaryOpNode<InstructionType::DIV>)(*this); break;
-		case Node::MOD: node = LUMIX_NEW(m_allocator, BinaryOpNode<InstructionType::MOD>)(*this); break;
-		case Node::MUL: node = LUMIX_NEW(m_allocator, BinaryOpNode<InstructionType::MUL>)(*this); break;
-		case Node::ADD: node = LUMIX_NEW(m_allocator, BinaryOpNode<InstructionType::ADD>)(*this); break;
-		case Node::SUB: node = LUMIX_NEW(m_allocator, BinaryOpNode<InstructionType::SUB>)(*this); break;
-		case Node::CONST: node = LUMIX_NEW(m_allocator, ConstNode)(*this); break;
-		case Node::COS: node = LUMIX_NEW(m_allocator, UnaryFunctionNode<Node::COS>)(*this); break;
-		case Node::SIN: node = LUMIX_NEW(m_allocator, UnaryFunctionNode<Node::SIN>)(*this); break;
-		case Node::NUMBER: node = LUMIX_NEW(m_allocator, LiteralNode)(*this); break;
+		case Node::CMP: node = AETHERION_NEW(m_allocator, CompareNode)(*this); break;
+		case Node::MESH: node = AETHERION_NEW(m_allocator, MeshNode)(*this); break;
+		case Node::SPLINE: node = AETHERION_NEW(m_allocator, SplineNode)(*this); break;
+		case Node::NOISE: node = AETHERION_NEW(m_allocator, NoiseNode)(*this); break;
+		case Node::CACHE: node = AETHERION_NEW(m_allocator, CacheNode)(*this); break;
+		case Node::EMIT_INPUT: node = AETHERION_NEW(m_allocator, EmitInputNode)(*this); break;
+		case Node::EMIT: node = AETHERION_NEW(m_allocator, EmitNode)(*this); break;
+		case Node::GRADIENT_COLOR: node = AETHERION_NEW(m_allocator, GradientColorNode)(*this); break;
+		case Node::CHANNEL_MASK: node = AETHERION_NEW(m_allocator, ChannelMaskNode)(*this); break;
+		case Node::CURVE: node = AETHERION_NEW(m_allocator, CurveNode)(*this); break;
+		case Node::VEC3: node = AETHERION_NEW(m_allocator, VectorNode<Node::VEC3>)(*this); break;
+		case Node::VEC4: node = AETHERION_NEW(m_allocator, VectorNode<Node::VEC4>)(*this); break;
+		case Node::SELECT: node = AETHERION_NEW(m_allocator, SelectNode)(*this); break;
+		case Node::SET_CHANNEL: node = AETHERION_NEW(m_allocator, SetChannelNode)(*this); break;
+		case Node::FUNCTION_INPUT: node = AETHERION_NEW(m_allocator, FunctionInputNode)(*this); break;
+		case Node::FUNCTION_OUTPUT: node = AETHERION_NEW(m_allocator, FunctionOutputNode)(*this); break;
+		case Node::FUNCTION_CALL: node = AETHERION_NEW(m_allocator, FunctionCallNode)(*this); break;
+		case Node::VEC3_LENGTH: node = AETHERION_NEW(m_allocator, Vec3LengthNode)(*this); break;
+		case Node::OR: node = AETHERION_NEW(m_allocator, LogicOpNode<InstructionType::OR>)(*this); break;
+		case Node::AND: node = AETHERION_NEW(m_allocator, LogicOpNode<InstructionType::AND>)(*this); break;
+		case Node::MADD: node = AETHERION_NEW(m_allocator, MaddNode)(*this); break;
+		case Node::SWITCH: node = AETHERION_NEW(m_allocator, SwitchNode)(*this); break;
+		case Node::RANDOM: node = AETHERION_NEW(m_allocator, RandomNode)(*this); break;
+		case Node::INIT: node = AETHERION_NEW(m_allocator, InitNode)(*this); break;
+		case Node::UPDATE: node = AETHERION_NEW(m_allocator, UpdateNode)(*this); break;
+		case Node::STREAM: node = AETHERION_NEW(m_allocator, StreamNode)(*this); break;
+		case Node::OUTPUT: node = AETHERION_NEW(m_allocator, OutputNode)(*this); break;
+		case Node::PIN: node = AETHERION_NEW(m_allocator, PinNode)(*this); break;
+		case Node::DIV: node = AETHERION_NEW(m_allocator, BinaryOpNode<InstructionType::DIV>)(*this); break;
+		case Node::MOD: node = AETHERION_NEW(m_allocator, BinaryOpNode<InstructionType::MOD>)(*this); break;
+		case Node::MUL: node = AETHERION_NEW(m_allocator, BinaryOpNode<InstructionType::MUL>)(*this); break;
+		case Node::ADD: node = AETHERION_NEW(m_allocator, BinaryOpNode<InstructionType::ADD>)(*this); break;
+		case Node::SUB: node = AETHERION_NEW(m_allocator, BinaryOpNode<InstructionType::SUB>)(*this); break;
+		case Node::CONST: node = AETHERION_NEW(m_allocator, ConstNode)(*this); break;
+		case Node::COS: node = AETHERION_NEW(m_allocator, UnaryFunctionNode<Node::COS>)(*this); break;
+		case Node::SIN: node = AETHERION_NEW(m_allocator, UnaryFunctionNode<Node::SIN>)(*this); break;
+		case Node::NUMBER: node = AETHERION_NEW(m_allocator, LiteralNode)(*this); break;
 		case Node::FREE0: ASSERT(false); break;
 	}
 	m_nodes.push(node);
@@ -2769,7 +2769,7 @@ struct ParticleEditorImpl : ParticleEditor {
 
 			auto getCount = [](const auto& x){
 				u32 c = 0;
-				for (const auto& i : x) c += Lumix::getCount(i.type);
+				for (const auto& i : x) c += Aetherion::getCount(i.type);
 				return c;
 			};
 
@@ -3097,7 +3097,7 @@ struct ParticleEditorWindow : AssetEditorWindow, NodeEditor {
 				m_active_emitter->m_links.eraseItems([&](const NodeEditorLink& link){
 					return link.getFromNode() == n->m_id || link.getToNode() == n->m_id;
 				});
-				LUMIX_DELETE(m_allocator, n);
+				AETHERION_DELETE(m_allocator, n);
 				m_active_emitter->m_nodes.swapAndPop(i);
 			}
 		}
@@ -3118,7 +3118,7 @@ struct ParticleEditorWindow : AssetEditorWindow, NodeEditor {
 					e->m_links.eraseItems([&](const NodeEditorLink& link){
 						return link.getFromNode() == n->m_id || link.getToNode() == n->m_id;
 					});
-					LUMIX_DELETE(m_allocator, n);
+					AETHERION_DELETE(m_allocator, n);
 					e->m_nodes.swapAndPop(i);
 				}
 			}
@@ -3161,7 +3161,7 @@ struct ParticleEditorWindow : AssetEditorWindow, NodeEditor {
 						m_active_emitter->m_links.swapAndPop(j);
 					}
 				}
-				LUMIX_DELETE(m_allocator, n);
+				AETHERION_DELETE(m_allocator, n);
 				m_active_emitter->m_nodes.swapAndPop(i);
 				break;
 			}
@@ -3235,7 +3235,7 @@ struct ParticleEditorWindow : AssetEditorWindow, NodeEditor {
 						m_active_emitter->m_links.eraseItems([&](const NodeEditorLink& link){
 							return link.getFromNode() == n->m_id || link.getToNode() == n->m_id;
 						});
-						LUMIX_DELETE(m_allocator, n);
+						AETHERION_DELETE(m_allocator, n);
 						m_active_emitter->m_nodes.swapAndPop(i);
 					}
 					break;
@@ -3365,7 +3365,7 @@ struct ParticleEditorWindow : AssetEditorWindow, NodeEditor {
 			memcpy(instructions.getMutableData() + editor_emitter->m_update.size() + editor_emitter->m_emit.size(), editor_emitter->m_output.data(), editor_emitter->m_output.size());
 			auto getCount = [](const auto& x){
 				u32 c = 0;
-				for (const auto& i : x) c += Lumix::getCount(i.type);
+				for (const auto& i : x) c += Aetherion::getCount(i.type);
 				return c;
 			};
 			system->getResource()->overrideData(emitter_idx
@@ -3423,7 +3423,7 @@ struct ParticleEditorWindow : AssetEditorWindow, NodeEditor {
 				m_active_emitter->m_links.eraseItems([&](const NodeEditorLink& link){
 					return link.getFromNode() == n->m_id || link.getToNode() == n->m_id;
 				});
-				LUMIX_DELETE(m_allocator, n);
+				AETHERION_DELETE(m_allocator, n);
 				m_active_emitter->m_nodes.swapAndPop(i);
 			}
 		}
@@ -3670,4 +3670,4 @@ UniquePtr<ParticleEditor> ParticleEditor::create(StudioApp& app) {
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion

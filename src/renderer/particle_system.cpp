@@ -19,7 +19,7 @@
 #include "renderer/render_module.h"
 #include "engine/world.h"
 
-namespace Lumix
+namespace Aetherion
 {
 
 using DataStream = ParticleSystemResource::DataStream;
@@ -458,7 +458,7 @@ struct ProcessHelper {
 	float4** reg_mem;
 	float* out_mem = nullptr;
 
-	LUMIX_FORCE_INLINE void readArgs(InputMemoryStream& ip, Stream* s, float4* literals, u32 num_args) {
+	AETHERION_FORCE_INLINE void readArgs(InputMemoryStream& ip, Stream* s, float4* literals, u32 num_args) {
 		for (u32 i = 0; i < num_args; ++i) {
 			const DataStream stream = ip.read<DataStream>();;
 			switch (stream.type) {
@@ -1032,9 +1032,9 @@ void ParticleSystem::applyTransform(const Transform& new_tr) {
 			jobs::forEach(emitter.particles_count, 4096, [&](u32 from, u32 to){
 				PROFILE_BLOCK("to world space");
 				// TODO make sure first 3 channels are position
-				float* LUMIX_RESTRICT x = emitter.channels[0].data;
-				float* LUMIX_RESTRICT y = emitter.channels[1].data;
-				float* LUMIX_RESTRICT z = emitter.channels[2].data;
+				float* AETHERION_RESTRICT x = emitter.channels[0].data;
+				float* AETHERION_RESTRICT y = emitter.channels[1].data;
+				float* AETHERION_RESTRICT z = emitter.channels[2].data;
 				for (u32 i = from; i < to; ++i) {
 					Vec3 p{x[i], y[i], z[i]};
 					p = Vec3(delta_tr.transform(p));
@@ -1220,4 +1220,4 @@ void ParticleSystem::Emitter::fillInstanceData(float* data, PageAllocator& page_
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion

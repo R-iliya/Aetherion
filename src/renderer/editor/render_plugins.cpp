@@ -1,10 +1,10 @@
-#define LUMIX_NO_CUSTOM_CRT
+#define AETHERION_NO_CUSTOM_CRT
 #include <string.h>
-#ifdef LUMIX_BASIS_UNIVERSAL
+#ifdef AETHERION_BASIS_UNIVERSAL
 	#include <encoder/basisu_comp.h>
 #endif
 
-#include "engine/lumix.h"
+#include "engine/aetherion.h"
 
 #include "animation/animation.h"
 #include "animation/animation_module.h"
@@ -68,7 +68,7 @@
 #include <stb/stb_image_resize2.h>
 
 
-using namespace Lumix;
+using namespace Aetherion;
 
 namespace {
 
@@ -1241,12 +1241,12 @@ struct MultiEditor {
 		}
 	}
 
-	LUMIX_FORCE_INLINE void ui(const char* label, bool* value, auto v) { ImGui::Checkbox(label, value); }
-	LUMIX_FORCE_INLINE void ui(const char* label, float* value, auto v) { ImGui::DragFloat(label, value); }
-	LUMIX_FORCE_INLINE void ui(const char* label, ModelMeta::Physics* value, auto v) {
+	AETHERION_FORCE_INLINE void ui(const char* label, bool* value, auto v) { ImGui::Checkbox(label, value); }
+	AETHERION_FORCE_INLINE void ui(const char* label, float* value, auto v) { ImGui::DragFloat(label, value); }
+	AETHERION_FORCE_INLINE void ui(const char* label, ModelMeta::Physics* value, auto v) {
 		ImGui::Combo(label, (int*)value, "None\0Convex\0Triangle mesh\0");
 	}
-	LUMIX_FORCE_INLINE void ui(const char* label, Path* value, auto v) {
+	AETHERION_FORCE_INLINE void ui(const char* label, Path* value, auto v) {
 		m_app.getAssetBrowser().resourceInput(label, *value, v.resource_type);
 	}
 
@@ -1366,7 +1366,7 @@ struct TexturePlugin final : AssetBrowser::IPlugin, AssetCompiler::IPlugin {
 
 		void execute() {
 			const FilePathHash hash(m_in_path.c_str());
-			const Path out_path(".lumix/asset_tiles/", hash, ".lbc");
+			const Path out_path(".aetherion/asset_tiles/", hash, ".lbc");
 			OutputMemoryStream resized_data(m_allocator);
 			resized_data.resize(AssetBrowser::TILE_SIZE * AssetBrowser::TILE_SIZE * 4);
 			FileSystem& fs = m_app.getEngine().getFileSystem();
@@ -1451,7 +1451,7 @@ struct TexturePlugin final : AssetBrowser::IPlugin, AssetCompiler::IPlugin {
 			PROFILE_FUNCTION();
 			TextureTileJob* that = (TextureTileJob*)data;
 			that->execute();
-			LUMIX_DELETE(that->m_allocator, that);
+			AETHERION_DELETE(that->m_allocator, that);
 		}
 
 		StudioApp& m_app;
@@ -1478,7 +1478,7 @@ struct TexturePlugin final : AssetBrowser::IPlugin, AssetCompiler::IPlugin {
 	bool createTile(const char* in_path, const char* out_path, Color tint) {
 		if (!Path::hasExtension(in_path, "raw")) {
 			FileSystem& fs = m_app.getEngine().getFileSystem();
-			TextureTileJob* job = LUMIX_NEW(m_allocator, TextureTileJob)(m_app, fs, m_allocator);
+			TextureTileJob* job = AETHERION_NEW(m_allocator, TextureTileJob)(m_app, fs, m_allocator);
 			job->m_tint = tint;
 			job->m_in_path = in_path;
 			job->m_out_path = out_path;
@@ -1579,7 +1579,7 @@ struct TexturePlugin final : AssetBrowser::IPlugin, AssetCompiler::IPlugin {
 			data = stb_data;
 		}
 
-		#ifdef LUMIX_BASIS_UNIVERSAL
+		#ifdef AETHERION_BASIS_UNIVERSAL
 			dst.write("bsu", 3);
 			u32 flags = meta.srgb ? (u32)Texture::Flags::SRGB : 0;
 			// TODO wrap_mode
@@ -2682,15 +2682,15 @@ struct ModelPlugin final : AssetBrowser::IPlugin, AssetCompiler::IPlugin {
 		}
 
 		if (Path::hasExtension(path, "fab")) {
-			TileData::PrefabJob* job = LUMIX_NEW(m_app.getAllocator(), TileData::PrefabJob)(path);
+			TileData::PrefabJob* job = AETHERION_NEW(m_app.getAllocator(), TileData::PrefabJob)(path);
 			m_tile.queue.push(job);
 		}
 		else if (Path::hasExtension(path, "mat")) {
-			TileData::MaterialJob* job = LUMIX_NEW(m_app.getAllocator(), TileData::MaterialJob)(path);
+			TileData::MaterialJob* job = AETHERION_NEW(m_app.getAllocator(), TileData::MaterialJob)(path);
 			m_tile.queue.push(job);
 		}
 		else if (Path::hasExtension(ResourcePath::getSubresource(path), "ani")) {
-			TileData::AnimationJob* job = LUMIX_NEW(m_app.getAllocator(), TileData::AnimationJob)(path);
+			TileData::AnimationJob* job = AETHERION_NEW(m_app.getAllocator(), TileData::AnimationJob)(path);
 			ModelMeta model_meta(m_app.getAllocator());
 			Path src_path(ResourcePath::getResource(path));
 			OutputMemoryStream blob(m_app.getAllocator());
@@ -2707,11 +2707,11 @@ struct ModelPlugin final : AssetBrowser::IPlugin, AssetCompiler::IPlugin {
 				m_tile.queue.push(job);
 			}
 			else {
-				LUMIX_DELETE(m_app.getAllocator(), job);
+				AETHERION_DELETE(m_app.getAllocator(), job);
 			}
 		}
 		else {
-			TileData::ModelJob* job = LUMIX_NEW(m_app.getAllocator(), TileData::ModelJob)(path);
+			TileData::ModelJob* job = AETHERION_NEW(m_app.getAllocator(), TileData::ModelJob)(path);
 			m_tile.queue.push(job);
 		}
 	}
@@ -2743,7 +2743,7 @@ struct ModelPlugin final : AssetBrowser::IPlugin, AssetCompiler::IPlugin {
 				destroyEntityRecursive(*m_tile.world, (EntityRef)m_tile.entity);
 				Engine& engine = m_app.getEngine();
 				FileSystem& fs = engine.getFileSystem();
-				const Path path(".lumix/asset_tiles/", m_tile.out_path_hash, ".lbc");
+				const Path path(".aetherion/asset_tiles/", m_tile.out_path_hash, ".lbc");
 
 				if (!gpu::isOriginBottomLeft()) {
 					u32* p = (u32*)m_tile.data.getMutableData();
@@ -2773,7 +2773,7 @@ struct ModelPlugin final : AssetBrowser::IPlugin, AssetCompiler::IPlugin {
 			if (job->prepare(*this) && !m_tile.wait_for_readback) {
 				m_tile.queue.erase(i);
 				job->execute(*this);
-				LUMIX_DELETE(m_app.getAllocator(), job);
+				AETHERION_DELETE(m_app.getAllocator(), job);
 				break;
 			}
 		}
@@ -2906,7 +2906,7 @@ struct ModelPlugin final : AssetBrowser::IPlugin, AssetCompiler::IPlugin {
 		if (!texture) return;
 
 		const Path& in_path = material->getTexture(0)->getPath();
-		const Path out_path(".lumix/asset_tiles/", material->getPath().getHash(), ".lbc");
+		const Path out_path(".aetherion/asset_tiles/", material->getPath().getHash(), ".lbc");
 		if (material->getUniformCount() > 0 && material->getUniform(0).name_hash == RuntimeHash("Material color")) {
 			const Vec4 v = *(Vec4*)material->getUniform(0).vec4;
 			Color tint(u8(v.x * 255), u8(v.y * 255), u8(v.z * 255), u8(v.w * 255));
@@ -3579,7 +3579,7 @@ struct EnvironmentProbePlugin final : PropertyGrid::IPlugin {
 		m_probe_jobs.reserve(env_probes.length() + reflection_probes.length());
 		IAllocator& allocator = m_app.getAllocator();
 		for (EntityRef p : env_probes) {
-			ProbeJob* job = LUMIX_NEW(m_app.getAllocator(), ProbeJob)(*this, world, p, allocator);
+			ProbeJob* job = AETHERION_NEW(m_app.getAllocator(), ProbeJob)(*this, world, p, allocator);
 			
 			job->env_probe = module->getEnvironmentProbe(p);
 			job->is_reflection = false;
@@ -3589,7 +3589,7 @@ struct EnvironmentProbePlugin final : PropertyGrid::IPlugin {
 		}
 
 		for (EntityRef p : reflection_probes) {
-			ProbeJob* job = LUMIX_NEW(m_app.getAllocator(), ProbeJob)(*this, world, p, allocator);
+			ProbeJob* job = AETHERION_NEW(m_app.getAllocator(), ProbeJob)(*this, world, p, allocator);
 			
 			job->reflection_probe = module->getReflectionProbe(p);
 			job->is_reflection = true;
@@ -3720,7 +3720,7 @@ struct EnvironmentProbePlugin final : PropertyGrid::IPlugin {
 					plugin->saveCubemap(job->reflection_probe.guid, (const Vec4*)mem.begin(), texture_size, num_mips, roughness_levels);
 					memoryBarrier();
 					job->done = true;
-					LUMIX_DELETE(*allocator, this);
+					AETHERION_DELETE(*allocator, this);
 				}
 				EnvironmentProbePlugin* plugin;
 				IAllocator* allocator;
@@ -3728,7 +3728,7 @@ struct EnvironmentProbePlugin final : PropertyGrid::IPlugin {
 				u32 texture_size;
 			};
 
-			Callback* cb = LUMIX_NEW(m_app.getAllocator(), Callback);
+			Callback* cb = AETHERION_NEW(m_app.getAllocator(), Callback);
 			cb->allocator = &m_app.getAllocator();
 			cb->plugin = this;
 			cb->texture_size = texture_size;
@@ -3743,7 +3743,7 @@ struct EnvironmentProbePlugin final : PropertyGrid::IPlugin {
 					job->sh.compute(Span((Vec4*)mem.begin(), mem.length() / sizeof(Vec4)));
 					memoryBarrier();
 					job->done = true;
-					LUMIX_DELETE(*allocator, this);
+					AETHERION_DELETE(*allocator, this);
 				}
 				EnvironmentProbePlugin* plugin;
 				IAllocator* allocator;
@@ -3751,7 +3751,7 @@ struct EnvironmentProbePlugin final : PropertyGrid::IPlugin {
 				u32 texture_size;
 			};
 
-			Callback* cb = LUMIX_NEW(m_app.getAllocator(), Callback);
+			Callback* cb = AETHERION_NEW(m_app.getAllocator(), Callback);
 			cb->allocator = &m_app.getAllocator();
 			cb->plugin = this;
 			cb->texture_size = texture_size;
@@ -3849,7 +3849,7 @@ struct EnvironmentProbePlugin final : PropertyGrid::IPlugin {
 				}
 
 				IAllocator& allocator = m_app.getAllocator();
-				LUMIX_DELETE(allocator, &job);
+				AETHERION_DELETE(allocator, &job);
 			}
 			if (module) module->reloadReflectionProbes();
 		}
@@ -4746,7 +4746,7 @@ struct RenderInterfaceImpl final : RenderInterface
 			else {
 				t.texture->destroy();
 				IAllocator& allocator = m_app.getAllocator();
-				LUMIX_DELETE(allocator, t.texture);
+				AETHERION_DELETE(allocator, t.texture);
 			}
 		} 
 	}
@@ -4773,7 +4773,7 @@ struct RenderInterfaceImpl final : RenderInterface
 		auto& rm = engine.getResourceManager();
 		auto& allocator = m_app.getAllocator();
 
-		Texture* texture = LUMIX_NEW(allocator, Texture)(Path(name), *rm.get(Texture::TYPE), m_renderer, allocator);
+		Texture* texture = AETHERION_NEW(allocator, Texture)(Path(name), *rm.get(Texture::TYPE), m_renderer, allocator);
 		texture->create(w, h, format, pixels, w * h * 4);
 		m_textures.insert(&texture->handle, {texture, false});
 		return texture->handle;
@@ -4789,7 +4789,7 @@ struct RenderInterfaceImpl final : RenderInterface
 		auto* texture = iter.value().texture;
 		m_textures.erase(iter);
 		texture->destroy();
-		LUMIX_DELETE(allocator, texture);
+		AETHERION_DELETE(allocator, texture);
 	}
 
 
@@ -5339,7 +5339,7 @@ struct StudioAppPlugin : StudioApp::IPlugin
 			m_renderdoc_capture_action.create("Studio", "Capture frame", "Capture frame with RenderDoc", "capture_renderdoc", "", Action::TOOL);
 		}
 
-		AddTerrainComponentPlugin* add_terrain_plugin = LUMIX_NEW(allocator, AddTerrainComponentPlugin)(m_app);
+		AddTerrainComponentPlugin* add_terrain_plugin = AETHERION_NEW(allocator, AddTerrainComponentPlugin)(m_app);
 		m_app.registerComponent(ICON_FA_MAP, "terrain", *add_terrain_plugin);
 
 		AssetCompiler& asset_compiler = m_app.getAssetCompiler();
@@ -5641,7 +5641,7 @@ struct StudioAppPlugin : StudioApp::IPlugin
 
 } // anonymous namespace
 
-namespace Lumix {
+namespace Aetherion {
 
 // ModelPlugin handles only fbx, but other formats
 // can use the same EditorWindow as ModelPlugin
@@ -5656,8 +5656,8 @@ void createModelEditor(const Path& path, StudioApp& app) {
 
 }
 
-LUMIX_STUDIO_ENTRY(renderer) {
+AETHERION_STUDIO_ENTRY(renderer) {
 	PROFILE_FUNCTION();
 	IAllocator& allocator = app.getAllocator();
-	return LUMIX_NEW(allocator, StudioAppPlugin)(app);
+	return AETHERION_NEW(allocator, StudioAppPlugin)(app);
 }

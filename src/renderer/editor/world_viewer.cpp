@@ -11,7 +11,7 @@
 #include "renderer/renderer.h"
 #include "world_viewer.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 static const ComponentType MODEL_INSTANCE_TYPE = reflection::getComponentType("model_instance");
 static const ComponentType ENVIRONMENT_PROBE_TYPE = reflection::getComponentType("environment_probe");

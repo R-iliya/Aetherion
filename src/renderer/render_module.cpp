@@ -32,7 +32,7 @@
 #include "renderer/texture.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 static const ComponentType INSTANCED_MODEL_TYPE = reflection::getComponentType("instanced_model");
@@ -196,7 +196,7 @@ struct RenderModuleImpl final : RenderModule {
 		}
 
 		for (auto* terrain : m_terrains) {
-			LUMIX_DELETE(m_allocator, terrain);
+			AETHERION_DELETE(m_allocator, terrain);
 		}
 
 		for (InstancedModel& im : m_instanced_models) {
@@ -216,7 +216,7 @@ struct RenderModuleImpl final : RenderModule {
 			}
 			
 			if (r.model) r.model->decRefCount();
-			LUMIX_DELETE(m_allocator, r.pose);
+			AETHERION_DELETE(m_allocator, r.pose);
 		}
 		
 		for(auto iter : m_model_entity_map.iterated()) {
@@ -235,7 +235,7 @@ struct RenderModuleImpl final : RenderModule {
 		}
 
 		for (const ReflectionProbe& probe : m_reflection_probes) {
-			LUMIX_DELETE(m_allocator, probe.load_job);
+			AETHERION_DELETE(m_allocator, probe.load_job);
 		}
 
 		m_renderer.getEndFrameDrawStream().destroy(m_reflection_probes_texture);
@@ -872,7 +872,7 @@ struct RenderModuleImpl final : RenderModule {
 			return;
 		}
 		
-		probe.load_job = LUMIX_NEW(m_allocator, ReflectionProbe::LoadJob)(*this, entity, m_allocator);
+		probe.load_job = AETHERION_NEW(m_allocator, ReflectionProbe::LoadJob)(*this, entity, m_allocator);
 		FileSystem::ContentCallback cb = makeDelegate<&ReflectionProbe::LoadJob::callback>(probe.load_job);
 		probe.load_job->m_handle = m_engine.getFileSystem().getContent(path, cb);
 	}
@@ -1214,7 +1214,7 @@ struct RenderModuleImpl final : RenderModule {
 			EntityRef entity;
 			serializer.read(entity);
 			entity = entity_map.get(entity);
-			auto* terrain = LUMIX_NEW(m_allocator, Terrain)(m_renderer, entity, *this, m_allocator);
+			auto* terrain = AETHERION_NEW(m_allocator, Terrain)(m_renderer, entity, *this, m_allocator);
 			terrain->deserialize(entity, serializer, m_world, *this, version);
 			m_terrains.insert(entity, terrain);
 		}
@@ -1265,7 +1265,7 @@ struct RenderModuleImpl final : RenderModule {
 	void destroyReflectionProbe(EntityRef entity)
 	{
 		ReflectionProbe& probe = m_reflection_probes[entity];
-		LUMIX_DELETE(m_allocator, probe.load_job);
+		AETHERION_DELETE(m_allocator, probe.load_job);
 		m_reflection_probes.erase(entity);
 		m_world.onComponentDestroyed(entity, REFLECTION_PROBE_TYPE, this);
 	}
@@ -1430,7 +1430,7 @@ struct RenderModuleImpl final : RenderModule {
 
 	void destroyTerrain(EntityRef entity)
 	{
-		LUMIX_DELETE(m_allocator, m_terrains[entity]);
+		AETHERION_DELETE(m_allocator, m_terrains[entity]);
 		m_terrains.erase(entity);
 		m_world.onComponentDestroyed(entity, TERRAIN_TYPE, this);
 	}
@@ -1470,7 +1470,7 @@ struct RenderModuleImpl final : RenderModule {
 
 	void createTerrain(EntityRef entity)
 	{
-		Terrain* terrain = LUMIX_NEW(m_allocator, Terrain)(m_renderer, entity, *this, m_allocator);
+		Terrain* terrain = AETHERION_NEW(m_allocator, Terrain)(m_renderer, entity, *this, m_allocator);
 		m_terrains.insert(entity, terrain);
 		m_world.onComponentCreated(entity, TERRAIN_TYPE, this);
 	}
@@ -2932,7 +2932,7 @@ struct RenderModuleImpl final : RenderModule {
 		ModelInstance& r = m_model_instances[entity.index];
 		r.meshes = nullptr;
 		r.mesh_count = 0;
-		LUMIX_DELETE(m_allocator, r.pose);
+		AETHERION_DELETE(m_allocator, r.pose);
 		r.pose = nullptr;
 
 		m_culling_system->remove(entity);
@@ -2953,7 +2953,7 @@ struct RenderModuleImpl final : RenderModule {
 		}
 		ASSERT(!r.pose);
 		if (model->getBoneCount() > 0) {
-			r.pose = LUMIX_NEW(m_allocator, Pose)(m_allocator);
+			r.pose = AETHERION_NEW(m_allocator, Pose)(m_allocator);
 			r.pose->resize(model->getBoneCount());
 			model->getPose(*r.pose);
 		}
@@ -3158,7 +3158,7 @@ struct RenderModuleImpl final : RenderModule {
 		
 		r.meshes = nullptr;
 		r.mesh_count = 0;
-		LUMIX_DELETE(m_allocator, r.pose);
+		AETHERION_DELETE(m_allocator, r.pose);
 		r.pose = nullptr;
 		r.dirty = true;
 
@@ -3401,7 +3401,7 @@ void ReflectionProbe::LoadJob::callback(Span<const u8> data, bool success) {
 
 	if (!success) {
 		logError("Failed to load probe ", probe.guid);
-		LUMIX_DELETE(m_allocator, this);
+		AETHERION_DELETE(m_allocator, this);
 		return;
 	}
 
@@ -3426,7 +3426,7 @@ void ReflectionProbe::LoadJob::callback(Span<const u8> data, bool success) {
 		}
 	}
 	stream.freeMemory(mem.data, m_module.m_renderer.getAllocator());
-	LUMIX_DELETE(m_allocator, this);
+	AETHERION_DELETE(m_allocator, this);
 }
 
 void RenderModule::reflect() {
@@ -3477,45 +3477,45 @@ void RenderModule::reflect() {
 	};
 
 	reflection::structure<Ray>("Ray")
-		.LUMIX_MEMBER(Ray::origin, "origin")
-		.LUMIX_MEMBER(Ray::dir, "dir");
+		.AETHERION_MEMBER(Ray::origin, "origin")
+		.AETHERION_MEMBER(Ray::dir, "dir");
 
 	reflection::structure<RayCastModelHit>("RayCastModelHit")
-		.LUMIX_MEMBER(RayCastModelHit::is_hit, "is_hit")
-		.LUMIX_MEMBER(RayCastModelHit::t, "t")
-		.LUMIX_MEMBER(RayCastModelHit::entity, "entity");
+		.AETHERION_MEMBER(RayCastModelHit::is_hit, "is_hit")
+		.AETHERION_MEMBER(RayCastModelHit::t, "t")
+		.AETHERION_MEMBER(RayCastModelHit::entity, "entity");
 
-	LUMIX_MODULE(RenderModuleImpl, "renderer")
-		.LUMIX_FUNC(addDebugCross)
-		.LUMIX_FUNC(addDebugLine)
-		.LUMIX_FUNC(addDebugTriangle)
+	AETHERION_MODULE(RenderModuleImpl, "renderer")
+		.AETHERION_FUNC(addDebugCross)
+		.AETHERION_FUNC(addDebugLine)
+		.AETHERION_FUNC(addDebugTriangle)
 		.function<(RayCastModelHit (RenderModuleImpl::*)(const Ray&, EntityPtr))&RenderModuleImpl::castRay>("castRay", "RenderModuleImpl::castRay")
-		.LUMIX_FUNC(setActiveCamera)
-		.LUMIX_CMP(ProceduralGeometry, "procedural_geom", "Render / Procedural geometry")
-			.LUMIX_PROP(ProceduralGeometryMaterial, "Material").resourceAttribute(Material::TYPE)
-		.LUMIX_CMP(BoneAttachment, "bone_attachment", "Render / Bone attachment")
+		.AETHERION_FUNC(setActiveCamera)
+		.AETHERION_CMP(ProceduralGeometry, "procedural_geom", "Render / Procedural geometry")
+			.AETHERION_PROP(ProceduralGeometryMaterial, "Material").resourceAttribute(Material::TYPE)
+		.AETHERION_CMP(BoneAttachment, "bone_attachment", "Render / Bone attachment")
 			.icon(ICON_FA_BONE)
-			.LUMIX_PROP(BoneAttachmentParent, "Parent")
-			.LUMIX_PROP(BoneAttachmentPosition, "Relative position")
-			.LUMIX_PROP(BoneAttachmentRotation, "Relative rotation").radiansAttribute()
-			.LUMIX_PROP(BoneAttachmentBone, "Bone").attribute<BoneEnum>() 
-		.LUMIX_CMP(Fur, "fur", "Render / Fur")
+			.AETHERION_PROP(BoneAttachmentParent, "Parent")
+			.AETHERION_PROP(BoneAttachmentPosition, "Relative position")
+			.AETHERION_PROP(BoneAttachmentRotation, "Relative rotation").radiansAttribute()
+			.AETHERION_PROP(BoneAttachmentBone, "Bone").attribute<BoneEnum>() 
+		.AETHERION_CMP(Fur, "fur", "Render / Fur")
 			.var_prop<&RenderModule::getFur, &FurComponent::layers>("Layers")
 			.var_prop<&RenderModule::getFur, &FurComponent::scale>("Scale")
 			.var_prop<&RenderModule::getFur, &FurComponent::gravity>("Gravity")
 			.var_prop<&RenderModule::getFur, &FurComponent::enabled>("Enabled")
-		.LUMIX_CMP(EnvironmentProbe, "environment_probe", "Render / Environment probe")
+		.AETHERION_CMP(EnvironmentProbe, "environment_probe", "Render / Environment probe")
 			.prop<&RenderModule::isEnvironmentProbeEnabled, &RenderModule::enableEnvironmentProbe>("Enabled")
 			.var_prop<&RenderModule::getEnvironmentProbe, &EnvironmentProbe::inner_range>("Inner range")
 			.var_prop<&RenderModule::getEnvironmentProbe, &EnvironmentProbe::outer_range>("Outer range")
-		.LUMIX_CMP(ReflectionProbe, "reflection_probe", "Render / Reflection probe")
+		.AETHERION_CMP(ReflectionProbe, "reflection_probe", "Render / Reflection probe")
 			.prop<&RenderModule::isReflectionProbeEnabled, &RenderModule::enableReflectionProbe>("Enabled")
 			.var_prop<&RenderModule::getReflectionProbe, &ReflectionProbe::size>("size")
 			.var_prop<&RenderModule::getReflectionProbe, &ReflectionProbe::half_extents>("half_extents")
-		.LUMIX_CMP(ParticleSystem, "particle_emitter", "Render / Particle emitter")
+		.AETHERION_CMP(ParticleSystem, "particle_emitter", "Render / Particle emitter")
 			.var_prop<&RenderModule::getParticleSystem, &ParticleSystem::m_autodestroy>("Autodestroy")
-			.LUMIX_PROP(ParticleSystemPath, "Source").resourceAttribute(ParticleSystemResource::TYPE)
-		.LUMIX_CMP(Camera, "camera", "Render / Camera")
+			.AETHERION_PROP(ParticleSystemPath, "Source").resourceAttribute(ParticleSystemResource::TYPE)
+		.AETHERION_CMP(Camera, "camera", "Render / Camera")
 			.icon(ICON_FA_CAMERA)
 			.function<&RenderModule::getCameraRay>("getRay", "getCameraRay")
 			.var_prop<&RenderModule::getCamera, &Camera::fov>("FOV").radiansAttribute()
@@ -3537,22 +3537,22 @@ void RenderModule::reflect() {
 			.var_prop<&RenderModule::getCamera, &Camera::bloom_avg_bloom_multiplier>("Bloom average bloom multiplier")
 			.var_prop<&RenderModule::getCamera, &Camera::bloom_exposure>("Bloom exposure")
 
-		.LUMIX_CMP(InstancedModel, "instanced_model", "Render / Instanced model")
-			.LUMIX_PROP(InstancedModelPath, "Model").resourceAttribute(Model::TYPE)
+		.AETHERION_CMP(InstancedModel, "instanced_model", "Render / Instanced model")
+			.AETHERION_PROP(InstancedModelPath, "Model").resourceAttribute(Model::TYPE)
 			.blob_property<&RenderModuleImpl::getInstancedModelBlob, &RenderModuleImpl::setInstancedModelBlob>("Blob")
-		.LUMIX_CMP(ModelInstance, "model_instance", "Render / Mesh")
-			.LUMIX_FUNC_EX(RenderModule::getModelInstanceModel, "getModel")
-			.LUMIX_FUNC_EX(RenderModuleImpl::overrideMaterialVec4, "overrideMaterialVec4")
+		.AETHERION_CMP(ModelInstance, "model_instance", "Render / Mesh")
+			.AETHERION_FUNC_EX(RenderModule::getModelInstanceModel, "getModel")
+			.AETHERION_FUNC_EX(RenderModuleImpl::overrideMaterialVec4, "overrideMaterialVec4")
 			.prop<&RenderModule::isModelInstanceEnabled, &RenderModule::enableModelInstance>("Enabled")
-			.LUMIX_PROP(ModelInstancePath, "Source").resourceAttribute(Model::TYPE)
-		.LUMIX_CMP(Environment, "environment", "Render / Environment")
+			.AETHERION_PROP(ModelInstancePath, "Source").resourceAttribute(Model::TYPE)
+		.AETHERION_CMP(Environment, "environment", "Render / Environment")
 			.icon(ICON_FA_GLOBE)
 			.var_prop<&RenderModule::getEnvironment, &Environment::light_color>("Color").colorAttribute()
 			.var_prop<&RenderModule::getEnvironment, &Environment::direct_intensity>("Intensity").minAttribute(0)
 			.var_prop<&RenderModule::getEnvironment, &Environment::indirect_intensity>("Indirect intensity").minAttribute(0)
-			.LUMIX_PROP(ShadowmapCascades, "Shadow cascades")
-			.LUMIX_PROP(EnvironmentCastShadows, "Cast shadows")
-			.LUMIX_PROP(EnvironmentSkyTexture, "Sky texture").resourceAttribute(Texture::TYPE)
+			.AETHERION_PROP(ShadowmapCascades, "Shadow cascades")
+			.AETHERION_PROP(EnvironmentCastShadows, "Cast shadows")
+			.AETHERION_PROP(EnvironmentSkyTexture, "Sky texture").resourceAttribute(Texture::TYPE)
 			.var_prop<&RenderModule::getEnvironment, &Environment::atmo_enabled>("Atmosphere enabled")
 			.var_prop<&RenderModule::getEnvironment, &Environment::godrays_enabled>("Godrays enabled")
 			.var_prop<&RenderModule::getEnvironment, &Environment::clouds_enabled>("Clouds enabled")
@@ -3571,38 +3571,38 @@ void RenderModule::reflect() {
 			.var_prop<&RenderModule::getEnvironment, &Environment::fog_density>("Fog density").minAttribute(0)
 			.var_prop<&RenderModule::getEnvironment, &Environment::fog_scattering>("Fog scattering").colorAttribute()
 			.var_prop<&RenderModule::getEnvironment, &Environment::fog_top>("Fog top")
-		.LUMIX_CMP(PointLight, "point_light", "Render / Point light")
+		.AETHERION_CMP(PointLight, "point_light", "Render / Point light")
 			.icon(ICON_FA_LIGHTBULB)
-			.LUMIX_PROP(PointLightCastShadows, "Cast shadows")
-			.LUMIX_PROP(PointLightDynamic, "Dynamic")
+			.AETHERION_PROP(PointLightCastShadows, "Cast shadows")
+			.AETHERION_PROP(PointLightDynamic, "Dynamic")
 			.var_prop<&RenderModule::getPointLight, &PointLight::intensity>("Intensity").minAttribute(0)
 			.var_prop<&RenderModule::getPointLight, &PointLight::fov>("FOV").clampAttribute(0, 360).radiansAttribute()
 			.var_prop<&RenderModule::getPointLight, &PointLight::attenuation_param>("Attenuation").clampAttribute(0, 100)
 			.var_prop<&RenderModule::getPointLight, &PointLight::color>("Color").colorAttribute()
-			.LUMIX_PROP(LightRange, "Range").minAttribute(0)
-		.LUMIX_CMP(Decal, "decal", "Render / Decal")
-			.LUMIX_PROP(DecalMaterialPath, "Material").resourceAttribute(Material::TYPE)
-			.LUMIX_PROP(DecalHalfExtents, "Half extents").minAttribute(0)
+			.AETHERION_PROP(LightRange, "Range").minAttribute(0)
+		.AETHERION_CMP(Decal, "decal", "Render / Decal")
+			.AETHERION_PROP(DecalMaterialPath, "Material").resourceAttribute(Material::TYPE)
+			.AETHERION_PROP(DecalHalfExtents, "Half extents").minAttribute(0)
 			.var_prop<&RenderModule::getDecal, &Decal::uv_scale>("UV scale").minAttribute(0)
-		.LUMIX_CMP(CurveDecal, "curve_decal", "Render / Curve decal")
-			.LUMIX_PROP(CurveDecalMaterialPath, "Material").resourceAttribute(Material::TYPE)
-			.LUMIX_PROP(CurveDecalHalfExtents, "Half extents").minAttribute(0)
-			.LUMIX_PROP(CurveDecalUVScale, "UV scale").minAttribute(0)
-			.LUMIX_PROP(CurveDecalBezierP0, "Bezier P0").noUIAttribute()
-			.LUMIX_PROP(CurveDecalBezierP2, "Bezier P2").noUIAttribute()
-		.LUMIX_CMP(Terrain, "terrain", "Render / Terrain")
-			.LUMIX_FUNC_EX(RenderModule::getTerrainNormalAt, "getTerrainNormalAt")
-			.LUMIX_FUNC_EX(RenderModule::getTerrainHeightAt, "getTerrainHeightAt")
-			.LUMIX_PROP(TerrainMaterialPath, "Material").resourceAttribute(Material::TYPE)
-			.LUMIX_PROP(TerrainXZScale, "XZ scale").minAttribute(0)
-			.LUMIX_PROP(TerrainYScale, "Height scale").minAttribute(0)
-			.LUMIX_PROP(TerrainTesselation, "Tesselation").minAttribute(1)
-			.LUMIX_PROP(TerrainBaseGridResolution, "Grid resolution").minAttribute(8)
+		.AETHERION_CMP(CurveDecal, "curve_decal", "Render / Curve decal")
+			.AETHERION_PROP(CurveDecalMaterialPath, "Material").resourceAttribute(Material::TYPE)
+			.AETHERION_PROP(CurveDecalHalfExtents, "Half extents").minAttribute(0)
+			.AETHERION_PROP(CurveDecalUVScale, "UV scale").minAttribute(0)
+			.AETHERION_PROP(CurveDecalBezierP0, "Bezier P0").noUIAttribute()
+			.AETHERION_PROP(CurveDecalBezierP2, "Bezier P2").noUIAttribute()
+		.AETHERION_CMP(Terrain, "terrain", "Render / Terrain")
+			.AETHERION_FUNC_EX(RenderModule::getTerrainNormalAt, "getTerrainNormalAt")
+			.AETHERION_FUNC_EX(RenderModule::getTerrainHeightAt, "getTerrainHeightAt")
+			.AETHERION_PROP(TerrainMaterialPath, "Material").resourceAttribute(Material::TYPE)
+			.AETHERION_PROP(TerrainXZScale, "XZ scale").minAttribute(0)
+			.AETHERION_PROP(TerrainYScale, "Height scale").minAttribute(0)
+			.AETHERION_PROP(TerrainTesselation, "Tesselation").minAttribute(1)
+			.AETHERION_PROP(TerrainBaseGridResolution, "Grid resolution").minAttribute(8)
 			.begin_array<&RenderModule::getGrassCount, &RenderModule::addGrass, &RenderModule::removeGrass>("grass")
-				.LUMIX_PROP(GrassPath, "Mesh").resourceAttribute(Model::TYPE)
-				.LUMIX_PROP(GrassDistance, "Distance").minAttribute(1)
-				.LUMIX_PROP(GrassSpacing, "Spacing")
-				.LUMIX_PROP(GrassRotationMode, "Mode").attribute<RotationModeEnum>()
+				.AETHERION_PROP(GrassPath, "Mesh").resourceAttribute(Model::TYPE)
+				.AETHERION_PROP(GrassDistance, "Distance").minAttribute(1)
+				.AETHERION_PROP(GrassSpacing, "Spacing")
+				.AETHERION_PROP(GrassRotationMode, "Mode").attribute<RotationModeEnum>()
 			.end_array()
 	;
 }
@@ -3664,4 +3664,4 @@ UniquePtr<RenderModule> RenderModule::createInstance(Renderer& renderer,
 
 
 
-} // namespace Lumix
+} // namespace Aetherion

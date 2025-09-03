@@ -6,12 +6,12 @@
 #include "renderer/gpu/gpu.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 struct Font;
 
-struct LUMIX_RENDERER_API Draw2D {
+struct AETHERION_RENDERER_API Draw2D {
 	struct Cmd {
 		gpu::TextureHandle* texture;
 		u32 indices_count;
@@ -53,4 +53,4 @@ private:
 	Array<Rect> m_clip_queue;
 };
 
-} //namespace Lumix
+} //namespace Aetherion

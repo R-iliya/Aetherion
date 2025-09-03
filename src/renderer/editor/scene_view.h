@@ -9,7 +9,7 @@
 #include "renderer/pipeline.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -129,4 +129,4 @@ private:
 };
 
 
-} // namespace Lumix
+} // namespace Aetherion

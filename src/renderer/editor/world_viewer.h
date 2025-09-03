@@ -6,9 +6,9 @@
 #include "engine/world.h"
 #include "renderer/pipeline.h"
 
-namespace Lumix {
+namespace Aetherion {
 
-struct LUMIX_RENDERER_API WorldViewer {
+struct AETHERION_RENDERER_API WorldViewer {
 	WorldViewer(struct StudioApp& app);
 	~WorldViewer();
 
