@@ -7,11 +7,11 @@
 
 
 #ifdef STATIC_PLUGINS
-	#define LUMIX_PHYSICS_API
+	#define AETHERION_PHYSICS_API
 #elif defined BUILDING_PHYSICS
-	#define LUMIX_PHYSICS_API LUMIX_LIBRARY_EXPORT
+	#define AETHERION_PHYSICS_API AETHERION_LIBRARY_EXPORT
 #else
-	#define LUMIX_PHYSICS_API LUMIX_LIBRARY_IMPORT
+	#define AETHERION_PHYSICS_API AETHERION_LIBRARY_IMPORT
 #endif
 
 
@@ -20,7 +20,7 @@ namespace physx {
 }
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -49,7 +49,7 @@ struct SweepHit {
 };
 
 //@ module PhysicsModule physics "Physics"
-struct LUMIX_PHYSICS_API PhysicsModule : IModule
+struct AETHERION_PHYSICS_API PhysicsModule : IModule
 {
 	enum class D6Motion : i32 {
 		LOCKED,
@@ -312,4 +312,4 @@ struct LUMIX_PHYSICS_API PhysicsModule : IModule
 };
 
 
-} // namespace Lumix
+} // namespace Aetherion

@@ -40,7 +40,7 @@
 #include "renderer/editor/game_view.h"
 
 
-using namespace Lumix;
+using namespace Aetherion;
 
 
 static const ComponentType LUA_SCRIPT_TYPE = reflection::getComponentType("lua_script");
@@ -48,7 +48,7 @@ static const ComponentType LUA_SCRIPT_TYPE = reflection::getComponentType("lua_s
 
 namespace {
 
-#ifdef LUMIX_LUAU_ANALYSIS
+#ifdef AETHERION_LUAU_ANALYSIS
 struct LuauAnalysis :Luau::FileResolver {
 	struct Location {
 		u32 line;
@@ -74,21 +74,21 @@ struct LuauAnalysis :Luau::FileResolver {
 		Luau::registerBuiltinGlobals(m_luau_frontend, m_luau_frontend.globals, false);
 		Luau::registerBuiltinGlobals(m_luau_frontend, m_luau_frontend.globalsForAutocomplete, true);
 		
-		if (m_app.getEngine().getFileSystem().getContentSync(Path("scripts/lumix.d.lua"), def_blob)) {
+		if (m_app.getEngine().getFileSystem().getContentSync(Path("scripts/aetherion.d.lua"), def_blob)) {
 			std::string_view def_src((const char*)def_blob.data(), def_blob.size());
-			report(m_luau_frontend.loadDefinitionFile(m_luau_frontend.globals, m_luau_frontend.globals.globalScope, def_src, "@lumix", false, false));
-			m_luau_frontend.loadDefinitionFile(m_luau_frontend.globalsForAutocomplete, m_luau_frontend.globalsForAutocomplete.globalScope, def_src, "@lumix", false, true);
+			report(m_luau_frontend.loadDefinitionFile(m_luau_frontend.globals, m_luau_frontend.globals.globalScope, def_src, "@aetherion", false, false));
+			m_luau_frontend.loadDefinitionFile(m_luau_frontend.globalsForAutocomplete, m_luau_frontend.globalsForAutocomplete.globalScope, def_src, "@aetherion", false, true);
 		}
 	}
 
 	void report(const Luau::LoadDefinitionFileResult& result) {
 		for (const Luau::ParseError& e : result.parseResult.errors) {
 			const Luau::Location& loc = e.getLocation();
-			logError("scripts/lumix.d.lua:", loc.begin.line, ":", loc.begin.column, ": ", e.getMessage().c_str());
+			logError("scripts/aetherion.d.lua:", loc.begin.line, ":", loc.begin.column, ": ", e.getMessage().c_str());
 		}
 		for (const Luau::ParseError& e : result.sourceModule.parseErrors) {
 			const Luau::Location& loc = e.getLocation();
-			logError("scripts/lumix.d.lua:", loc.begin.line, ":", loc.begin.column, ": ", e.getMessage().c_str());
+			logError("scripts/aetherion.d.lua:", loc.begin.line, ":", loc.begin.column, ": ", e.getMessage().c_str());
 		}
 	}
 
@@ -224,7 +224,7 @@ struct StudioLuaPlugin : StudioApp::GUIPlugin {
 		}
 		const char* name = LuaWrapper::toType<const char*>(L, -1);
 
-		StudioLuaPlugin* plugin = LUMIX_NEW(app.getAllocator(), StudioLuaPlugin)(app, name);
+		StudioLuaPlugin* plugin = AETHERION_NEW(app.getAllocator(), StudioLuaPlugin)(app, name);
 		lua_pop(L, 1);
 
 
@@ -270,7 +270,7 @@ struct StudioLuaPlugin : StudioApp::GUIPlugin {
 	
 	bool exportData(const char* dest_dir) override
 	{
-		#ifndef LUMIX_STATIC_LUAU
+		#ifndef AETHERION_STATIC_LUAU
 			char exe_path[MAX_PATH];
 			os::getExecutablePath(Span(exe_path));
 			char exe_dir[MAX_PATH];
@@ -430,7 +430,7 @@ struct EditorWindow : AssetEditorWindow {
 		, m_app(app)
 		, m_analysis(analysis)
 		, m_path(path)
-		#ifdef LUMIX_LUAU_ANALYSIS
+		#ifdef AETHERION_LUAU_ANALYSIS
 			, m_autocomplete_list(app.getAllocator())
 		#endif
 	{
@@ -445,7 +445,7 @@ struct EditorWindow : AssetEditorWindow {
 	}
 
 	void underline() {
-		#ifdef LUMIX_LUAU_ANALYSIS
+		#ifdef AETHERION_LUAU_ANALYSIS
 			Luau::FrontendOptions options;
 			options.forAutocomplete = true;
 			Luau::CheckResult check_res = m_analysis.m_luau_frontend.check(m_path.c_str(), options);
@@ -507,7 +507,7 @@ struct EditorWindow : AssetEditorWindow {
 				m_analysis.markDirty(m_path);
 				underline();
 			}
-			#ifdef LUMIX_LUAU_ANALYSIS
+			#ifdef AETHERION_LUAU_ANALYSIS
 				if (m_code_editor->canHandleInput()) {
 					if (m_app.checkShortcut(m_analysis.m_autocomplete_action) && m_code_editor->getNumCursors() == 1) {
 						m_autocomplete_list.clear();
@@ -599,19 +599,19 @@ struct EditorWindow : AssetEditorWindow {
 	Path m_path;
 	UniquePtr<CodeEditor> m_code_editor;
 	LuauAnalysis& m_analysis;
-	#ifdef LUMIX_LUAU_ANALYSIS
+	#ifdef AETHERION_LUAU_ANALYSIS
 		Array<String> m_autocomplete_list;
 		u32 m_autocomplete_selection_idx = 0;
 		TextFilter m_autocomplete_filter;
 	#endif
 };
 
-static bool gatherRequires(Span<const u8> src, Lumix::Array<Path>& dependencies, const Path& path) {
+static bool gatherRequires(Span<const u8> src, Aetherion::Array<Path>& dependencies, const Path& path) {
 	lua_State* L = luaL_newstate();
 
 	auto reg_dep = [](lua_State* L) -> int {
 		lua_getglobal(L, "__deps");
-		Lumix::Array<Path>* deps = (Lumix::Array<Path>*)lua_tolightuserdata(L, -1);
+		Aetherion::Array<Path>* deps = (Aetherion::Array<Path>*)lua_tolightuserdata(L, -1);
 		lua_pop(L, 1);
 		const char* path = LuaWrapper::checkArg<const char*>(L, 1);
 		Path lua_path(path, ".lua");
@@ -764,7 +764,7 @@ template <> struct StoredType<Path> {
 		const i32 res_idx = value.isEmpty() ? -1 : system.addLuaResource(value, resource_type);
 		
 		lua_newtable(L);
-		lua_getglobal(L, "Lumix");
+		lua_getglobal(L, "Aetherion");
 		lua_getfield(L, -1, "Resource");
 		lua_setmetatable(L, -3);
 		lua_pop(L, 1);
@@ -1277,7 +1277,7 @@ struct StudioAppPlugin : StudioApp::IPlugin {
 		if (!LuaWrapper::checkStringField(L, 1, "label", Span(label))) luaL_argerror(L, 1, "missing label");
 
 		// TODO leak
-		LuaAction* action = LUMIX_NEW(app.getAllocator(), LuaAction);
+		LuaAction* action = AETHERION_NEW(app.getAllocator(), LuaAction);
 		plugin->m_lua_actions.push(action);
 
 		lua_pushthread(L);
@@ -1323,15 +1323,15 @@ struct StudioAppPlugin : StudioApp::IPlugin {
 		WorldEditor& editor = inst->getWorldEditor();
 		EntityRef entity = editor.getSelectedEntities()[entity_idx];
 
-		lua_getglobal(L, "Lumix");
+		lua_getglobal(L, "Aetherion");
 		lua_getfield(L, -1, "Entity");
 		lua_remove(L, -2);
 		lua_getfield(L, -1, "new");
-		lua_pushvalue(L, -2); // [Lumix.Entity, Entity.new, Lumix.Entity]
-		lua_remove(L, -3); // [Entity.new, Lumix.Entity]
+		lua_pushvalue(L, -2); // [Aetherion.Entity, Entity.new, Aetherion.Entity]
+		lua_remove(L, -3); // [Entity.new, Aetherion.Entity]
 		World* world = editor.getWorld();
-		LuaWrapper::push(L, world); // [Entity.new, Lumix.Entity, world]
-		LuaWrapper::push(L, entity.index); // [Entity.new, Lumix.Entity, world, entity_index]
+		LuaWrapper::push(L, world); // [Entity.new, Aetherion.Entity, world]
+		LuaWrapper::push(L, entity.index); // [Entity.new, Aetherion.Entity, world, entity_index]
 		const bool error = !LuaWrapper::pcall(L, 3, 1); // [entity]
 		return error ? 0 : 1;
 	}
@@ -1763,8 +1763,8 @@ struct SetPropertyVisitor : reflection::IPropertyVisitor {
 
 		LuaWrapper::createSystemVariable(L, "Editor", "editor", &m_app);
 		
-		lua_pushcfunction(L, &LUA_debugCallback, "LumixDebugCallback");
-		lua_setglobal(L, "LumixDebugCallback");
+		lua_pushcfunction(L, &LUA_debugCallback, "AetherionDebugCallback");
+		lua_setglobal(L, "AetherionDebugCallback");
 
 		#define REGISTER_FUNCTION(F)                                    \
 		do {                                                            \
@@ -1817,11 +1817,11 @@ struct SetPropertyVisitor : reflection::IPropertyVisitor {
 
 		for (StudioLuaPlugin* plugin : m_plugins) {
 			m_app.removePlugin(*plugin);
-			LUMIX_DELETE(m_app.getAllocator(), plugin);
+			AETHERION_DELETE(m_app.getAllocator(), plugin);
 		}
 
 		for (LuaAction* action : m_lua_actions) {
-			LUMIX_DELETE(m_app.getAllocator(), action);
+			AETHERION_DELETE(m_app.getAllocator(), action);
 		}
 	}
 
@@ -1856,10 +1856,10 @@ struct SetPropertyVisitor : reflection::IPropertyVisitor {
 } // anonymous namespace
 
 
-LUMIX_STUDIO_ENTRY(lua) {
+AETHERION_STUDIO_ENTRY(lua) {
 	PROFILE_FUNCTION();
 	IAllocator& allocator = app.getAllocator();
-	return LUMIX_NEW(allocator, StudioAppPlugin)(app);
+	return AETHERION_NEW(allocator, StudioAppPlugin)(app);
 }
 
 

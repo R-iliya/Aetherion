@@ -17,7 +17,7 @@
 #include "navigation/navigation_module.h"
 
 
-using namespace Lumix;
+using namespace Aetherion;
 
 
 namespace
@@ -212,12 +212,12 @@ struct StudioAppPlugin : StudioApp::IPlugin
 };
 
 
-} // anonymous
+} // someone's Mum ig..
 
 
-LUMIX_STUDIO_ENTRY(navigation) {
+AETHERION_STUDIO_ENTRY(navigation) {
 	PROFILE_FUNCTION();
 	IAllocator& allocator = app.getAllocator();
-	return LUMIX_NEW(allocator, StudioAppPlugin)(app);
+	return AETHERION_NEW(allocator, StudioAppPlugin)(app);
 }
 

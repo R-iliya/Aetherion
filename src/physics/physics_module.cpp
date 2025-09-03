@@ -59,7 +59,7 @@
 using namespace physx;
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -869,7 +869,7 @@ struct PhysicsModuleImpl final : PhysicsModule
 		heights.resize(width * height);
 		if (bytes_per_pixel == 2)
 		{
-			const i16* LUMIX_RESTRICT data = (const i16*)src_data;
+			const i16* AETHERION_RESTRICT data = (const i16*)src_data;
 			for (int j = 0; j < height; ++j)
 			{
 				for (int i = 0; i < width; ++i)
@@ -884,7 +884,7 @@ struct PhysicsModuleImpl final : PhysicsModule
 		else
 		{
 			ASSERT(bytes_per_pixel == 1);
-			const u8* LUMIX_RESTRICT data = src_data;
+			const u8* AETHERION_RESTRICT data = src_data;
 			for (int j = 0; j < height; ++j)
 			{
 				for (int i = 0; i < width; ++i)
@@ -2505,7 +2505,7 @@ struct PhysicsModuleImpl final : PhysicsModule
 		if (terrain.m_heightmap->format == gpu::TextureFormat::R16)
 		{
 			PROFILE_BLOCK("copyData");
-			const i16* LUMIX_RESTRICT data = (const i16*)terrain.m_heightmap->getData();
+			const i16* AETHERION_RESTRICT data = (const i16*)terrain.m_heightmap->getData();
 			for (int j = 0; j < height; ++j)
 			{
 				int idx = j * width;
@@ -3855,7 +3855,7 @@ PhysicsModuleImpl::PhysicsModuleImpl(Engine& engine, World& world, PhysicsSystem
 
 UniquePtr<PhysicsModule> PhysicsModule::create(PhysicsSystem& system, World& world, Engine& engine, IAllocator& allocator)
 {
-	PhysicsModuleImpl* impl = LUMIX_NEW(allocator, PhysicsModuleImpl)(engine, world, system, allocator);
+	PhysicsModuleImpl* impl = AETHERION_NEW(allocator, PhysicsModuleImpl)(engine, world, system, allocator);
 	impl->m_world.componentTransformed(CONTROLLER_TYPE).bind<&PhysicsModuleImpl::onControllerMoved>(impl);
 	impl->m_world.componentTransformed(RIGID_ACTOR_TYPE).bind<&PhysicsModuleImpl::onActorMoved>(impl);
 	
@@ -3871,7 +3871,7 @@ UniquePtr<PhysicsModule> PhysicsModule::create(PhysicsSystem& system, World& wor
 	impl->m_scene = system.getPhysics()->createScene(sceneDesc);
 	if (!impl->m_scene)
 	{
-		LUMIX_DELETE(allocator, impl);
+		AETHERION_DELETE(allocator, impl);
 		return UniquePtr<PhysicsModule>(nullptr, nullptr);
 	}
 
@@ -3939,127 +3939,127 @@ void PhysicsModule::reflect() {
 	};
 	
 	reflection::structure<RaycastHit>("RaycastHit")
-		.LUMIX_MEMBER(RaycastHit::position, "position")
-		.LUMIX_MEMBER(RaycastHit::normal, "normal")
-		.LUMIX_MEMBER(RaycastHit::entity, "entity");
+		.AETHERION_MEMBER(RaycastHit::position, "position")
+		.AETHERION_MEMBER(RaycastHit::normal, "normal")
+		.AETHERION_MEMBER(RaycastHit::entity, "entity");
 
 	reflection::structure<SweepHit>("SweepHit")
-		.LUMIX_MEMBER(SweepHit::position, "position")
-		.LUMIX_MEMBER(SweepHit::normal, "normal")
-		.LUMIX_MEMBER(SweepHit::distance, "distance")
-		.LUMIX_MEMBER(SweepHit::entity, "entity");
+		.AETHERION_MEMBER(SweepHit::position, "position")
+		.AETHERION_MEMBER(SweepHit::normal, "normal")
+		.AETHERION_MEMBER(SweepHit::distance, "distance")
+		.AETHERION_MEMBER(SweepHit::entity, "entity");
 
-	LUMIX_MODULE(PhysicsModuleImpl, "physics")
-		.LUMIX_FUNC(raycast)
-		.LUMIX_FUNC(raycastEx)
-		.LUMIX_FUNC(sweepSphere)
-		.LUMIX_FUNC(setGravity)
-		.LUMIX_CMP(D6Joint, "d6_joint", "Physics / Joint / D6")
-			.LUMIX_PROP(JointConnectedBody, "Connected body")
-			.LUMIX_PROP(JointAxisPosition, "Axis position")
-			.LUMIX_PROP(JointAxisDirection, "Axis direction")
-			.LUMIX_ENUM_PROP(D6JointXMotion, "X motion").attribute<D6MotionEnum>()
-			.LUMIX_ENUM_PROP(D6JointYMotion, "Y motion").attribute<D6MotionEnum>()
-			.LUMIX_ENUM_PROP(D6JointZMotion, "Z motion").attribute<D6MotionEnum>()
-			.LUMIX_ENUM_PROP(D6JointSwing1Motion, "Swing 1").attribute<D6MotionEnum>()
-			.LUMIX_ENUM_PROP(D6JointSwing2Motion, "Swing 2").attribute<D6MotionEnum>()
-			.LUMIX_ENUM_PROP(D6JointTwistMotion, "Twist").attribute<D6MotionEnum>()
-			.LUMIX_PROP(D6JointLinearLimit, "Linear limit").minAttribute(0)
-			.LUMIX_PROP(D6JointSwingLimit, "Swing limit").radiansAttribute()
-			.LUMIX_PROP(D6JointTwistLimit, "Twist limit").radiansAttribute()
-			.LUMIX_PROP(D6JointDamping, "Damping")
-			.LUMIX_PROP(D6JointStiffness, "Stiffness")
-			.LUMIX_PROP(D6JointRestitution, "Restitution")
-		.LUMIX_CMP(SphericalJoint, "spherical_joint", "Physics / Joint / Spherical")
-			.LUMIX_PROP(JointConnectedBody, "Connected body")
-			.LUMIX_PROP(JointAxisPosition, "Axis position")
-			.LUMIX_PROP(JointAxisDirection, "Axis direction")
-			.LUMIX_PROP(SphericalJointUseLimit, "Use limit")
-			.LUMIX_PROP(SphericalJointLimit, "Limit").radiansAttribute()
-		.LUMIX_CMP(DistanceJoint, "distance_joint", "Physics / Joint / Distance")
-			.LUMIX_PROP(JointConnectedBody, "Connected body")
-			.LUMIX_PROP(JointAxisPosition, "Axis position")
-			.LUMIX_PROP(DistanceJointDamping, "Damping").minAttribute(0)
-			.LUMIX_PROP(DistanceJointStiffness, "Stiffness").minAttribute(0)
-			.LUMIX_PROP(DistanceJointTolerance, "Tolerance").minAttribute(0)
-			.LUMIX_PROP(DistanceJointLimits, "Limits")
-		.LUMIX_CMP(HingeJoint, "hinge_joint", "Physics / Joint / Hinge")
-			.LUMIX_PROP(JointConnectedBody, "Connected body")
-			.LUMIX_PROP(JointAxisPosition, "Axis position")
-			.LUMIX_PROP(JointAxisDirection, "Axis direction")
-			.LUMIX_PROP(HingeJointDamping, "Damping").minAttribute(0)
-			.LUMIX_PROP(HingeJointStiffness, "Stiffness").minAttribute(0)
-			.LUMIX_PROP(HingeJointUseLimit, "Use limit")
-			.LUMIX_PROP(HingeJointLimit, "Limit").radiansAttribute()
-		.LUMIX_CMP(InstancedCube, "physical_instanced_cube", "Physics / Instanced cube")
-			.LUMIX_PROP(InstancedCubeHalfExtents, "Half extents")
-			.LUMIX_ENUM_PROP(InstancedCubeLayer, "Layer").attribute<LayerEnum>()
-		.LUMIX_CMP(InstancedMesh, "physical_instanced_mesh", "Physics / Instanced mesh")
-			.LUMIX_PROP(InstancedMeshGeomPath, "Mesh").resourceAttribute(PhysicsGeometry::TYPE)
-			.LUMIX_ENUM_PROP(InstancedMeshLayer, "Layer").attribute<LayerEnum>()
-		.LUMIX_CMP(Controller, "physical_controller", "Physics / Controller")
-			.LUMIX_FUNC_EX(PhysicsModule::moveController, "move")
-			.LUMIX_FUNC_EX(PhysicsModule::isControllerCollisionDown, "isCollisionDown")
-			.LUMIX_FUNC_EX(PhysicsModule::getGravitySpeed, "getGravitySpeed")
-			.LUMIX_PROP(ControllerRadius, "Radius")
-			.LUMIX_PROP(ControllerHeight, "Height")
-			.LUMIX_ENUM_PROP(ControllerLayer, "Layer").attribute<LayerEnum>()
-			.LUMIX_PROP(ControllerUseRootMotion, "Use root motion")
-			.LUMIX_PROP(ControllerCustomGravity, "Use custom gravity")
-			.LUMIX_PROP(ControllerCustomGravityAcceleration, "Custom gravity acceleration")
-		.LUMIX_CMP(Actor, "rigid_actor", "Physics / Actor")
+	AETHERION_MODULE(PhysicsModuleImpl, "physics")
+		.AETHERION_FUNC(raycast)
+		.AETHERION_FUNC(raycastEx)
+		.AETHERION_FUNC(sweepSphere)
+		.AETHERION_FUNC(setGravity)
+		.AETHERION_CMP(D6Joint, "d6_joint", "Physics / Joint / D6")
+			.AETHERION_PROP(JointConnectedBody, "Connected body")
+			.AETHERION_PROP(JointAxisPosition, "Axis position")
+			.AETHERION_PROP(JointAxisDirection, "Axis direction")
+			.AETHERION_ENUM_PROP(D6JointXMotion, "X motion").attribute<D6MotionEnum>()
+			.AETHERION_ENUM_PROP(D6JointYMotion, "Y motion").attribute<D6MotionEnum>()
+			.AETHERION_ENUM_PROP(D6JointZMotion, "Z motion").attribute<D6MotionEnum>()
+			.AETHERION_ENUM_PROP(D6JointSwing1Motion, "Swing 1").attribute<D6MotionEnum>()
+			.AETHERION_ENUM_PROP(D6JointSwing2Motion, "Swing 2").attribute<D6MotionEnum>()
+			.AETHERION_ENUM_PROP(D6JointTwistMotion, "Twist").attribute<D6MotionEnum>()
+			.AETHERION_PROP(D6JointLinearLimit, "Linear limit").minAttribute(0)
+			.AETHERION_PROP(D6JointSwingLimit, "Swing limit").radiansAttribute()
+			.AETHERION_PROP(D6JointTwistLimit, "Twist limit").radiansAttribute()
+			.AETHERION_PROP(D6JointDamping, "Damping")
+			.AETHERION_PROP(D6JointStiffness, "Stiffness")
+			.AETHERION_PROP(D6JointRestitution, "Restitution")
+		.AETHERION_CMP(SphericalJoint, "spherical_joint", "Physics / Joint / Spherical")
+			.AETHERION_PROP(JointConnectedBody, "Connected body")
+			.AETHERION_PROP(JointAxisPosition, "Axis position")
+			.AETHERION_PROP(JointAxisDirection, "Axis direction")
+			.AETHERION_PROP(SphericalJointUseLimit, "Use limit")
+			.AETHERION_PROP(SphericalJointLimit, "Limit").radiansAttribute()
+		.AETHERION_CMP(DistanceJoint, "distance_joint", "Physics / Joint / Distance")
+			.AETHERION_PROP(JointConnectedBody, "Connected body")
+			.AETHERION_PROP(JointAxisPosition, "Axis position")
+			.AETHERION_PROP(DistanceJointDamping, "Damping").minAttribute(0)
+			.AETHERION_PROP(DistanceJointStiffness, "Stiffness").minAttribute(0)
+			.AETHERION_PROP(DistanceJointTolerance, "Tolerance").minAttribute(0)
+			.AETHERION_PROP(DistanceJointLimits, "Limits")
+		.AETHERION_CMP(HingeJoint, "hinge_joint", "Physics / Joint / Hinge")
+			.AETHERION_PROP(JointConnectedBody, "Connected body")
+			.AETHERION_PROP(JointAxisPosition, "Axis position")
+			.AETHERION_PROP(JointAxisDirection, "Axis direction")
+			.AETHERION_PROP(HingeJointDamping, "Damping").minAttribute(0)
+			.AETHERION_PROP(HingeJointStiffness, "Stiffness").minAttribute(0)
+			.AETHERION_PROP(HingeJointUseLimit, "Use limit")
+			.AETHERION_PROP(HingeJointLimit, "Limit").radiansAttribute()
+		.AETHERION_CMP(InstancedCube, "physical_instanced_cube", "Physics / Instanced cube")
+			.AETHERION_PROP(InstancedCubeHalfExtents, "Half extents")
+			.AETHERION_ENUM_PROP(InstancedCubeLayer, "Layer").attribute<LayerEnum>()
+		.AETHERION_CMP(InstancedMesh, "physical_instanced_mesh", "Physics / Instanced mesh")
+			.AETHERION_PROP(InstancedMeshGeomPath, "Mesh").resourceAttribute(PhysicsGeometry::TYPE)
+			.AETHERION_ENUM_PROP(InstancedMeshLayer, "Layer").attribute<LayerEnum>()
+		.AETHERION_CMP(Controller, "physical_controller", "Physics / Controller")
+			.AETHERION_FUNC_EX(PhysicsModule::moveController, "move")
+			.AETHERION_FUNC_EX(PhysicsModule::isControllerCollisionDown, "isCollisionDown")
+			.AETHERION_FUNC_EX(PhysicsModule::getGravitySpeed, "getGravitySpeed")
+			.AETHERION_PROP(ControllerRadius, "Radius")
+			.AETHERION_PROP(ControllerHeight, "Height")
+			.AETHERION_ENUM_PROP(ControllerLayer, "Layer").attribute<LayerEnum>()
+			.AETHERION_PROP(ControllerUseRootMotion, "Use root motion")
+			.AETHERION_PROP(ControllerCustomGravity, "Use custom gravity")
+			.AETHERION_PROP(ControllerCustomGravityAcceleration, "Custom gravity acceleration")
+		.AETHERION_CMP(Actor, "rigid_actor", "Physics / Actor")
 			.icon(ICON_FA_VOLLEYBALL_BALL)
-			.LUMIX_FUNC_EX(PhysicsModule::putToSleep, "putToSleep")
-			.LUMIX_FUNC_EX(PhysicsModule::getActorSpeed, "getSpeed")
-			.LUMIX_FUNC_EX(PhysicsModule::getActorVelocity, "getVelocity")
-			.LUMIX_FUNC_EX(PhysicsModule::applyForceToActor, "applyForce")
-			.LUMIX_FUNC_EX(PhysicsModule::applyImpulseToActor, "applyImpulse")
-			.LUMIX_FUNC_EX(PhysicsModule::addForceAtPos, "addForceAtPos")
-			.LUMIX_ENUM_PROP(ActorLayer, "Layer").attribute<LayerEnum>()
-			.LUMIX_ENUM_PROP(ActorDynamicType, "Dynamic").attribute<DynamicTypeEnum>()
-			.LUMIX_PROP(ActorIsTrigger, "Trigger")
+			.AETHERION_FUNC_EX(PhysicsModule::putToSleep, "putToSleep")
+			.AETHERION_FUNC_EX(PhysicsModule::getActorSpeed, "getSpeed")
+			.AETHERION_FUNC_EX(PhysicsModule::getActorVelocity, "getVelocity")
+			.AETHERION_FUNC_EX(PhysicsModule::applyForceToActor, "applyForce")
+			.AETHERION_FUNC_EX(PhysicsModule::applyImpulseToActor, "applyImpulse")
+			.AETHERION_FUNC_EX(PhysicsModule::addForceAtPos, "addForceAtPos")
+			.AETHERION_ENUM_PROP(ActorLayer, "Layer").attribute<LayerEnum>()
+			.AETHERION_ENUM_PROP(ActorDynamicType, "Dynamic").attribute<DynamicTypeEnum>()
+			.AETHERION_PROP(ActorIsTrigger, "Trigger")
 			.begin_array<&PhysicsModule::getBoxCount, &PhysicsModule::addBox, &PhysicsModule::removeBox>("Box geometry")	
-				.LUMIX_PROP(BoxHalfExtents, "Size")
-				.LUMIX_PROP(BoxOffsetPosition, "Position offset")
-				.LUMIX_PROP(BoxOffsetRotation, "Rotation offset").radiansAttribute()
+				.AETHERION_PROP(BoxHalfExtents, "Size")
+				.AETHERION_PROP(BoxOffsetPosition, "Position offset")
+				.AETHERION_PROP(BoxOffsetRotation, "Rotation offset").radiansAttribute()
 			.end_array()
 			.begin_array<&PhysicsModule::getSphereCount, &PhysicsModule::addSphere, &PhysicsModule::removeSphere>("Sphere geometry")
-				.LUMIX_PROP(SphereRadius, "Radius").minAttribute(0)
-				.LUMIX_PROP(SphereOffsetPosition, "Position offset")
+				.AETHERION_PROP(SphereRadius, "Radius").minAttribute(0)
+				.AETHERION_PROP(SphereOffsetPosition, "Position offset")
 			.end_array()
-			.LUMIX_PROP(ActorCCD, "CCD")
-			.LUMIX_PROP(ActorMesh, "Mesh").resourceAttribute(PhysicsGeometry::TYPE)
-			.LUMIX_PROP(ActorMaterial, "Material").resourceAttribute(PhysicsMaterial::TYPE)
-		.LUMIX_CMP(Vehicle, "vehicle", "Physics / Vehicle")
+			.AETHERION_PROP(ActorCCD, "CCD")
+			.AETHERION_PROP(ActorMesh, "Mesh").resourceAttribute(PhysicsGeometry::TYPE)
+			.AETHERION_PROP(ActorMaterial, "Material").resourceAttribute(PhysicsMaterial::TYPE)
+		.AETHERION_CMP(Vehicle, "vehicle", "Physics / Vehicle")
 			.icon(ICON_FA_CAR_ALT)
-			.LUMIX_FUNC_EX(PhysicsModule::setVehicleAccel, "setAccel")
-			.LUMIX_FUNC_EX(PhysicsModule::setVehicleSteer, "setSteer")
-			.LUMIX_FUNC_EX(PhysicsModule::setVehicleBrake, "setBrake")
+			.AETHERION_FUNC_EX(PhysicsModule::setVehicleAccel, "setAccel")
+			.AETHERION_FUNC_EX(PhysicsModule::setVehicleSteer, "setSteer")
+			.AETHERION_FUNC_EX(PhysicsModule::setVehicleBrake, "setBrake")
 			.prop<&PhysicsModuleImpl::getVehicleSpeed>("Speed")
 			.prop<&PhysicsModuleImpl::getVehicleCurrentGear>("Current gear")
 			.prop<&PhysicsModuleImpl::getVehicleRPM>("RPM")
-			.LUMIX_PROP(VehicleMass, "Mass").minAttribute(0)
-			.LUMIX_PROP(VehicleCenterOfMass, "Center of mass")
-			.LUMIX_PROP(VehicleMOIMultiplier, "MOI multiplier")
-			.LUMIX_PROP(VehicleChassis, "Chassis").resourceAttribute(PhysicsGeometry::TYPE)
-			.LUMIX_ENUM_PROP(VehicleChassisLayer, "Chassis layer").attribute<LayerEnum>()
-			.LUMIX_ENUM_PROP(VehicleWheelsLayer, "Wheels layer").attribute<LayerEnum>()
-		.LUMIX_CMP(Wheel, "wheel", "Physics / Wheel")
-			.LUMIX_PROP(WheelRadius, "Radius").minAttribute(0)
-			.LUMIX_PROP(WheelWidth, "Width").minAttribute(0)
-			.LUMIX_PROP(WheelMass, "Mass").minAttribute(0)
-			.LUMIX_PROP(WheelMOI, "MOI").minAttribute(0)
-			.LUMIX_PROP(WheelSpringMaxCompression, "Max compression").minAttribute(0)
-			.LUMIX_PROP(WheelSpringMaxDroop, "Max droop").minAttribute(0)
-			.LUMIX_PROP(WheelSpringStrength, "Spring strength").minAttribute(0)
-			.LUMIX_PROP(WheelSpringDamperRate, "Spring damper rate").minAttribute(0)
-			.LUMIX_ENUM_PROP(WheelSlot, "Slot").attribute<WheelSlotEnum>()
+			.AETHERION_PROP(VehicleMass, "Mass").minAttribute(0)
+			.AETHERION_PROP(VehicleCenterOfMass, "Center of mass")
+			.AETHERION_PROP(VehicleMOIMultiplier, "MOI multiplier")
+			.AETHERION_PROP(VehicleChassis, "Chassis").resourceAttribute(PhysicsGeometry::TYPE)
+			.AETHERION_ENUM_PROP(VehicleChassisLayer, "Chassis layer").attribute<LayerEnum>()
+			.AETHERION_ENUM_PROP(VehicleWheelsLayer, "Wheels layer").attribute<LayerEnum>()
+		.AETHERION_CMP(Wheel, "wheel", "Physics / Wheel")
+			.AETHERION_PROP(WheelRadius, "Radius").minAttribute(0)
+			.AETHERION_PROP(WheelWidth, "Width").minAttribute(0)
+			.AETHERION_PROP(WheelMass, "Mass").minAttribute(0)
+			.AETHERION_PROP(WheelMOI, "MOI").minAttribute(0)
+			.AETHERION_PROP(WheelSpringMaxCompression, "Max compression").minAttribute(0)
+			.AETHERION_PROP(WheelSpringMaxDroop, "Max droop").minAttribute(0)
+			.AETHERION_PROP(WheelSpringStrength, "Spring strength").minAttribute(0)
+			.AETHERION_PROP(WheelSpringDamperRate, "Spring damper rate").minAttribute(0)
+			.AETHERION_ENUM_PROP(WheelSlot, "Slot").attribute<WheelSlotEnum>()
 			.prop<&PhysicsModuleImpl::getWheelRPM>("RPM")
-		.LUMIX_CMP(Heightfield, "physical_heightfield", "Physics / Heightfield")
-			.LUMIX_ENUM_PROP(HeightfieldLayer, "Layer").attribute<LayerEnum>()
-			.LUMIX_PROP(HeightfieldSource, "Heightmap").resourceAttribute(Texture::TYPE)
-			.LUMIX_PROP(HeightfieldYScale, "Y scale").minAttribute(0)
-			.LUMIX_PROP(HeightfieldXZScale, "XZ scale").minAttribute(0)
+		.AETHERION_CMP(Heightfield, "physical_heightfield", "Physics / Heightfield")
+			.AETHERION_ENUM_PROP(HeightfieldLayer, "Layer").attribute<LayerEnum>()
+			.AETHERION_PROP(HeightfieldSource, "Heightmap").resourceAttribute(Texture::TYPE)
+			.AETHERION_PROP(HeightfieldYScale, "Y scale").minAttribute(0)
+			.AETHERION_PROP(HeightfieldXZScale, "XZ scale").minAttribute(0)
 	;
 }
 
@@ -4207,4 +4207,4 @@ void Heightfield::heightmapLoaded(Resource::State, Resource::State new_state, Re
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion

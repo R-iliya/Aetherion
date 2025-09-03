@@ -14,7 +14,7 @@
 #include "physics/physics_system.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -138,11 +138,11 @@ PhysicsMaterialManager::~PhysicsMaterialManager() {
 }
 
 Resource* PhysicsMaterialManager::createResource(const Path& path) {
-	return LUMIX_NEW(m_allocator, PhysicsMaterial)(path, *this, system, allocator);
+	return AETHERION_NEW(m_allocator, PhysicsMaterial)(path, *this, system, allocator);
 }
 
 void PhysicsMaterialManager::destroyResource(Resource& resource) {
-	LUMIX_DELETE(m_allocator, static_cast<PhysicsMaterial*>(&resource));
+	AETHERION_DELETE(m_allocator, static_cast<PhysicsMaterial*>(&resource));
 }
 
-} // namespace Lumix
+} // namespace Aetherion
