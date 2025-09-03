@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/lumix.h"
+#include "engine/aetherion.h"
 
 #include "core/array.h"
 #include "core/core.h"
@@ -15,19 +15,19 @@
 #include "engine/resource.h"
 
 
-#define LUMIX_MODULE(Class, Label) using ReflModule = Class; reflection::build_module(Label)
-#define LUMIX_FUNC_EX(F, Name) function<&ReflModule::F>(Name, #F)
-#define LUMIX_FUNC(F) function<&ReflModule::F>(#F, #F)
-#define LUMIX_EVENT(F) event<&F>(#F)
-#define LUMIX_CMP(Cmp, Name, Label) cmp<&ReflModule::create##Cmp, &ReflModule::destroy##Cmp>(Name, Label)
-#define LUMIX_PROP(Property, Label) prop<&ReflModule::get##Property, &ReflModule::set##Property>(Label)
-#define LUMIX_ENUM_PROP(Property, Label) enum_prop<&ReflModule::get##Property, &ReflModule::set##Property>(Label)
-#define LUMIX_GLOBAL_FUNC(Func) reflection::function<&Func>(#Func, nullptr)
+#define AETHERION_MODULE(Class, Label) using ReflModule = Class; reflection::build_module(Label)
+#define AETHERION_FUNC_EX(F, Name) function<&ReflModule::F>(Name, #F)
+#define AETHERION_FUNC(F) function<&ReflModule::F>(#F, #F)
+#define AETHERION_EVENT(F) event<&F>(#F)
+#define AETHERION_CMP(Cmp, Name, Label) cmp<&ReflModule::create##Cmp, &ReflModule::destroy##Cmp>(Name, Label)
+#define AETHERION_PROP(Property, Label) prop<&ReflModule::get##Property, &ReflModule::set##Property>(Label)
+#define AETHERION_ENUM_PROP(Property, Label) enum_prop<&ReflModule::get##Property, &ReflModule::set##Property>(Label)
+#define AETHERION_GLOBAL_FUNC(Func) reflection::function<&Func>(#Func, nullptr)
 
 // see member function for explanation
-#define LUMIX_MEMBER(V, Name) member<&V, __LINE__>(Name)
+#define AETHERION_MEMBER(V, Name) member<&V, __LINE__>(Name)
 
-namespace Lumix
+namespace Aetherion
 {
 
 struct Path;
@@ -65,16 +65,16 @@ struct RegisteredComponent {
 	struct ComponentBase* cmp = nullptr;
 };
 
-LUMIX_ENGINE_API const ComponentBase* getComponent(ComponentType cmp_type);
-LUMIX_ENGINE_API const struct PropertyBase* getProperty(ComponentType cmp_type, StringView prop);
-LUMIX_ENGINE_API Span<const RegisteredComponent> getComponents();
+AETHERION_ENGINE_API const ComponentBase* getComponent(ComponentType cmp_type);
+AETHERION_ENGINE_API const struct PropertyBase* getProperty(ComponentType cmp_type, StringView prop);
+AETHERION_ENGINE_API Span<const RegisteredComponent> getComponents();
 
-LUMIX_ENGINE_API const PropertyBase* getPropertyFromHash(StableHash hash);
-LUMIX_ENGINE_API StableHash getPropertyHash(ComponentType cmp, const char* property_name);
-LUMIX_ENGINE_API bool componentTypeExists(const char* id);
-LUMIX_ENGINE_API ComponentType getComponentType(StringView id);
-LUMIX_ENGINE_API ComponentType getComponentTypeFromHash(RuntimeHash hash);
-LUMIX_ENGINE_API const char* declCodeToName(const char* decl_code);
+AETHERION_ENGINE_API const PropertyBase* getPropertyFromHash(StableHash hash);
+AETHERION_ENGINE_API StableHash getPropertyHash(ComponentType cmp, const char* property_name);
+AETHERION_ENGINE_API bool componentTypeExists(const char* id);
+AETHERION_ENGINE_API ComponentType getComponentType(StringView id);
+AETHERION_ENGINE_API ComponentType getComponentTypeFromHash(RuntimeHash hash);
+AETHERION_ENGINE_API const char* declCodeToName(const char* decl_code);
 
 struct ResourceAttribute : IAttribute
 {
@@ -126,7 +126,7 @@ struct StringEnumAttribute : IAttribute {
 };
 
 
-struct LUMIX_ENGINE_API PropertyBase {
+struct AETHERION_ENGINE_API PropertyBase {
 	PropertyBase(IAllocator& allocator) : attributes(allocator) {}
 	virtual ~PropertyBase() {}
 	Array<IAttribute*> attributes;
@@ -201,7 +201,7 @@ struct IEmptyPropertyVisitor : IPropertyVisitor {
 	void visit(const BlobProperty& prop) override {}
 };
 
-struct LUMIX_ENGINE_API ArrayProperty : PropertyBase {
+struct AETHERION_ENGINE_API ArrayProperty : PropertyBase {
 	typedef u32 (*Counter)(IModule*, EntityRef);
 	typedef void (*Adder)(IModule*, EntityRef, u32);
 	typedef void (*Remover)(IModule*, EntityRef, u32);
@@ -221,7 +221,7 @@ struct LUMIX_ENGINE_API ArrayProperty : PropertyBase {
 	Remover remover;
 };
 
-struct LUMIX_ENGINE_API BlobProperty : PropertyBase {
+struct AETHERION_ENGINE_API BlobProperty : PropertyBase {
 	BlobProperty(IAllocator& allocator);
 
 	void visit(struct IPropertyVisitor& visitor) const override;
@@ -241,9 +241,9 @@ inline Icon icon(const char* name) { return {name}; }
 namespace detail {
 
 #if defined __clang__ && defined _WIN32
-	static const u32 FRONT_SIZE = (u32)sizeof("static StringView Lumix::reflection::detail::GetTypeNameHelper<") - 1u;
+	static const u32 FRONT_SIZE = (u32)sizeof("static StringView Aetherion::reflection::detail::GetTypeNameHelper<") - 1u;
 #else
-	static const u32 FRONT_SIZE = sizeof("Lumix::reflection::detail::GetTypeNameHelper<") - 1u;
+	static const u32 FRONT_SIZE = sizeof("Aetherion::reflection::detail::GetTypeNameHelper<") - 1u;
 	static const u32 BACK_SIZE = sizeof(">::GetTypeName") - 1u;
 #endif
 
@@ -266,7 +266,7 @@ struct GetTypeNameHelper
 	}
 };
 
-LUMIX_ENGINE_API StringView normalizeTypeName(StringView type_name);
+AETHERION_ENGINE_API StringView normalizeTypeName(StringView type_name);
 
 } // namespace detail
 
@@ -371,7 +371,7 @@ template <typename T> TypeDescriptor toTypeDescriptor() {
 	TypeDescriptor td;
 	td.create_copy = [](const void* src, IAllocator& allocator) -> void* {
 		if constexpr (__is_constructible(T)) {
-			return LUMIX_NEW(allocator, RemoveCVR<T>)(*(RemoveCVR<T>*)src);
+			return AETHERION_NEW(allocator, RemoveCVR<T>)(*(RemoveCVR<T>*)src);
 		}
 		return nullptr;
 	};
@@ -651,10 +651,10 @@ struct StructBase {
 	virtual void destroyInstance(void* obj, IAllocator& allocator) = 0;
 
 	// clang (at least on windows) has an issue with multiple definitions with same mangled name
-	// so we need to add a dummy template parameter, see LUMIX_MEMBER macro
+	// so we need to add a dummy template parameter, see AETHERION_MEMBER macro
 	template <auto Getter, int V = 0> 
 	StructBase& member(const char* name) {
-		StructVar<Getter>* member = LUMIX_NEW(allocator, StructVar<Getter>);
+		StructVar<Getter>* member = AETHERION_NEW(allocator, StructVar<Getter>);
 		member->name = name;
 		members.push(member);
 		return *this;
@@ -666,8 +666,8 @@ struct StructBase {
 	u32 size = 0;
 };
 
-LUMIX_ENGINE_API Array<FunctionBase*>& allFunctions();
-LUMIX_ENGINE_API Array<StructBase*>& allStructs();
+AETHERION_ENGINE_API Array<FunctionBase*>& allFunctions();
+AETHERION_ENGINE_API Array<StructBase*>& allStructs();
 
 template <auto func>
 auto& function(const char* decl_code, const char* name)
@@ -683,8 +683,8 @@ template <typename S>
 auto& structure(const char* name)
 {
 	static struct : StructBase {
-		void* createInstance(IAllocator& allocator) override { return LUMIX_NEW(allocator, S); }
-		void destroyInstance(void* obj, IAllocator& allocator) override { LUMIX_DELETE(allocator, (S*)obj); }
+		void* createInstance(IAllocator& allocator) override { return AETHERION_NEW(allocator, S); }
+		void destroyInstance(void* obj, IAllocator& allocator) override { AETHERION_DELETE(allocator, (S*)obj); }
 	} ret;
 	ret.name = name;
 	ret.size = sizeof(S);
@@ -692,7 +692,7 @@ auto& structure(const char* name)
 	return ret;
 }
 
-struct LUMIX_ENGINE_API ComponentBase {
+struct AETHERION_ENGINE_API ComponentBase {
 	ComponentBase(IAllocator& allocator);
 
 	void visit(IPropertyVisitor& visitor) const;
@@ -742,9 +742,9 @@ struct Module {
 	Module* next = nullptr;
 };
 
-LUMIX_ENGINE_API Module* getFirstModule();
+AETHERION_ENGINE_API Module* getFirstModule();
 
-struct LUMIX_ENGINE_API builder {
+struct AETHERION_ENGINE_API builder {
 	builder(IAllocator& allocator);
 
 	template <auto Creator, auto Destroyer>
@@ -752,7 +752,7 @@ struct LUMIX_ENGINE_API builder {
 		auto creator = [](IModule* module, EntityRef e){ (module->*static_cast<void (IModule::*)(EntityRef)>(Creator))(e); };
 		auto destroyer = [](IModule* module, EntityRef e){ (module->*static_cast<void (IModule::*)(EntityRef)>(Destroyer))(e); };
 	
-		ComponentBase* cmp = LUMIX_NEW(allocator, ComponentBase)(allocator);
+		ComponentBase* cmp = AETHERION_NEW(allocator, ComponentBase)(allocator);
 		cmp->name = name;
 		cmp->label = label;
 		cmp->component_type = getComponentType(name);
@@ -766,7 +766,7 @@ struct LUMIX_ENGINE_API builder {
 	template <auto Getter, auto PropGetter>
 	builder& var_enum_prop(const char* name) {
 		using T = typename ResultOf<decltype(PropGetter)>::Type;
-		auto* p = LUMIX_NEW(allocator, Property<i32>)(allocator);
+		auto* p = AETHERION_NEW(allocator, Property<i32>)(allocator);
 		p->setter = [](IModule* module, EntityRef e, u32, const i32& value) {
 			using C = typename ClassOf<decltype(Getter)>::Type;
 			auto& c = (static_cast<C*>(module)->*Getter)(e);
@@ -786,7 +786,7 @@ struct LUMIX_ENGINE_API builder {
 
 	template <auto Getter, auto Setter = nullptr>
 	builder& enum_prop(const char* name) {
-		auto* p = LUMIX_NEW(allocator, Property<i32>)(allocator);
+		auto* p = AETHERION_NEW(allocator, Property<i32>)(allocator);
 		
 		if constexpr (Setter == nullptr) {
 			p->setter = nullptr;
@@ -820,7 +820,7 @@ struct LUMIX_ENGINE_API builder {
 
 	template <typename T>
 	builder& property() {
-		auto* p = LUMIX_NEW(allocator, T)(allocator);
+		auto* p = AETHERION_NEW(allocator, T)(allocator);
 		addProp(p);
 		return *this;
 	}
@@ -828,7 +828,7 @@ struct LUMIX_ENGINE_API builder {
 	template <auto Getter, auto Setter = nullptr>
 	builder& prop(const char* name) {
 		using T = typename ResultOf<decltype(Getter)>::Type;
-		auto* p = LUMIX_NEW(allocator, Property<T>)(allocator);
+		auto* p = AETHERION_NEW(allocator, Property<T>)(allocator);
 		
 		if constexpr (Setter == nullptr) {
 			p->setter = nullptr;
@@ -862,7 +862,7 @@ struct LUMIX_ENGINE_API builder {
 
 	template <auto Getter, auto Setter>
 	builder& blob_property(const char* name) {
-		auto* p = LUMIX_NEW(allocator, BlobProperty)(allocator);
+		auto* p = AETHERION_NEW(allocator, BlobProperty)(allocator);
 		p->name = name;
 		p->setter = [](IModule* module, EntityRef e, u32 idx, InputMemoryStream& value) {
 			using C = typename ClassOf<decltype(Setter)>::Type;
@@ -889,7 +889,7 @@ struct LUMIX_ENGINE_API builder {
 	template <auto Getter, auto PropGetter>
 	builder& var_prop(const char* name) {
 		using T = typename ResultOf<decltype(PropGetter)>::Type;
-		auto* p = LUMIX_NEW(allocator, Property<T>)(allocator);
+		auto* p = AETHERION_NEW(allocator, Property<T>)(allocator);
 		p->setter = [](IModule* module, EntityRef e, u32, const T& value) {
 			using C = typename ClassOf<decltype(Getter)>::Type;
 			auto& c = (static_cast<C*>(module)->*Getter)(e);
@@ -909,7 +909,7 @@ struct LUMIX_ENGINE_API builder {
 
 	template <auto Counter, auto Adder, auto Remover>
 	builder& begin_array(const char* name) {
-		ArrayProperty* prop = LUMIX_NEW(allocator, ArrayProperty)(allocator);
+		ArrayProperty* prop = AETHERION_NEW(allocator, ArrayProperty)(allocator);
 		using C = typename ClassOf<decltype(Counter)>::Type;
 		prop->counter = [](IModule* module, EntityRef e) -> u32 {
 			return (static_cast<C*>(module)->*Counter)(e);
@@ -929,14 +929,14 @@ struct LUMIX_ENGINE_API builder {
 
 	template <typename T>
 	builder& attribute() {
-		auto* a = LUMIX_NEW(allocator, T);
+		auto* a = AETHERION_NEW(allocator, T);
 		last_prop->attributes.push(a);
 		return *this;
 	}
 
 	template <auto F>
 	builder& event(const char* name) {
-		auto* f = LUMIX_NEW(allocator, Event<decltype(F)>);
+		auto* f = AETHERION_NEW(allocator, Event<decltype(F)>);
 		f->function = F;
 		f->name = name;
 		module->events.push(f);
@@ -945,7 +945,7 @@ struct LUMIX_ENGINE_API builder {
 
 	template <auto F>
 	builder& function(const char* name, const char* decl_code) {
-		auto* f = LUMIX_NEW(allocator, Function<F>);
+		auto* f = AETHERION_NEW(allocator, Function<F>);
 		f->name = name && name[0] ? name : declCodeToName(decl_code);
 		f->decl_code = decl_code;
 		if (module->cmps.empty()) {
@@ -1007,8 +1007,8 @@ template <typename F> void forEachProperty(ComponentType cmp_type, const F& f) {
 	if (cmp) cmp->visit(h);
 }
 
-LUMIX_ENGINE_API builder build_module(const char* name);
+AETHERION_ENGINE_API builder build_module(const char* name);
 
 } // namespace reflection
 
-} // namespace Lumix
+} // namespace Aetherion

@@ -13,7 +13,7 @@
 
 #include "engine/file_system.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 struct AsyncItem {
 	enum class Flags : u32 {
@@ -364,4 +364,4 @@ UniquePtr<FileSystem> FileSystem::createPacked(const char* pak_path, IAllocator&
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion

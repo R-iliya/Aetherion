@@ -1,11 +1,11 @@
 #pragma once
 
-#include "engine/lumix.h"
+#include "engine/aetherion.h"
 
 #include "core/allocator.h"
 #include "core/span.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 struct Path;
 
@@ -20,10 +20,10 @@ enum class DeserializeProjectResult {
 	PLUGIN_VERSION_NOT_SUPPORTED
 };
 
-struct LUMIX_ENGINE_API Engine {
+struct AETHERION_ENGINE_API Engine {
 	struct InitArgs {
 		const char* working_dir = nullptr;
-		const char* log_path = "lumix.log";
+		const char* log_path = "aetherion.log";
 		Span<const char*> plugins;
 		UniquePtr<struct FileSystem> file_system;
 	};
@@ -70,4 +70,4 @@ protected:
 	Engine(const Engine&) = delete;
 };
 
-} // namespace Lumix
+} // namespace Aetherion

@@ -4,7 +4,7 @@
 #include "engine/resource.h"
 #include "core/stream.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 enum class PrefabVersion : u32 {
 	FIRST,
@@ -24,4 +24,4 @@ struct LUMIX_ENGINE_API PrefabResource final : Resource {
 	static const ResourceType TYPE;
 };
 
-} // namespace Lumix
+} // namespace Aetherion

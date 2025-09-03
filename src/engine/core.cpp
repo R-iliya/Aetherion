@@ -7,7 +7,7 @@
 #include "engine/reflection.h"
 #include "world.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 static const ComponentType SPLINE_TYPE = reflection::getComponentType("spline");
 static const ComponentType SIGNAL_TYPE = reflection::getComponentType("signal");
@@ -246,10 +246,10 @@ struct CoreModuleImpl : CoreModule {
 	}
 
 	static void reflect() {
-		LUMIX_MODULE(CoreModuleImpl, "core")
-			.LUMIX_CMP(Spline, "spline", "Core / Spline")
+		AETHERION_MODULE(CoreModuleImpl, "core")
+			.AETHERION_CMP(Spline, "spline", "Core / Spline")
 				.blob_property<&CoreModuleImpl::getSplineBlob, &CoreModuleImpl::setSplineBlob>("Blob")
-			.LUMIX_CMP(Signal, "signal", "Core / Signal")
+			.AETHERION_CMP(Signal, "signal", "Core / Signal")
 				.blob_property<&CoreModuleImpl::getSignalBlob, &CoreModuleImpl::setSignalBlob>("Blob")
 		;
 	}
@@ -283,7 +283,7 @@ struct CorePlugin : ISystem {
 };
 
 ISystem* createCorePlugin(Engine& engine) {
-	return LUMIX_NEW(engine.getAllocator(), CorePlugin)(engine);
+	return AETHERION_NEW(engine.getAllocator(), CorePlugin)(engine);
 }
 
-} // namespace Lumix
+} // namespace Aetherion

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "lumix.h"
+#include "aetherion.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 template <typename T> struct Delegate;
 template <typename T> struct Span;
@@ -14,10 +14,10 @@ namespace os {
 	struct OutputFile;
 }
 
-struct LUMIX_ENGINE_API FileSystem {
+struct AETHERION_ENGINE_API FileSystem {
 	using ContentCallback = Delegate<void(Span<const u8>, bool)>;
 
-	struct LUMIX_ENGINE_API AsyncHandle {
+	struct AETHERION_ENGINE_API AsyncHandle {
 		static AsyncHandle invalid() { return AsyncHandle(0xffFFffFF); };
 		explicit AsyncHandle(u32 value) : value(value) {}
 		u32 value;
@@ -49,4 +49,4 @@ struct LUMIX_ENGINE_API FileSystem {
 	virtual void cancel(AsyncHandle handle) = 0;
 };
 
-} // namespace Lumix
+} // namespace Aetherion

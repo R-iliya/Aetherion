@@ -1,4 +1,4 @@
-#include "engine/lumix.h"
+#include "engine/aetherion.h"
 
 #include "core/array.h"
 #include "core/log.h"
@@ -8,7 +8,7 @@
 #include "engine/resource_manager.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 void ResourceManager::create(ResourceType type, ResourceManagerHub& owner)
@@ -268,4 +268,4 @@ void ResourceManagerHub::reload(const Path& path)
 	}
 }
 
-} // namespace Lumix
+} // namespace Aetherion

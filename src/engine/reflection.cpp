@@ -6,14 +6,14 @@
 #include "core/string.h"
 #include "engine/world.h"
 
-namespace Lumix::reflection {
+namespace Aetherion::reflection {
 
 namespace detail {
 
 StringView normalizeTypeName(StringView type_name) {
 	StringView res = type_name;
 	if (startsWith(res, "struct ")) res.removePrefix(7);
-	if (startsWith(res, "Lumix::")) res.removePrefix(7);
+	if (startsWith(res, "Aetherion::")) res.removePrefix(7);
 	while (res.size() > 0 && res[0] == ' ') res.removePrefix(1);
 	while (res.size() > 0 && res.back() == ' ') res.removeSuffix(1);
 	return res;
@@ -84,7 +84,7 @@ Module::Module(IAllocator& allocator)
 builder::builder(IAllocator& allocator)
 	: allocator(allocator)
 {
-	module = LUMIX_NEW(allocator, Module)(allocator);
+	module = AETHERION_NEW(allocator, Module)(allocator);
 }
 
 void builder::registerCmp(ComponentBase* cmp) {
@@ -196,43 +196,43 @@ builder build_module(const char* name) {
 }
 
 builder& builder::radiansAttribute() {
-	auto* a = LUMIX_NEW(allocator, RadiansAttribute);
+	auto* a = AETHERION_NEW(allocator, RadiansAttribute);
 	last_prop->attributes.push(a);
 	return *this;
 }
 
 builder& builder::colorAttribute() {
-	auto* a = LUMIX_NEW(allocator, ColorAttribute);
+	auto* a = AETHERION_NEW(allocator, ColorAttribute);
 	last_prop->attributes.push(a);
 	return *this;
 }
 
 builder& builder::noUIAttribute() {
-	auto* a = LUMIX_NEW(allocator, NoUIAttribute);
+	auto* a = AETHERION_NEW(allocator, NoUIAttribute);
 	last_prop->attributes.push(a);
 	return *this;
 }
 
 builder& builder::multilineAttribute() {
-	auto* a = LUMIX_NEW(allocator, MultilineAttribute);
+	auto* a = AETHERION_NEW(allocator, MultilineAttribute);
 	last_prop->attributes.push(a);
 	return *this;
 }
 
 builder& builder::minAttribute(float value) {
-	auto* a = LUMIX_NEW(allocator, MinAttribute)(value);
+	auto* a = AETHERION_NEW(allocator, MinAttribute)(value);
 	last_prop->attributes.push(a);
 	return *this;
 }
 
 builder& builder::clampAttribute(float min, float max) {
-	auto* a = LUMIX_NEW(allocator, ClampAttribute)(min, max);
+	auto* a = AETHERION_NEW(allocator, ClampAttribute)(min, max);
 	last_prop->attributes.push(a);
 	return *this;
 }
 
 builder& builder::resourceAttribute(ResourceType type) {
-	auto* a = LUMIX_NEW(allocator, ResourceAttribute)(type);
+	auto* a = AETHERION_NEW(allocator, ResourceAttribute)(type);
 	last_prop->attributes.push(a);
 	return *this;
 }
@@ -303,4 +303,4 @@ void ArrayProperty::visitChildren(struct IPropertyVisitor& visitor) const {
 	}
 }
 
-} // namespace Lumix::reflection
+} // namespace Aetherion::reflection

@@ -10,7 +10,7 @@
 #include "core/string.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 static constexpr int RESERVED_ENTITIES_COUNT = 1024;
@@ -1157,4 +1157,4 @@ ChildrenRange::Iterator ChildrenRange::end() const {
 	return iter;
 }
 
-} // namespace Lumix
+} // namespace Aetherion

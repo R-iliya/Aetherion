@@ -2,7 +2,7 @@
 
 #include "core/core.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 struct EntityRef;
 struct StringView;
@@ -56,31 +56,31 @@ inline EntityRef EntityPtr::operator*() const {
 }
 
 #ifdef STATIC_PLUGINS
-	#define LUMIX_ENGINE_API
+	#define AETHERION_ENGINE_API
 #elif defined BUILDING_ENGINE
-	#define LUMIX_ENGINE_API LUMIX_LIBRARY_EXPORT
+	#define AETHERION_ENGINE_API AETHERION_LIBRARY_EXPORT
 #else
-	#define LUMIX_ENGINE_API LUMIX_LIBRARY_IMPORT
+	#define AETHERION_ENGINE_API AETHERION_LIBRARY_IMPORT
 #endif
 
 #ifdef STATIC_PLUGINS
-	#define LUMIX_EDITOR_API
+	#define AETHERION_EDITOR_API
 #elif defined BUILDING_EDITOR
-	#define LUMIX_EDITOR_API LUMIX_LIBRARY_EXPORT
+	#define AETHERION_EDITOR_API AETHERION_LIBRARY_EXPORT
 #else
-	#define LUMIX_EDITOR_API LUMIX_LIBRARY_IMPORT
+	#define AETHERION_EDITOR_API AETHERION_LIBRARY_IMPORT
 #endif
 
 #ifdef STATIC_PLUGINS
-	#define LUMIX_RENDERER_API
+	#define AETHERION_RENDERER_API
 #elif defined BUILDING_RENDERER
-	#define LUMIX_RENDERER_API LUMIX_LIBRARY_EXPORT
+	#define AETHERION_RENDERER_API AETHERION_LIBRARY_EXPORT
 #else
-	#define LUMIX_RENDERER_API LUMIX_LIBRARY_IMPORT
+	#define AETHERION_RENDERER_API AETHERION_LIBRARY_IMPORT
 #endif
 
 namespace reflection { 
-	LUMIX_ENGINE_API ComponentType getComponentType(StringView id);
+	AETHERION_ENGINE_API ComponentType getComponentType(StringView id);
 }
 
-} // namespace Lumix
+} // namespace Aetherion

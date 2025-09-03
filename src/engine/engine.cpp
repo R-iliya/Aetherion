@@ -21,7 +21,7 @@
 #include "engine/world.h"
 #include <lz4/lz4.h>
 
-namespace Lumix
+namespace Aetherion
 {
 
 static const u32 SERIALIZED_PROJECT_MAGIC = 0x5f50524c;
@@ -33,11 +33,11 @@ struct PrefabResourceManager final : ResourceManager {
 	{}
 
 	Resource* createResource(const Path& path) override {
-		return LUMIX_NEW(m_allocator, PrefabResource)(path, *this, m_allocator);
+		return AETHERION_NEW(m_allocator, PrefabResource)(path, *this, m_allocator);
 	}
 
 	void destroyResource(Resource& resource) override {
-		return LUMIX_DELETE(m_allocator, &static_cast<PrefabResource&>(resource));
+		return AETHERION_DELETE(m_allocator, &static_cast<PrefabResource&>(resource));
 	}
 
 	IAllocator& m_allocator;
@@ -101,8 +101,8 @@ struct EngineImpl final : Engine {
 
 		m_system_manager->addSystem(createCorePlugin(*this), nullptr);
 
-		#ifdef LUMIXENGINE_PLUGINS
-			const char* plugins[] = { LUMIXENGINE_PLUGINS };
+		#ifdef AETHERIONENGINE_PLUGINS
+			const char* plugins[] = { AETHERIONENGINE_PLUGINS };
 			for (auto* plugin_name : plugins) {
 				if (plugin_name[0] && !m_system_manager->load(plugin_name)) {
 					logInfo(plugin_name, " plugin has not been loaded");
@@ -198,13 +198,13 @@ struct EngineImpl final : Engine {
 	}
 
 	World& createWorld() override {
-		return *LUMIX_NEW(m_allocator, World)(*this);
+		return *AETHERION_NEW(m_allocator, World)(*this);
 	}
 
 
 	void destroyWorld(World& world) override
 	{
-		LUMIX_DELETE(m_allocator, &world);
+		AETHERION_DELETE(m_allocator, &world);
 		m_resource_manager.removeUnreferenced();
 	}
 
@@ -428,4 +428,4 @@ UniquePtr<Engine> Engine::create(InitArgs&& init_data, IAllocator& allocator)
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion
