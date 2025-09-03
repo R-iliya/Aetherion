@@ -1,22 +1,16 @@
 # Aetherion Studio Engine
 
-[![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
-[![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/mikulasflorek)
+Aetherion studio is a 3D Game Engine and a fork of Lumix Engine 
+![License](http://img.shields.io/:license-mit-blue.svg)
+![authoor](https://img.shields.io/badge/By:-R._iliya-green)
+![lumix](https://img.shields.io/badge/forked_from-Lumix_Engine-red)
 
-Aetherion studio is a 3D Game Engine and a fork of Lumix Engine
-
-[Features](https://github.com/nem0/LumixEngine/wiki/Features) | [Getting started](https://nem0.github.io/LumixEngine/getting_started.html) | [Video](https://www.youtube.com/watch?v=OjQKTA5ia2U) | 
-[Documentation](https://nem0.github.io/LumixEngine/) | [Videos](https://www.youtube.com/channel/UCtjtIy0ldsq-9siM1Gm_rXg/videos)
-
-<<<<<<< HEAD
-![Editor screenshot](https://raw.githubusercontent.com/wiki/nem0/LumixEngine/files/features/editor.jpg)
+[![wiki](https://img.shields.io/badge/Brief_Limux_Wiki-4A2BE3)](https://github.com/nem0/LumixEngine/wiki) 
+[![Features](https://img.shields.io/badge/Features-4A2BE3)](https://github.com/nem0/LumixEngine/wiki/Features) 
+[![Getting started](https://img.shields.io/badge/Getting_Started-4A2BE3)](https://nem0.github.io/LumixEngine/getting_started.html) 
+[![Video](https://img.shields.io/badge/Video-4A2BE3)](https://www.youtube.com/watch?v=OjQKTA5ia2U) 
+[![Documentation](https://img.shields.io/badge/Lumix_Documentation-4A2BE3)](https://nem0.github.io/LumixEngine/) 
+[![Videos](https://img.shields.io/badge/Videos-4A2BE3)](https://www.youtube.com/channel/UCtjtIy0ldsq-9siM1Gm_rXg/videos) 
 
 ---------
- Project generator : [Genie](https://github.com/bkaradzic/genie)
- 
-Contact: iliyarahgari@duck.com
-=======
----------
- Project generator : [Genie](https://github.com/bkaradzic/genie)
- Contact: iliyarahgari@duck.com
->>>>>>> 05bcf7e85a0b79c88e40b65e1e092222eeb91474
+ [![genie](http://img.shields.io/:Project_generator-Genie-blue.svg)](https://github.com/bkaradzic/genie)
