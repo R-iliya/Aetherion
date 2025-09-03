@@ -8,7 +8,7 @@ local yaw = 0
 local sprint = 0
 local jump = 0
 local pitch = 0
-camera_pivot = Lumix.Entity.NULL
+camera_pivot = Aetherion.Entity.NULL
 
 function onInputEvent(event : InputEvent)
     if event.type == "axis" and event.device.type == "mouse" then
@@ -45,14 +45,14 @@ function onInputEvent(event : InputEvent)
                     right = 0
                 end
 			end
-			if event.key_id == LumixAPI.INPUT_KEYCODE_SHIFT then 
+			if event.key_id == AetherionAPI.INPUT_KEYCODE_SHIFT then 
                 if event.down then
                     sprint = 1
                 else
                     sprint = 0
                 end
 			end	
-            if event.key_id == LumixAPI.INPUT_KEYCODE_SPACE then 
+            if event.key_id == AetherionAPI.INPUT_KEYCODE_SPACE then 
                 if event.down then
                     jump = 1
                 else

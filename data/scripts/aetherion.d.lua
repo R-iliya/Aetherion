@@ -640,7 +640,7 @@ declare Editor: {
 	asset_browser : AssetBrowser
 }
 
-declare LumixAPI: {
+declare AetherionAPI: {
 	RaycastHit : { create : () -> RaycastHit, destroy : (RaycastHit) -> () },
 	SweepHit : { create : () -> SweepHit, destroy : (SweepHit) -> () },
 	Ray : { create : () -> Ray, destroy : (Ray) -> () },
@@ -674,7 +674,7 @@ end
 declare class ModuleReflection
 end
 
-declare LumixReflection: {
+declare AetherionReflection: {
 	getComponent : (number) -> ComponentBase,
 	getComponentName : (ComponentBase) -> string,
 	getNumComponents : () -> number,

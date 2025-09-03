@@ -14,7 +14,7 @@ local dir_input_idx = -1
 local stance_input_index = -1
 local crouched = false
 local aiming = false
-camera_pivot = Lumix.Entity.NULL
+camera_pivot = Aetherion.Entity.NULL
 handle_input = true
 
 function onInputEvent(event : InputEvent)
@@ -66,7 +66,7 @@ function onInputEvent(event : InputEvent)
 					right = 0
 				end
 			end
-			if event.key_id == LumixAPI.INPUT_KEYCODE_SHIFT then
+			if event.key_id == AetherionAPI.INPUT_KEYCODE_SHIFT then
 				if event.down then
 					sprint = 1
 				else

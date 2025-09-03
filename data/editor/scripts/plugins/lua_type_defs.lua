@@ -127,7 +127,7 @@ declare Editor: {
 	asset_browser : AssetBrowser
 }
 
-declare LumixAPI: {
+declare AetherionAPI: {
 %s
 	INPUT_KEYCODE_SHIFT: number,
 	INPUT_KEYCODE_LEFT : number,
@@ -157,7 +157,7 @@ end
 declare class ModuleReflection
 end
 
-declare LumixReflection: {
+declare AetherionReflection: {
 	getComponent : (number) -> ComponentBase,
 	getComponentName : (ComponentBase) -> string,
 	getNumComponents : () -> number,
@@ -234,13 +234,13 @@ export type InputEvent = ButtonInputEvent | AxisInputEvent
 	end
 
 	function writeFuncDecl(code : string, self_type : string, func : FunctionBase, is_component_fn : boolean)
-		local func_name = LumixReflection.getFunctionName(func)
-		local arg_count = LumixReflection.getFunctionArgCount(func)
-		local ret_type = LumixReflection.getFunctionReturnType(func)
+		local func_name = AetherionReflection.getFunctionName(func)
+		local arg_count = AetherionReflection.getFunctionArgCount(func)
+		local ret_type = AetherionReflection.getFunctionReturnType(func)
 		code = code .. `\t{func_name} : ({self_type}`
 		local from_arg = if is_component_fn then 2 else 1
 		for i = from_arg, arg_count do
-			code = code .. ", " .. toLuaType(LumixReflection.getFunctionArgType(func, i - 1))
+			code = code .. ", " .. toLuaType(AetherionReflection.getFunctionArgType(func, i - 1))
 		end
 		code = code .. `) -> {toLuaType(ret_type)}\n`
 		return code
@@ -253,7 +253,7 @@ export type InputEvent = ButtonInputEvent | AxisInputEvent
 	end
 
 	function toLuaType(ctype : string)
-		if string.match(ctype, "^struct Lumix::") then
+		if string.match(ctype, "^struct Aetherion::") then
 			ctype = string.sub(ctype, 15)
 		end
 		if ctype == "int" then return "number" end
@@ -291,27 +291,27 @@ export type InputEvent = ButtonInputEvent | AxisInputEvent
 
 	function refl()
 		local out = ""
-		local lumixAPI_src = ""
-		local num_structs = LumixReflection.getNumStructs()
+		local aetherionAPI_src = ""
+		local num_structs = AetherionReflection.getNumStructs()
 		for i = 0, num_structs - 1 do
-			local struct = LumixReflection.getStruct(i)
-			local name = LumixReflection.getStructName(struct)
+			local struct = AetherionReflection.getStruct(i)
+			local name = AetherionReflection.getStructName(struct)
 			out = out .. `declare class {name}\n`
-			local num_members = LumixReflection.getNumStructMembers(struct)
-			lumixAPI_src = lumixAPI_src .. `\t{name} : \{ create : () -> {name}, destroy : ({name}) -> () \},\n`
+			local num_members = AetherionReflection.getNumStructMembers(struct)
+			AetherionAPI_src = AetherionAPI_src .. `\t{name} : \{ create : () -> {name}, destroy : ({name}) -> () \},\n`
 			for j = 0, num_members - 1 do
-				local member = LumixReflection.getStructMember(struct, j)
-				local member_name = LumixReflection.getStructMemberName(member)
-				local type = LumixReflection.getStructMemberType(member)
+				local member = AetherionReflection.getStructMember(struct, j)
+				local member_name = AetherionReflection.getStructMemberName(member)
+				local type = AetherionReflection.getStructMemberType(member)
 				out = out .. `\t{member_name} : {memberTypeToString(type)}\n`
 			end
 			out = out .. `end\n\n`
 		end
 
-		local num_funcs = LumixReflection.getNumFunctions()
+		local num_funcs = AetherionReflection.getNumFunctions()
 		for i = 1, num_funcs do
-			local fn = LumixReflection.getFunction(i - 1)
-			local this_type_name = toLuaTypeName(LumixReflection.getThisTypeName(fn)) 
+			local fn = AetherionReflection.getFunction(i - 1)
+			local this_type_name = toLuaTypeName(AetherionReflection.getThisTypeName(fn)) 
 			if objs[this_type_name] == nil then
 				objs[this_type_name] = {}
 			end
@@ -327,44 +327,44 @@ export type InputEvent = ButtonInputEvent | AxisInputEvent
 		end
 
 		local world_src = ""
-		local module = LumixReflection.getFirstModule()
+		local module = AetherionReflection.getFirstModule()
 		while module ~= nil do
-			local module_name = LumixReflection.getModuleName(module)
+			local module_name = AetherionReflection.getModuleName(module)
 			out = out .. `declare class {module_name}_module\n`
-			local num_fn = LumixReflection.getNumModuleFunctions(module)
+			local num_fn = AetherionReflection.getNumModuleFunctions(module)
 			for i = 1, num_fn do
-				local fn = LumixReflection.getModuleFunction(module, i - 1)
+				local fn = AetherionReflection.getModuleFunction(module, i - 1)
 				out = writeFuncDecl(out, module_name .. "_module", fn, false)
 			end
 			out = out .. "end\n\n"
 			world_src = world_src .. `\t{module_name} : {module_name}_module\n`
-			module = LumixReflection.getNextModule(module)
+			module = AetherionReflection.getNextModule(module)
 		end
 
-		local num_cmp = LumixReflection.getNumComponents()
+		local num_cmp = AetherionReflection.getNumComponents()
 		local entity_src = ""
 		for i = 1, num_cmp do
-			local cmp = LumixReflection.getComponent(i - 1)
-			local name = LumixReflection.getComponentName(cmp)
-			local num_props = LumixReflection.getNumProperties(cmp)
+			local cmp = AetherionReflection.getComponent(i - 1)
+			local name = AetherionReflection.getComponentName(cmp)
+			local num_props = AetherionReflection.getNumProperties(cmp)
 			out = out .. `declare class {name}_component\n`
 			entity_src = entity_src .. `\t{name}: {name}_component\n`
 			for j = 1, num_props do
-				local prop = LumixReflection.getProperty(cmp, j - 1)
-				local prop_name = LumixReflection.getPropertyName(prop)
-				local prop_type = LumixReflection.getPropertyType(prop)
+				local prop = AetherionReflection.getProperty(cmp, j - 1)
+				local prop_name = AetherionReflection.getPropertyName(prop)
+				local prop_type = AetherionReflection.getPropertyType(prop)
 				if prop_name:match("[0-9].*") then continue end
 				out = out .. "\t" .. toLuaIdentifier(prop_name) .. ": " .. typeToString(prop_type) .. "\n"
 			end
-			local num_cmp_funcs = LumixReflection.getNumComponentFunctions(cmp)
+			local num_cmp_funcs = AetherionReflection.getNumComponentFunctions(cmp)
 			for j = 1, num_cmp_funcs do
-				local func = LumixReflection.getComponentFunction(cmp, j - 1)
+				local func = AetherionReflection.getComponentFunction(cmp, j - 1)
 				out = writeFuncDecl(out, name .. "_component", func, true)
 			end
 			out = out .. "end\n\n"
 		end
 
-		return string.format(tpl, world_src, out, entity_src, lumixAPI_src)
+		return string.format(tpl, world_src, out, entity_src, aetherionAPI_src)
 	end
 
 local type_defs = refl()
