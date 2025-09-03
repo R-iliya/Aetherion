@@ -11,11 +11,11 @@
 #include "editor/text_filter.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
-struct LUMIX_EDITOR_API LogUI : StudioApp::GUIPlugin
+struct AETHERION_EDITOR_API LogUI : StudioApp::GUIPlugin
 {
 	public:
 		explicit LogUI(StudioApp& app, IAllocator& allocator);
@@ -78,4 +78,4 @@ struct LUMIX_EDITOR_API LogUI : StudioApp::GUIPlugin
 };
 
 
-} // namespace Lumix
+} // namespace Aetherion

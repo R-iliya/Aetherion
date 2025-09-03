@@ -15,7 +15,7 @@
 #include <math.h>
 #include <imgui/imgui.h>
 
-namespace Lumix {
+namespace Aetherion {
 
 static const ComponentType SPLINE_TYPE = reflection::getComponentType("spline");
 
@@ -274,7 +274,7 @@ struct SplineEditorPlugin : SplineEditor, StudioApp::MousePlugin, PropertyGrid::
 };
 
 SplineEditor* createSplineEditor(StudioApp& app) {
-	return LUMIX_NEW(app.getAllocator(), SplineEditorPlugin)(app);
+	return AETHERION_NEW(app.getAllocator(), SplineEditorPlugin)(app);
 }
 
 

@@ -1,21 +1,21 @@
 #pragma once
 
 #include "core/span.h"
-#include "engine/lumix.h"
+#include "engine/aetherion.h"
 
 struct ImFont;
 
 #ifdef STATIC_PLUGINS
-	#define LUMIX_STUDIO_ENTRY(plugin_name) \
-		extern "C" Lumix::StudioApp::IPlugin* setStudioApp_##plugin_name(Lumix::StudioApp& app); \
-		extern "C" Lumix::StudioApp::IPlugin* setStudioApp_##plugin_name(Lumix::StudioApp& app)
+	#define AETHERION_STUDIO_ENTRY(plugin_name) \
+		extern "C" Aetherion::StudioApp::IPlugin* setStudioApp_##plugin_name(Aetherion::StudioApp& app); \
+		extern "C" Aetherion::StudioApp::IPlugin* setStudioApp_##plugin_name(Aetherion::StudioApp& app)
 #else
-	#define LUMIX_STUDIO_ENTRY(plugin_name) \
-		extern "C" LUMIX_LIBRARY_EXPORT Lumix::StudioApp::IPlugin* setStudioApp(Lumix::StudioApp& app)
+	#define AETHERION_STUDIO_ENTRY(plugin_name) \
+		extern "C" AETHERION_LIBRARY_EXPORT Aetherion::StudioApp::IPlugin* setStudioApp(Aetherion::StudioApp& app)
 #endif
 
 
-namespace Lumix {
+namespace Aetherion {
 
 
 template <typename T> struct Array;
@@ -30,7 +30,7 @@ namespace os {
 	struct Rect;
 }
 
-struct LUMIX_EDITOR_API StudioApp {
+struct AETHERION_EDITOR_API StudioApp {
 	struct IPlugin {
 		virtual ~IPlugin() {}
 		virtual void init() = 0;
@@ -41,7 +41,7 @@ struct LUMIX_EDITOR_API StudioApp {
 		virtual bool showGizmo(struct WorldView& view, struct ComponentUID cmp) = 0;
 	};
 
-	struct LUMIX_EDITOR_API MousePlugin {
+	struct AETHERION_EDITOR_API MousePlugin {
 		virtual ~MousePlugin() {}
 
 		virtual bool onMouseDown(WorldView& view, int x, int y) { return false; }
@@ -51,7 +51,7 @@ struct LUMIX_EDITOR_API StudioApp {
 		virtual const char* getName() const = 0;
 	};
 
-	struct LUMIX_EDITOR_API GUIPlugin {
+	struct AETHERION_EDITOR_API GUIPlugin {
 		virtual ~GUIPlugin() {}
 		virtual void onGUI() = 0;
 		virtual void update(float) {}
@@ -154,4 +154,4 @@ struct LUMIX_EDITOR_API StudioApp {
 };
 
 
-} // namespace Lumix
+} // namespace Aetherion

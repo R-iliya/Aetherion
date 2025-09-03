@@ -10,7 +10,7 @@
 #include <unistd.h>
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -18,19 +18,19 @@ struct FileSystemWatcherImpl;
 
 
 
-struct FileSystemWatcherTask : Lumix::Thread
+struct FileSystemWatcherTask : Aetherion::Thread
 {
 	FileSystemWatcherTask(const char* path,
         FileSystemWatcherImpl& _watcher,
-		Lumix::IAllocator& _allocator)
+		Aetherion::IAllocator& _allocator)
 		: Thread(_allocator)
 		, watcher(_watcher)
 		, watched(_allocator)
 		, allocator(_allocator)
 	{
-		Lumix::copyString(this->path, path);
-		int len = Lumix::stringLength(path);
-		if(len > 0 && path[len - 1] != '/') Lumix::catString(this->path, "/");
+		Aetherion::copyString(this->path, path);
+		int len = Aetherion::stringLength(path);
+		if(len > 0 && path[len - 1] != '/') Aetherion::catString(this->path, "/");
 	}
 
 
@@ -41,18 +41,18 @@ struct FileSystemWatcherTask : Lumix::Thread
         close(fd);
     }
 
-    Lumix::IAllocator& allocator;
+    Aetherion::IAllocator& allocator;
     FileSystemWatcherImpl& watcher;
 	volatile bool finished = false;
 	char path[MAX_PATH];
-	Lumix::HashMap<int, Lumix::StaticString<MAX_PATH> > watched;
+	Aetherion::HashMap<int, Aetherion::StaticString<MAX_PATH> > watched;
 	int fd;
 };
 
 
 struct FileSystemWatcherImpl : FileSystemWatcher
 {
-	explicit FileSystemWatcherImpl(Lumix::IAllocator& _allocator)
+	explicit FileSystemWatcherImpl(Aetherion::IAllocator& _allocator)
 		: allocator(_allocator)
 		, task(nullptr)
 	{
@@ -65,17 +65,17 @@ struct FileSystemWatcherImpl : FileSystemWatcher
         {
             task->cancel();
             task->destroy();
-            LUMIX_DELETE(allocator, task);
+            AETHERION_DELETE(allocator, task);
         }
     }
 
 
     bool start(const char* path)
     {
-        task = LUMIX_NEW(allocator, FileSystemWatcherTask)(path, *this, allocator);
+        task = AETHERION_NEW(allocator, FileSystemWatcherTask)(path, *this, allocator);
         if (!task->create("FileSystemWatcherTask", true))
         {
-            LUMIX_DELETE(allocator, task);
+            AETHERION_DELETE(allocator, task);
             task = nullptr;
             return false;
         }
@@ -83,16 +83,16 @@ struct FileSystemWatcherImpl : FileSystemWatcher
     }
 
 
-	virtual Lumix::Delegate<void(const char*)>& getCallback() { return callback; }
+	virtual Aetherion::Delegate<void(const char*)>& getCallback() { return callback; }
 
 
     FileSystemWatcherTask* task;
-	Lumix::Delegate<void(const char*)> callback;
-	Lumix::IAllocator& allocator;
+	Aetherion::Delegate<void(const char*)> callback;
+	Aetherion::IAllocator& allocator;
 };
 
 
-UniquePtr<FileSystemWatcher> FileSystemWatcher::create(const char* path, Lumix::IAllocator& allocator)
+UniquePtr<FileSystemWatcher> FileSystemWatcher::create(const char* path, Aetherion::IAllocator& allocator)
 {
 	UniquePtr<FileSystemWatcherImpl> watcher = UniquePtr<FileSystemWatcherImpl>::create(allocator, allocator);
 	if(!watcher->start(path))
@@ -115,10 +115,10 @@ static void addWatch(FileSystemWatcherTask& task, const char* path, int root_len
     while (os::getNextFile(iter, &info))
     {
         if (!info.is_directory) continue;
-		if (Lumix::equalStrings(info.filename, ".")) continue;
-		if (Lumix::equalStrings(info.filename, "..")) continue;
+		if (Aetherion::equalStrings(info.filename, ".")) continue;
+		if (Aetherion::equalStrings(info.filename, "..")) continue;
 
-        Lumix::StaticString<MAX_PATH> tmp(path, info.filename, "/");
+        Aetherion::StaticString<MAX_PATH> tmp(path, info.filename, "/");
         addWatch(task, tmp, root_length);
     }
     os::destroyFileIterator(iter);
@@ -131,12 +131,12 @@ static void getName(FileSystemWatcherTask& task, inotify_event* event, char* out
 
     if (iter == task.watched.end())
     {
-        Lumix::copyString(Span(out, max_size), event->name);
+        Aetherion::copyString(Span(out, max_size), event->name);
         return;
     }
 
-    Lumix::copyString(Span(out, max_size), iter.value());
-    Lumix::catString(Span(out, max_size), event->name);
+    Aetherion::copyString(Span(out, max_size), iter.value());
+    Aetherion::catString(Span(out, max_size), event->name);
 }
 
 
@@ -145,7 +145,7 @@ int FileSystemWatcherTask::task()
     fd = inotify_init();
     if (fd == -1) return false;
 
-	int root_length = Lumix::stringLength(path);
+	int root_length = Aetherion::stringLength(path);
     addWatch(*this, path, root_length);
 
     char buf[4096];
@@ -168,7 +168,7 @@ int FileSystemWatcherTask::task()
             while ((char*)event < buf + r)
             {
                 char tmp[MAX_PATH];
-                getName(*this, event, tmp, Lumix::lengthOf(tmp));
+                getName(*this, event, tmp, Aetherion::lengthOf(tmp));
                 if (event->mask & IN_CREATE) addWatch(*this, tmp, root_length);
                 watcher.callback.invoke(tmp);
 
@@ -181,4 +181,4 @@ int FileSystemWatcherTask::task()
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion

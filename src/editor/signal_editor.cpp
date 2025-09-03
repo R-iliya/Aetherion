@@ -5,7 +5,7 @@
 #include "signal_editor.h"
 #include <imgui/imgui.h>
 
-namespace Lumix {
+namespace Aetherion {
 
 static const ComponentType SIGNAL_TYPE = reflection::getComponentType("signal");
 
@@ -69,7 +69,7 @@ struct SignalEditorImpl : SignalEditor {
 };
 
 SignalEditor* createSignalEditor(StudioApp& app) {
-	return LUMIX_NEW(app.getAllocator(), SignalEditorImpl)(app);
+	return AETHERION_NEW(app.getAllocator(), SignalEditorImpl)(app);
 }
 
 }

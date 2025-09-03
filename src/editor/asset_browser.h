@@ -3,15 +3,15 @@
 #include "core/hash.h"
 #include "editor/studio_app.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 template <typename T> struct UniquePtr;
 struct ResourceType;
 
-struct LUMIX_EDITOR_API AssetBrowser : StudioApp::GUIPlugin {
+struct AETHERION_EDITOR_API AssetBrowser : StudioApp::GUIPlugin {
 	static constexpr int TILE_SIZE = 96;
 
-	struct LUMIX_EDITOR_API IPlugin {
+	struct AETHERION_EDITOR_API IPlugin {
 		virtual bool canCreateResource() const { return false; }
 		virtual bool canMultiEdit() { return false; }
 		virtual void createResource(struct OutputMemoryStream& content) {}
@@ -55,4 +55,4 @@ struct LUMIX_EDITOR_API AssetBrowser : StudioApp::GUIPlugin {
 };
 
 
-} // namespace Lumix
+} // namespace Aetherion

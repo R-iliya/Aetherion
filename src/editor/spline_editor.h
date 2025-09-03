@@ -2,7 +2,7 @@
 
 #include "studio_app.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 	struct SplineEditor : StudioApp::IPlugin {
 		virtual void setSplinePoints(EntityRef entity, Span<const Vec3> points) = 0;

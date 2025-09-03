@@ -1,14 +1,14 @@
 #pragma once
 
-#include "engine/lumix.h"
+#include "engine/aetherion.h"
 
-namespace Lumix
+namespace Aetherion
 {
 
 template <typename T> struct Delegate;
 template <typename T> struct UniquePtr;
 
-struct LUMIX_EDITOR_API FileSystemWatcher
+struct AETHERION_EDITOR_API FileSystemWatcher
 {
 	virtual ~FileSystemWatcher() {}
 
@@ -17,4 +17,4 @@ struct LUMIX_EDITOR_API FileSystemWatcher
 };
 
 
-} // namespace Lumix
+} // namespace Aetherion

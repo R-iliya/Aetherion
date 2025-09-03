@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/lumix.h"
+#include "engine/aetherion.h"
 
 #include "core/array.h"
 #include "core/delegate.h"
@@ -10,11 +10,11 @@
 
 #include <imgui/imgui.h>
 
-namespace Lumix {
+namespace Aetherion {
 
 namespace os { enum class Keycode : u8; }
 
-struct LUMIX_EDITOR_API ResourceLocator {
+struct AETHERION_EDITOR_API ResourceLocator {
 	ResourceLocator(StringView path);
 
 	StringView subresource;
@@ -26,17 +26,17 @@ struct LUMIX_EDITOR_API ResourceLocator {
 	StringView full;
 };
 
-LUMIX_EDITOR_API [[nodiscard]] bool menuItem(const struct Action& a, bool enabled);
-LUMIX_EDITOR_API void getEntityListDisplayName(StudioApp& app, struct World& editor, Span<char> buf, EntityPtr entity, bool force_display_index = false);
-LUMIX_EDITOR_API bool inputRotation(const char* label, struct Quat* value);
-LUMIX_EDITOR_API bool inputString(const char* label, String* value, ImGuiInputTextFlags flags = 0);
-LUMIX_EDITOR_API bool inputString(const char* str_id, const char* label, String* value);
-LUMIX_EDITOR_API bool inputStringMultiline(const char* label, String* value, const ImVec2& size = ImVec2(0, 0));
-LUMIX_EDITOR_API void openCenterStrip(const char* str_id);
-LUMIX_EDITOR_API bool beginCenterStrip(const char* str_id, u32 lines = 5);
-LUMIX_EDITOR_API void endCenterStrip();
+AETHERION_EDITOR_API [[nodiscard]] bool menuItem(const struct Action& a, bool enabled);
+AETHERION_EDITOR_API void getEntityListDisplayName(StudioApp& app, struct World& editor, Span<char> buf, EntityPtr entity, bool force_display_index = false);
+AETHERION_EDITOR_API bool inputRotation(const char* label, struct Quat* value);
+AETHERION_EDITOR_API bool inputString(const char* label, String* value, ImGuiInputTextFlags flags = 0);
+AETHERION_EDITOR_API bool inputString(const char* str_id, const char* label, String* value);
+AETHERION_EDITOR_API bool inputStringMultiline(const char* label, String* value, const ImVec2& size = ImVec2(0, 0));
+AETHERION_EDITOR_API void openCenterStrip(const char* str_id);
+AETHERION_EDITOR_API bool beginCenterStrip(const char* str_id, u32 lines = 5);
+AETHERION_EDITOR_API void endCenterStrip();
 
-struct LUMIX_EDITOR_API SimpleUndoRedo {
+struct AETHERION_EDITOR_API SimpleUndoRedo {
 	enum { NO_MERGE_UNDO = 0xffFFffFF };
 	struct Undo {
 		Undo(IAllocator& allocator) : blob(allocator) {}
@@ -99,7 +99,7 @@ private:
 	Array<String> m_subdirs;
 };
 
-struct LUMIX_EDITOR_API FileSelector {
+struct AETHERION_EDITOR_API FileSelector {
 	FileSelector(StudioApp& app);
 	FileSelector(const char* ext, StudioApp& app);
 	// popup
@@ -119,7 +119,7 @@ private:
 	Array<String> m_subfiles;
 };
 
-struct LUMIX_EDITOR_API NodeEditor : SimpleUndoRedo {
+struct AETHERION_EDITOR_API NodeEditor : SimpleUndoRedo {
 	enum { OUTPUT_FLAG = 1 << 31 };
 
 	NodeEditor(IAllocator& allocator);
@@ -168,10 +168,10 @@ struct CodeEditor {
 	static inline i32 s_font_size = 20;
 };
 
-LUMIX_EDITOR_API UniquePtr<CodeEditor> createCodeEditor(StudioApp& app);
-LUMIX_EDITOR_API UniquePtr<CodeEditor> createCppCodeEditor(StudioApp& app);
-LUMIX_EDITOR_API UniquePtr<CodeEditor> createLuaCodeEditor(StudioApp& app);
-LUMIX_EDITOR_API UniquePtr<CodeEditor> createHLSLCodeEditor(StudioApp& app);
+AETHERION_EDITOR_API UniquePtr<CodeEditor> createCodeEditor(StudioApp& app);
+AETHERION_EDITOR_API UniquePtr<CodeEditor> createCppCodeEditor(StudioApp& app);
+AETHERION_EDITOR_API UniquePtr<CodeEditor> createLuaCodeEditor(StudioApp& app);
+AETHERION_EDITOR_API UniquePtr<CodeEditor> createHLSLCodeEditor(StudioApp& app);
 
 template <typename F> void alignGUI(float align, const F& f) {
 	const ImVec2 container_size = ImGui::GetContentRegionAvail();
@@ -183,7 +183,7 @@ template <typename F> void alignGUI(float align, const F& f) {
 	ImGuiWindowFlags flags = ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollWithMouse |
 							   ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing |
 							   ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoDocking;
-	const char* id = "imgui_lumix_measure__";
+	const char* id = "imgui_aetherion_measure__";
 	ImGui::Begin(id, nullptr, flags);
 	ImGuiEx::SetSkipItems(false);
 	ImGui::BeginGroup();
@@ -201,4 +201,4 @@ template <typename F> void alignGUIRight(const F& f) { alignGUI(1, f); }
 template <typename F> void alignGUICenter(const F& f) { alignGUI(0.5f, f); }
 
 
-} // namespace Lumix
+} // namespace Aetherion

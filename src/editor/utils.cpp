@@ -19,7 +19,7 @@
 #include "text_filter.h"
 #include "utils.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 // copied from imgui, but without the rounding
 static ImVec2 CalcTextSize(const char* text, const char* text_end = nullptr, float wrap_width = -1.f)
@@ -2361,7 +2361,7 @@ void FileSelector::fillSubitems() {
 	while (os::getNextFile(iter, &info)) {
 		if (equalStrings(info.filename, ".")) continue;
 		if (equalStrings(info.filename, "..")) continue;
-		if (equalStrings(info.filename, ".lumix")) continue;
+		if (equalStrings(info.filename, ".aetherion")) continue;
 		if (!filter.pass(info.filename)) continue;
 		if (info.is_directory) {
 			m_subdirs.emplace(info.filename, m_app.getAllocator());
@@ -2412,7 +2412,7 @@ void DirSelector::fillSubitems() {
 	while (os::getNextFile(iter, &info)) {
 		if (equalStrings(info.filename, ".")) continue;
 		if (equalStrings(info.filename, "..")) continue;
-		if (equalStrings(info.filename, ".lumix") && m_current_dir.length() == 0) continue;
+		if (equalStrings(info.filename, ".aetherion") && m_current_dir.length() == 0) continue;
 
 		if (info.is_directory && filter.pass(info.filename)) {
 			m_subdirs.emplace(info.filename, m_app.getAllocator());
@@ -2995,4 +2995,4 @@ void endCenterStrip() {
 	ImGui::EndPopup();
 }
 
-} // namespace Lumix
+} // namespace Aetherion

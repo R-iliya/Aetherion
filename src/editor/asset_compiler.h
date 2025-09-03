@@ -4,13 +4,13 @@
 #include "core/hash_map.h"
 #include "engine/resource.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 struct StudioApp;
 
 
-struct LUMIX_EDITOR_API AssetCompiler {
-	struct LUMIX_EDITOR_API IPlugin {
+struct AETHERION_EDITOR_API AssetCompiler {
+	struct AETHERION_EDITOR_API IPlugin {
 		virtual ~IPlugin() {}
 		virtual bool compile(const Path& src) = 0;
 		
@@ -56,5 +56,5 @@ struct LUMIX_EDITOR_API AssetCompiler {
 };
 
 
-} // namespace Lumix
+} // namespace Aetherion
 

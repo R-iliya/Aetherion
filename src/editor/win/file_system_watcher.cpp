@@ -9,7 +9,7 @@
 #include "file_system_watcher.h"
 
 
-namespace Lumix {
+namespace Aetherion {
 
 
 struct FileSystemWatcherPC;
@@ -50,15 +50,15 @@ struct FileSystemWatcherPC final : FileSystemWatcher {
 			CloseHandle(m_task->m_handle);
 
 			m_task->destroy();
-			LUMIX_DELETE(m_allocator, m_task);
+			AETHERION_DELETE(m_allocator, m_task);
 		}
 	}
 
 
 	bool start(LPCSTR path) {
-		m_task = LUMIX_NEW(m_allocator, FileSystemWatcherTask)(path, *this, m_allocator);
+		m_task = AETHERION_NEW(m_allocator, FileSystemWatcherTask)(path, *this, m_allocator);
 		if (!m_task->create("Filesystem watcher", true)) {
-			LUMIX_DELETE(m_allocator, m_task);
+			AETHERION_DELETE(m_allocator, m_task);
 			m_task = nullptr;
 			return false;
 		}
@@ -140,4 +140,4 @@ int FileSystemWatcherTask::task() {
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion

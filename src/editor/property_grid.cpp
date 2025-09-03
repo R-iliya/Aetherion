@@ -20,7 +20,7 @@
 #include "utils.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 static const ComponentType GUI_RECT_TYPE = reflection::getComponentType("gui_rect");
@@ -914,4 +914,4 @@ void PropertyGrid::onGUI() {
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion

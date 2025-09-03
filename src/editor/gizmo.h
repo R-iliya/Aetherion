@@ -1,13 +1,13 @@
 #pragma once
 
-#include "engine/lumix.h"
+#include "engine/aetherion.h"
 
 #include "core/array.h"
 #include "core/math.h"
 
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -18,7 +18,7 @@ template <typename T> struct Array;
 
 namespace Gizmo {
 
-struct LUMIX_EDITOR_API Config {
+struct AETHERION_EDITOR_API Config {
 	enum Mode {
 		TRANSLATE,
 		ROTATE,
@@ -60,13 +60,13 @@ struct LUMIX_EDITOR_API Config {
 	void setOffset(Vec3 val) { offset = val; }
 };
 
-LUMIX_EDITOR_API bool manipulate(u64 id, WorldView& view, Transform& tr, const Config& cfg);
-LUMIX_EDITOR_API bool box(u64 id, WorldView& view, Transform& tr, Vec3& half_extents, const Config& cfg, bool keep_center);
-LUMIX_EDITOR_API void setDragged(u64 id);
-LUMIX_EDITOR_API bool isActive();
-LUMIX_EDITOR_API void frame();
+AETHERION_EDITOR_API bool manipulate(u64 id, WorldView& view, Transform& tr, const Config& cfg);
+AETHERION_EDITOR_API bool box(u64 id, WorldView& view, Transform& tr, Vec3& half_extents, const Config& cfg, bool keep_center);
+AETHERION_EDITOR_API void setDragged(u64 id);
+AETHERION_EDITOR_API bool isActive();
+AETHERION_EDITOR_API void frame();
 
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion

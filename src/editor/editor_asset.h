@@ -1,12 +1,12 @@
 #include "editor/asset_browser.h"
 #include "editor/asset_compiler.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 // use this if you want an editor-only asset to be visible in asset browser
 // editor only assets do not inherit from Resource, e.g. particle system function
 // it can also be used as a base for normal asset plugin
-struct LUMIX_EDITOR_API EditorAssetPlugin : AssetBrowser::IPlugin, AssetCompiler::IPlugin {
+struct AETHERION_EDITOR_API EditorAssetPlugin : AssetBrowser::IPlugin, AssetCompiler::IPlugin {
 	EditorAssetPlugin(const char* name, const char* ext, ResourceType type, StudioApp& app, IAllocator& allocator);
 	~EditorAssetPlugin();
 
@@ -24,7 +24,7 @@ protected:
 };
 
 // common funcitonality for asset editor windows
-struct LUMIX_EDITOR_API AssetEditorWindow : StudioApp::GUIPlugin {
+struct AETHERION_EDITOR_API AssetEditorWindow : StudioApp::GUIPlugin {
 	AssetEditorWindow(StudioApp& app);
 
 	virtual void windowGUI() = 0;

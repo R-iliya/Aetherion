@@ -16,7 +16,7 @@
 #include "engine/world.h"
 #include "prefab_system.h"
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -641,7 +641,7 @@ static AssetBrowserPlugin* ab_plugin = nullptr;
 
 void PrefabSystem::createEditorPlugins(StudioApp& app, PrefabSystem& system)
 {
-	ab_plugin = LUMIX_NEW(app.getAllocator(), AssetBrowserPlugin)(app, system);
+	ab_plugin = AETHERION_NEW(app.getAllocator(), AssetBrowserPlugin)(app, system);
 	const char* extensions[] = { "fab" };
 	app.getAssetBrowser().addPlugin(*ab_plugin, Span(extensions));
 	app.getAssetCompiler().addPlugin(*ab_plugin, Span(extensions));
@@ -652,9 +652,9 @@ void PrefabSystem::destroyEditorPlugins(StudioApp& app)
 {
 	app.getAssetBrowser().removePlugin(*ab_plugin);
 	app.getAssetCompiler().removePlugin(*ab_plugin);
-	LUMIX_DELETE(app.getAllocator(), ab_plugin);
+	AETHERION_DELETE(app.getAllocator(), ab_plugin);
 	ab_plugin = nullptr;
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion

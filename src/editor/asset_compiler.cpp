@@ -20,7 +20,7 @@
 
 #include <imgui/imgui.h>
 
-namespace Lumix {
+namespace Aetherion {
 
 struct AssetCompilerImpl;
 
@@ -89,7 +89,7 @@ struct AssetCompilerImpl : AssetCompiler {
 		PROFILE_FUNCTION();
 		os::OutputFile file;
 		FileSystem& fs = m_app.getEngine().getFileSystem();
-		if (fs.open(".lumix/resources/_resources.txt_tmp", file)) {
+		if (fs.open(".aetherion/resources/_resources.txt_tmp", file)) {
 			file << "resources = [\n";
 			for (const ResourceItem& ri : m_resources) {
 				file << "\"" << ri.path << "\",\n";
@@ -106,11 +106,11 @@ struct AssetCompilerImpl : AssetCompiler {
 			file << "}\n";
 
 			file.close();
-			fs.deleteFile(".lumix/resources/_resources.txt");
-			fs.moveFile(".lumix/resources/_resources.txt_tmp", ".lumix/resources/_resources.txt");
+			fs.deleteFile(".aetherion/resources/_resources.txt");
+			fs.moveFile(".aetherion/resources/_resources.txt_tmp", ".aetherion/resources/_resources.txt");
 		}
 		else {
-			logError("Could not save .lumix/resources/_resources.txt");
+			logError("Could not save .aetherion/resources/_resources.txt");
 		}
 	}
 
@@ -133,7 +133,7 @@ struct AssetCompilerImpl : AssetCompiler {
 		m_dependencies.clear();
 		m_resources.clear();
 
-		Path path(base_path, ".lumix");
+		Path path(base_path, ".aetherion");
 		bool success = os::makePath(path.c_str());
 		if (!success) logError("Could not create ", path);
 
@@ -156,20 +156,20 @@ struct AssetCompilerImpl : AssetCompiler {
 		os::InputFile file;
 		Path version_bin_path(path, "/_version.bin");
 		if (!file.open(version_bin_path.c_str())) {
-			logInfo("Could not open .lumix/resources/_version.bin");
+			logInfo("Could not open .aetherion/resources/_version.bin");
 		}
 		else {
 			u32 version;
 			file.read(version);
 			file.close();
 			if (version != 0) {
-				logWarning("Unsupported version of .lumix/resources. Rebuilding all assets.");
-				os::FileIterator* iter = os::createFileIterator(".lumix/resources", m_allocator);
+				logWarning("Unsupported version of .aetherion/resources. Rebuilding all assets.");
+				os::FileIterator* iter = os::createFileIterator(".aetherion/resources", m_allocator);
 				os::FileInfo info;
 				bool all_deleted = true;
 				while (os::getNextFile(iter, &info)) {
 					if (!info.is_directory) {
-						const Path filepath(".lumix/resources/", info.filename);
+						const Path filepath(".aetherion/resources/", info.filename);
 						if (!os::deleteFile(filepath)) {
 							all_deleted = false;
 						}
@@ -178,12 +178,12 @@ struct AssetCompilerImpl : AssetCompiler {
 				os::destroyFileIterator(iter);
 
 				if (!all_deleted) {
-					logError("Could not delete all files in .lumix/resources, please delete the directory and restart the editor.");
+					logError("Could not delete all files in .aetherion/resources, please delete the directory and restart the editor.");
 				}
 
 				os::OutputFile out_file;
 				if (!out_file.open(version_bin_path.c_str())) {
-					logError("Could not open .lumix/resources/_version.bin");
+					logError("Could not open .aetherion/resources/_version.bin");
 				}
 				else {
 					out_file.write(0);
@@ -227,7 +227,7 @@ struct AssetCompilerImpl : AssetCompiler {
 		}
 
 		FileSystem& fs = m_app.getEngine().getFileSystem();
-		const Path out_path(".lumix/resources/", path.getHash().getHashValue(), ".res");
+		const Path out_path(".aetherion/resources/", path.getHash().getHashValue(), ".res");
 		os::OutputFile file;
 		if(!fs.open(out_path, file)) {
 			logError("Could not create ", out_path);
@@ -374,10 +374,10 @@ struct AssetCompilerImpl : AssetCompiler {
 		if (m_plugins.empty()) return;
 
 		FileSystem& fs = m_app.getEngine().getFileSystem();
-		const Path list_path(fs.getBasePath(), ".lumix/resources/_resources.txt");
+		const Path list_path(fs.getBasePath(), ".aetherion/resources/_resources.txt");
 		OutputMemoryStream content(m_allocator);
-		if (fs.getContentSync(Path(".lumix/resources/_resources.txt"), content)) {
-			Tokenizer tokenizer(StringView(content), ".lumix/resources/_resources.txt");
+		if (fs.getContentSync(Path(".aetherion/resources/_resources.txt"), content)) {
+			Tokenizer tokenizer(StringView(content), ".aetherion/resources/_resources.txt");
 			for (;;) {
 				Tokenizer::Token t = tokenizer.tryNextToken(Tokenizer::Token::IDENTIFIER);
 				if (!t) break;
@@ -399,7 +399,7 @@ struct AssetCompilerImpl : AssetCompiler {
 								m_resources.insert(path.getHash(), {path, type, dirHash(path)});
 							}
 							else {
-								const Path res_path(".lumix/resources/", path.getHash(), ".res");
+								const Path res_path(".aetherion/resources/", path.getHash(), ".res");
 								fs.deleteFile(res_path);
 							}
 						}
@@ -497,7 +497,7 @@ struct AssetCompilerImpl : AssetCompiler {
 	void onFileChanged(const char* path)
 	{
 		if (startsWith(path, ".")) return;
-		if (equalIStrings(path, "lumix.log")) return;
+		if (equalIStrings(path, "aetherion.log")) return;
 
 		const char* base_path = m_app.getEngine().getFileSystem().getBasePath();
 		const Path full_path(base_path, "/", path);
@@ -554,11 +554,11 @@ struct AssetCompilerImpl : AssetCompiler {
 
 		FileSystem& fs = m_app.getEngine().getFileSystem();
 		if (!fs.fileExists(filepath)) return ResourceManagerHub::LoadHook::Action::IMMEDIATE;
-		if (startsWith(filepath, ".lumix/resources/")) return ResourceManagerHub::LoadHook::Action::IMMEDIATE;
-		if (startsWith(filepath, ".lumix/asset_tiles/")) return ResourceManagerHub::LoadHook::Action::IMMEDIATE;
+		if (startsWith(filepath, ".aetherion/resources/")) return ResourceManagerHub::LoadHook::Action::IMMEDIATE;
+		if (startsWith(filepath, ".aetherion/asset_tiles/")) return ResourceManagerHub::LoadHook::Action::IMMEDIATE;
 
 		const FilePathHash hash = res.getPath().getHash();
-		const Path dst_path(".lumix/resources/", hash, ".res");
+		const Path dst_path(".aetherion/resources/", hash, ".res");
 		const Path meta_path(filepath, ".meta");
 
 		if (!fs.fileExists(dst_path)
@@ -728,7 +728,7 @@ struct AssetCompilerImpl : AssetCompiler {
 
 			if (!path_obj.isEmpty()) {
 				FileSystem& fs = m_app.getEngine().getFileSystem();
-				const Path list_path(fs.getBasePath(), ".lumix/resources/_resources.txt");
+				const Path list_path(fs.getBasePath(), ".aetherion/resources/_resources.txt");
 				const u64 list_last_modified = os::getLastModified(list_path);
 				const Path fullpath(fs.getBasePath(), path_obj);
 				if (os::dirExists(fullpath)) {
@@ -857,5 +857,5 @@ UniquePtr<AssetCompiler> AssetCompiler::create(StudioApp& app) {
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion
 
