@@ -55,9 +55,9 @@ goto :begin
 	if not exist ..\plugins mkdir ..\plugins
 	pushd ..\plugins
 	if not exist gltf_import (
-		git.exe clone https://github.com/nem0/lumixengine_gltf.git gltf_import
+		git.exe clone https://github.com/nem0/aetherionengine_gltf.git gltf_import
 		pushd gltf_import
-		git remote add origin2 git@github.com:nem0/lumixengine_gltf.git
+		git remote add origin2 git@github.com:nem0/aetherionengine_gltf.git
 		popd
 	) else (
 		cd gltf_import
@@ -70,9 +70,9 @@ exit /B 0
 	if not exist ..\plugins mkdir ..\plugins
 	pushd ..\plugins
 	if not exist net (
-		git.exe clone https://github.com/nem0/lumixengine_net.git net
+		git.exe clone https://github.com/nem0/aetherionengine_net.git net
 		pushd net
-		git remote add origin2 git@github.com:nem0/lumixengine_net.git
+		git remote add origin2 git@github.com:nem0/aetherionengine_net.git
 		popd
 	) else (
 		cd net
@@ -85,9 +85,9 @@ exit /B 0
 	if not exist ..\plugins mkdir ..\plugins
 	pushd ..\plugins
 	if not exist js (
-		git.exe clone https://github.com/nem0/lumixengine_js.git js
+		git.exe clone https://github.com/nem0/aetherionengine_js.git js
 		pushd js
-		git remote add origin2 git@github.com:nem0/lumixengine_js.git
+		git remote add origin2 git@github.com:nem0/aetherionengine_js.git
 		popd
 	) else (
 		cd js
@@ -100,9 +100,9 @@ exit /B 0
 	if not exist ..\plugins mkdir ..\plugins
 	pushd ..\plugins
 	if not exist csharp (
-		git.exe clone https://github.com/nem0/lumixengine_csharp.git csharp
+		git.exe clone https://github.com/nem0/aetherionengine_csharp.git csharp
 		pushd csharp
-		git remote add origin2 git@github.com:nem0/lumixengine_csharp.git
+		git remote add origin2 git@github.com:nem0/aetherionengine_csharp.git
 		popd
 	) else (
 		cd csharp
@@ -115,9 +115,9 @@ exit /B 0
 	if not exist ..\plugins mkdir ..\plugins
 	pushd ..\plugins
 	if not exist visualscript (
-		git.exe clone https://github.com/nem0/lumixengine_visualscript.git visualscript
+		git.exe clone https://github.com/nem0/aetherionengine_visualscript.git visualscript
 		pushd visualscript
-		git remote add origin2 git@github.com:nem0/lumixengine_visualscript.git
+		git remote add origin2 git@github.com:nem0/aetherionengine_visualscript.git
 		popd
 	) else (
 		cd visualscript
@@ -130,9 +130,9 @@ exit /B 0
 	if not exist ..\plugins mkdir ..\plugins
 	pushd ..\plugins
 	if not exist shader_editor (
-		git.exe clone https://github.com/nem0/lumixengine_shader_editor.git shader_editor
+		git.exe clone https://github.com/nem0/aetherionengine_shader_editor.git shader_editor
 		pushd shader_editor
-		git remote add origin2 git@github.com:nem0/lumixengine_shader_editor.git
+		git remote add origin2 git@github.com:nem0/aetherionengine_shader_editor.git
 		popd
 	) else (
 		cd shader_editor
@@ -145,9 +145,9 @@ exit /B 0
 	if not exist ..\plugins mkdir ..\plugins
 	pushd ..\plugins
 	if not exist maps (
-		git.exe clone https://github.com/nem0/lumixengine_maps.git maps
+		git.exe clone https://github.com/nem0/aetherionengine_maps.git maps
 		pushd maps
-		git remote add origin2 git@github.com:nem0/lumixengine_maps.git
+		git remote add origin2 git@github.com:nem0/aetherionengine_maps.git
 		popd
 	) else (
 		cd maps
@@ -160,9 +160,9 @@ exit /B 0
 	if not exist ..\plugins mkdir ..\plugins
 	pushd ..\plugins
 	if not exist procedural_geom (
-		git.exe clone https://github.com/nem0/lumixengine_procedural_geom.git procedural_geom
+		git.exe clone https://github.com/nem0/aetherionengine_procedural_geom.git procedural_geom
 		pushd procedural_geom
-		git remote add origin2 git@github.com:nem0/lumixengine_procedural_geom.git
+		git remote add origin2 git@github.com:nem0/aetherionengine_procedural_geom.git
 		popd
 	) else (
 		cd procedural_geom
@@ -175,9 +175,9 @@ exit /B 0
 	if not exist ..\plugins mkdir ..\plugins
 	pushd ..\plugins
 	if not exist market (
-		git.exe clone https://github.com/nem0/lumixengine_market.git market
+		git.exe clone https://github.com/nem0/aetherionengine_market.git market
 		pushd market
-		git remote add origin2 git@github.com:nem0/lumixengine_market.git
+		git remote add origin2 git@github.com:nem0/aetherionengine_market.git
 		popd
 	) else (
 		cd market
@@ -190,9 +190,9 @@ exit /B 0
 	if not exist ..\plugins mkdir ..\plugins
 	pushd ..\plugins
 	if not exist livecode (
-		git.exe clone https://github.com/nem0/lumixengine_livecode.git livecode
+		git.exe clone https://github.com/nem0/aetherionengine_livecode.git livecode
 		pushd livecode
-		git remote add origin2 git@github.com:nem0/lumixengine_livecode.git
+		git remote add origin2 git@github.com:nem0/aetherionengine_livecode.git
 		popd
 	) else (
 		cd livecode
@@ -205,9 +205,9 @@ exit /B 0
 	if not exist ..\plugins mkdir ..\plugins
 	pushd ..\plugins
 	if not exist jolt (
-		git.exe clone https://github.com/nem0/lumixengine_jolt.git jolt
+		git.exe clone https://github.com/nem0/aetherionengine_jolt.git jolt
 		pushd jolt
-		git remote add origin2 git@github.com:nem0/lumixengine_jolt.git
+		git remote add origin2 git@github.com:nem0/aetherionengine_jolt.git
 		popd
 	) else (
 		cd jolt
@@ -220,7 +220,7 @@ exit /B 0
 	if not exist ..\plugins mkdir ..\plugins
 	pushd ..\plugins
 	if not exist myplugin (
-		git.exe clone https://github.com/nem0/lumix_plugin_template.git myplugin
+		git.exe clone https://github.com/nem0/aetherion_plugin_template.git myplugin
 	) else (
 		cd myplugin
 		git pull
@@ -246,19 +246,19 @@ exit /B 0
 	if %errorlevel%==2 call :download_basisu
 	if %errorlevel%==3 call :build_basisu
 	if %errorlevel%==4 call :deploy_basisu
-	if %errorlevel%==5 "../external/_repos/basisu/lumix/vs2022/basis_lumix.sln"
+	if %errorlevel%==5 "../external/_repos/basisu/aetherion/vs2022/basis_aetherion.sln"
 	pause
 goto :basisu
 
 :build_basisu
-	.\genie.exe --file=../external/_repos/basisu/lumix/genie.lua vs2022
-	%msbuild_cmd% ..\external\_repos\basisu\lumix\vs2022\basis_lumix.sln /p:Configuration="Release" /p:Platform=x64
+	.\genie.exe --file=../external/_repos/basisu/aetherion/genie.lua vs2022
+	%msbuild_cmd% ..\external\_repos\basisu\aetherion\vs2022\basis_aetherion.sln /p:Configuration="Release" /p:Platform=x64
 exit /B 0
 
 :deploy_basisu
 	echo %CD%
 	del /Q ..\external\basisu\lib\win64_vs2017\release\*
-	xcopy /E /Y "3rdparty\basisu\lumix\vs2022\bin\*.*" ..\external\basisu\lib\win64_vs2017\release\
+	xcopy /E /Y "3rdparty\basisu\aetherion\vs2022\bin\*.*" ..\external\basisu\lib\win64_vs2017\release\
 	del /Q ..\external\basisu\include\*
 	xcopy /E /Y "3rdparty\basisu\transcoder\*.h" ..\external\basisu\include\transcoder
 	xcopy /E /Y "3rdparty\basisu\encoder\*.h" ..\external\basisu\include\encoder

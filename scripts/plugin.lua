@@ -108,7 +108,7 @@ end
 function defaultConfigurations()
 	configuration "Debug"
 		targetdir(BINARY_DIR .. "Debug")
-		defines { "NDEBUG", "LUMIX_DEBUG" }
+		defines { "NDEBUG", "AETHERION_DEBUG" }
 		flags { "Symbols", "ReleaseRuntime" }
 
 	configuration "RelWithDebInfo"
@@ -125,7 +125,7 @@ function defaultConfigurations()
 		
 	configuration {}
 		files {
-			path.join(ENGINE_ROOT, "./src/lumix.natvis"),
+			path.join(ENGINE_ROOT, "./src/aetherion.natvis"),
 			path.join(ENGINE_ROOT, ".editorconfig")
 		}
 		defines { "_ITERATOR_DEBUG_LEVEL=0", "STBI_NO_STDIO" }
@@ -241,20 +241,20 @@ function bootstrapPlugin(name)
 	project(name)
 		kind "SharedLib"
 		includedirs { 
-			"../lumixengine/src/",
-			"../lumixengine/external/",
+			"../aetherionengine/src/",
+			"../aetherionengine/external/",
 		}
 		
 		links { "engine" }
 		
 		configuration  "Debug" 
-			libdirs { "../lumixengine/scripts/tmp/" .. ide_dir .. "/bin/Debug" }
+			libdirs { "../aetherionengine/scripts/tmp/" .. ide_dir .. "/bin/Debug" }
 
 		configuration  "Release" 
-			libdirs { "../lumixengine/scripts/tmp/" .. ide_dir .. "/bin/Release" }
+			libdirs { "../aetherionengine/scripts/tmp/" .. ide_dir .. "/bin/Release" }
 
 		configuration  "RelWithDebInfo" 
-			libdirs { "../lumixengine/scripts/tmp/" .. ide_dir .. "/bin/RelWithDebInfo" }
+			libdirs { "../aetherionengine/scripts/tmp/" .. ide_dir .. "/bin/RelWithDebInfo" }
 
 		configuration {}
 end

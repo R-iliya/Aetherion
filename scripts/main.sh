@@ -42,7 +42,7 @@ build_recast()
 build_physx()
 {
 	pushd 3rdparty/physx/physx
-	sh generate_projects.sh lumix_gcc5
+	sh generate_projects.sh aetherion_gcc5
 	cd compiler/linux-release
 	make
 	popd
@@ -141,8 +141,8 @@ plugins_menu()
 		select opt in "${options[@]}"
 		do
 			case "$REPLY" in
-				1 ) download_plugin "shader_editor" "https://github.com/nem0/lumixengine_shader_editor.git" break;;
-				2 ) download_plugin "visualscript" "https://github.com/nem0/lumixengine_visualscript.git"; break;;
+				1 ) download_plugin "shader_editor" "https://github.com/nem0/aetherionengine_shader_editor.git" break;;
+				2 ) download_plugin "visualscript" "https://github.com/nem0/aetherionengine_visualscript.git"; break;;
 				3 ) break 2;;
 			esac
 		done
@@ -190,7 +190,7 @@ push_to_itch_io()
 		chmod +x butler
 	fi
 
-	./butler push itch_io mikulasflorek/lumix-engine:linux
+	./butler push itch_io mikulasflorek/aetherion-engine:linux
 }
 
 build()

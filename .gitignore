@@ -8,10 +8,10 @@ obj/
 *.nvuser
 *.orig
 .vscode
-data/.lumix
-data/lumix.log
+data/.aetherion
+data/aetherion.log
 data/studio.ini
-.lumixuser
+.aetherionuser
 *.unv.bak
 scripts/3rdparty
 !scripts/bin/
