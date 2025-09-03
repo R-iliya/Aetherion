@@ -4,11 +4,11 @@
 #include "log.h"
 #include "delegate_list.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 namespace detail {
 	using LogCallback = DelegateList<void(LogLevel, const char*)>;
-	LUMIX_CORE_API LogCallback& getLogCallback();
+	AETHERION_CORE_API LogCallback& getLogCallback();
 } // namespace detail
 
 template <auto F> void registerLogCallback() {
@@ -35,4 +35,4 @@ template <auto F, typename T> void unregisterLogCallback(T* inst) {
 	detail::unlock();
 }
 
-} // namespace Lumix
+} // namespace Aetherion

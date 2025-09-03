@@ -3,7 +3,7 @@
 #include "core/crt.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 char toLower(char c) {
@@ -834,4 +834,4 @@ bool StringView::operator==(const StringView& rhs) const {
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion

@@ -8,7 +8,7 @@
 #include "core/win/simple_win.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -94,4 +94,4 @@ MutexGuardProfiled::~MutexGuardProfiled() {
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion

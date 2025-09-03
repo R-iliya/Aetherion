@@ -8,7 +8,7 @@
 #include "core/sync.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -60,4 +60,4 @@ namespace detail {
 } // namespace detail
 
 
-} // namespace Lumix
+} // namespace Aetherion

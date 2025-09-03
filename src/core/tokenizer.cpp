@@ -2,7 +2,7 @@
 #include "core/log.h"
 #include "core/crt.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 Tokenizer::Tokenizer(StringView content, const char* filename)
 	: content(content)

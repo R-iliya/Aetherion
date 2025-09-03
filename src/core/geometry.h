@@ -3,17 +3,17 @@
 #include "core.h"
 #include "math.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 struct AABB;
 struct Matrix;
 
-struct LUMIX_CORE_API Ray {
+struct AETHERION_CORE_API Ray {
 	DVec3 origin;
 	Vec3 dir;
 };
 
-struct LUMIX_CORE_API Sphere {
+struct AETHERION_CORE_API Sphere {
 	Sphere();
 	Sphere(float x, float y, float z, float _radius);
 	Sphere(const Vec3& point, float _radius);
@@ -25,7 +25,7 @@ struct LUMIX_CORE_API Sphere {
 };
 
 
-struct alignas(16) LUMIX_CORE_API Frustum {
+struct alignas(16) AETHERION_CORE_API Frustum {
 	Frustum();
 
 	void computeOrtho(const Vec3& position,
@@ -98,7 +98,7 @@ struct alignas(16) LUMIX_CORE_API Frustum {
 };
 
 
-struct alignas(16) LUMIX_CORE_API ShiftedFrustum {
+struct alignas(16) AETHERION_CORE_API ShiftedFrustum {
 	void computeOrtho(const DVec3& position,
 		const Vec3& direction,
 		const Vec3& up,
@@ -151,7 +151,7 @@ struct alignas(16) LUMIX_CORE_API ShiftedFrustum {
 	DVec3 origin;
 };
 
-struct LUMIX_CORE_API AABB {
+struct AETHERION_CORE_API AABB {
 	AABB();
 	AABB(const Vec3& _min, const Vec3& _max);
 	
@@ -174,7 +174,7 @@ struct LUMIX_CORE_API AABB {
 };
 
 
-struct LUMIX_CORE_API Viewport {
+struct AETHERION_CORE_API Viewport {
 	Matrix getProjectionNoJitter() const;
 	Matrix getProjectionWithJitter() const;
 	Matrix getView(const DVec3& origin) const;
@@ -196,16 +196,16 @@ struct LUMIX_CORE_API Viewport {
 	Vec2 pixel_offset = Vec2(0);
 };
 
-LUMIX_CORE_API Vec4 makePlane(const Vec3& normal, const Vec3& point);
-LUMIX_CORE_API float planeDist(const Vec4& plane, const Vec3& point);
+AETHERION_CORE_API Vec4 makePlane(const Vec3& normal, const Vec3& point);
+AETHERION_CORE_API float planeDist(const Vec4& plane, const Vec3& point);
 
-LUMIX_CORE_API bool getRayPlaneIntersecion(const Vec3& origin, const Vec3& dir, const Vec3& plane_point, const Vec3& normal, float& out);
-LUMIX_CORE_API bool getRaySphereIntersection(const Vec3& origin, const Vec3& dir, const Vec3& center, float radius, float& out);
-LUMIX_CORE_API bool getRayAABBIntersection(const Vec3& origin, const Vec3& dir, const Vec3& min, const Vec3& size, Vec3& out);
-LUMIX_CORE_API float getLineSegmentDistance(const Vec3& origin, const Vec3& dir, const Vec3& a, const Vec3& b);
-LUMIX_CORE_API bool getRayTriangleIntersection(const Vec3& origin, const Vec3& dir, const Vec3& a, const Vec3& b, const Vec3& c, float* out_t);
-LUMIX_CORE_API bool getSphereTriangleIntersection(const Vec3& center, float radius, const Vec3& v0, const Vec3& v1, const Vec3& v2);
-LUMIX_CORE_API bool testOBBCollision(const AABB& a, const Matrix& mtx_b, const AABB& b);
-LUMIX_CORE_API bool testAABBTriangleCollision(const AABB& aabb, const Vec3& a, const Vec3& b, const Vec3& c);
+AETHERION_CORE_API bool getRayPlaneIntersecion(const Vec3& origin, const Vec3& dir, const Vec3& plane_point, const Vec3& normal, float& out);
+AETHERION_CORE_API bool getRaySphereIntersection(const Vec3& origin, const Vec3& dir, const Vec3& center, float radius, float& out);
+AETHERION_CORE_API bool getRayAABBIntersection(const Vec3& origin, const Vec3& dir, const Vec3& min, const Vec3& size, Vec3& out);
+AETHERION_CORE_API float getLineSegmentDistance(const Vec3& origin, const Vec3& dir, const Vec3& a, const Vec3& b);
+AETHERION_CORE_API bool getRayTriangleIntersection(const Vec3& origin, const Vec3& dir, const Vec3& a, const Vec3& b, const Vec3& c, float* out_t);
+AETHERION_CORE_API bool getSphereTriangleIntersection(const Vec3& center, float radius, const Vec3& v0, const Vec3& v1, const Vec3& v2);
+AETHERION_CORE_API bool testOBBCollision(const AABB& a, const Matrix& mtx_b, const AABB& b);
+AETHERION_CORE_API bool testAABBTriangleCollision(const AABB& aabb, const Vec3& a, const Vec3& b, const Vec3& c);
 
-} // namespace Lumix
+} // namespace Aetherion

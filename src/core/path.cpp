@@ -1,6 +1,6 @@
 #include "core/path.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 Path::Path() : m_path{} {}
 
@@ -230,4 +230,4 @@ PathInfo::PathInfo(StringView path) {
 
 
 
-} // namespace Lumix
+} // namespace Aetherion

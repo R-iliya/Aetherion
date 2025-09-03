@@ -4,12 +4,12 @@
 #include "sync.h"
 
 
-namespace Lumix::debug {
+namespace Aetherion::debug {
 
 struct StackNode;
 
 
-struct LUMIX_CORE_API StackTree {
+struct AETHERION_CORE_API StackTree {
 	StackTree(IAllocator& allocator);
 	~StackTree();
 

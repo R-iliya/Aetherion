@@ -4,9 +4,9 @@
 	#include <pthread.h>
 #endif
 
-namespace Lumix {
+namespace Aetherion {
 
-struct alignas(8) LUMIX_CORE_API Mutex {
+struct alignas(8) AETHERION Mutex {
 	friend struct ConditionVariable;
 	
 	Mutex();
@@ -25,7 +25,7 @@ private:
 };
 
 
-struct LUMIX_CORE_API Semaphore {
+struct AETHERION_CORE_API Semaphore {
 	Semaphore(int init_count, int max_count);
 	Semaphore(const Semaphore&) = delete;
 	~Semaphore();
@@ -79,7 +79,7 @@ private:
 	Mutex& m_mutex;
 };
 
-struct LUMIX_CORE_API MutexGuardProfiled {
+struct AETHERION_CORE_API MutexGuardProfiled {
 	explicit MutexGuardProfiled(Mutex& cs);
 	~MutexGuardProfiled();
 
@@ -94,4 +94,4 @@ private:
 	u64 end_exit;
 };
 
-} // namespace Lumix
+} // namespace Aetherion

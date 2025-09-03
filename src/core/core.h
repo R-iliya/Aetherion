@@ -8,13 +8,13 @@
 #endif
 
 #ifndef ASSERT
-	#ifdef LUMIX_DEBUG
+	#ifdef AETHERION_DEBUG
 		#ifdef _WIN32
-			#define LUMIX_DEBUG_BREAK() __debugbreak()
+			#define AETHERION_DEBUG_BREAK() __debugbreak()
 		#else
-			#define LUMIX_DEBUG_BREAK()  raise(SIGTRAP) 
+			#define AETHERION_DEBUG_BREAK()  raise(SIGTRAP) 
 		#endif
-		#define ASSERT(x) do { const volatile bool lumix_assert_b____ = !(x); if(lumix_assert_b____) LUMIX_DEBUG_BREAK(); } while (false)
+		#define ASSERT(x) do { const volatile bool AETHERION_assert_b____ = !(x); if(AETHERION_assert_b____) AETHERION_DEBUG_BREAK(); } while (false)
 	#else
 		#if defined _MSC_VER && !defined __clang__
 			#define ASSERT(x) __assume(x)
@@ -24,7 +24,7 @@
 	#endif
 #endif
 
-namespace Lumix {
+namespace Aetherion {
 
 #ifdef MAX_PATH
 	#undef MAX_PATH
@@ -75,23 +75,23 @@ template <typename E> void setFlag(E& flags, E flag, bool set) {
 }
 
 #ifdef _WIN32
-	#define LUMIX_LIBRARY_EXPORT __declspec(dllexport)
-	#define LUMIX_LIBRARY_IMPORT __declspec(dllimport)
-	#define LUMIX_FORCE_INLINE __forceinline
-	#define LUMIX_RESTRICT __restrict
+	#define AETHERION_LIBRARY_EXPORT __declspec(dllexport)
+	#define AETHERION_LIBRARY_IMPORT __declspec(dllimport)
+	#define AETHERION_FORCE_INLINE __forceinline
+	#define AETHERION_RESTRICT __restrict
 #else 
-	#define LUMIX_LIBRARY_EXPORT __attribute__((visibility("default")))
-	#define LUMIX_LIBRARY_IMPORT 
-	#define LUMIX_FORCE_INLINE __attribute__((always_inline)) inline
-	#define LUMIX_RESTRICT __restrict__
+	#define AETHERION_LIBRARY_EXPORT __attribute__((visibility("default")))
+	#define AETHERION_LIBRARY_IMPORT 
+	#define AETHERION_FORCE_INLINE __attribute__((always_inline)) inline
+	#define AETHERION_RESTRICT __restrict__
 #endif
 
 #ifdef STATIC_PLUGINS
-	#define LUMIX_CORE_API
+	#define AETHERION_CORE_API
 #elif defined BUILDING_CORE
-	#define LUMIX_CORE_API LUMIX_LIBRARY_EXPORT
+	#define AETHERION_CORE_API AETHERION_LIBRARY_EXPORT
 #else
-	#define LUMIX_CORE_API LUMIX_LIBRARY_IMPORT
+	#define AETHERION_CORE_API AETHERION_LIBRARY_IMPORT
 #endif
 
 #ifdef _MSC_VER
@@ -120,4 +120,4 @@ template <typename E> void setFlag(E& flags, E flag, bool set) {
 	#pragma clang diagnostic ignored "-Wchar-subscripts"
 #endif
 
-} // namespace Lumix
+} // namespace Aetherion

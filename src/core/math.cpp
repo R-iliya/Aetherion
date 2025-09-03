@@ -3,7 +3,7 @@
 #include "os.h"
 #include "simd.h"
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -1552,4 +1552,4 @@ void Matrix::setTranslation(const Vec3& t) {
 	columns[3].z = t.z;
 }
 
-} // namespace Lumix
+} // namespace Aetherion

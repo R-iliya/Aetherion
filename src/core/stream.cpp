@@ -6,7 +6,7 @@
 #include "core/string.h"
 
 
-namespace Lumix {
+namespace Aetherion {
 
 OutputMemoryStream::OutputMemoryStream(IAllocator& allocator)
 	: m_allocator(&allocator)
@@ -436,4 +436,4 @@ const char* InputMemoryStream::readString()
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion

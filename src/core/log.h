@@ -2,7 +2,7 @@
 
 #include "core.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 enum class LogLevel {
 	INFO,
@@ -35,6 +35,6 @@ template <typename... T> void logInfo(const T&... args) { detail::log(LogLevel::
 template <typename... T> void logWarning(const T&... args) { detail::log(LogLevel::WARNING, args...); }
 template <typename... T> void logError(const T&... args) { detail::log(LogLevel::ERROR, args...); }
 
-} // namespace Lumix
+} // namespace Aetherion
 
 

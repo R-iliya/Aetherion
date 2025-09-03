@@ -3,17 +3,17 @@
 #include "allocator.h"
 #include "atomic.h"
 #include "sync.h"
-#ifdef LUMIX_DEBUG
+#ifdef AETHERION_DEBUG
 	#include "debug.h"
 	#include "tag_allocator.h"
 #endif
 
-namespace Lumix {
+namespace Aetherion {
 
 
 // allocations in a row one after another, deallocate everything at once
 // use case: data for one frame
-struct LUMIX_CORE_API ArenaAllocator : IAllocator {
+struct AETHERION_CORE_API ArenaAllocator : IAllocator {
 	ArenaAllocator(u32 reserved, IAllocator& parent, const char* tag);
 	~ArenaAllocator();
 
@@ -21,7 +21,7 @@ struct LUMIX_CORE_API ArenaAllocator : IAllocator {
 	void* allocate(size_t size, size_t align) override;
 	void deallocate(void* ptr) override;
 	void* reallocate(void* ptr, size_t new_size, size_t old_size, size_t align) override;
-	#ifdef LUMIX_DEBUG
+	#ifdef AETHERION_DEBUG
 		const debug::AllocationInfo& getAllocationInfo() const { return m_allocation_info; }
 	#endif
 
@@ -32,11 +32,11 @@ private:
 	AtomicI32 m_end = 0;
 	u8* m_mem;
 	Mutex m_mutex;
-	#ifdef LUMIX_DEBUG
+	#ifdef AETHERION_DEBUG
 		debug::AllocationInfo m_allocation_info;
 		TagAllocator m_tag_allocator;
 	#endif
 };
 
 
-} // namespace Lumix
+} // namespace Aetherion

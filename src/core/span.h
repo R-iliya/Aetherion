@@ -2,7 +2,7 @@
 
 #include "core.h"
 
-namespace Lumix {
+namespace Aetherion {
 template <typename T> struct Span {
 	Span()
 		: m_begin(nullptr)
@@ -79,4 +79,4 @@ template <typename T> struct Span {
 	T* m_begin;
 	T* m_end;
 };
-} // namespace Lumix
+} // namespace Aetherion

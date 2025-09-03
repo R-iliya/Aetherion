@@ -9,11 +9,11 @@
 #include "tag_allocator.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
-struct LUMIX_CORE_API PageAllocator final {
+struct AETHERION_CORE_API PageAllocator final {
 	enum { PAGE_SIZE = 4096 };
 
 	PageAllocator(IAllocator& fallback);
@@ -27,7 +27,7 @@ private:
 	AtomicI32 reserved_count = 0;
 	RingBuffer<void*, 512> free_pages;
 	debug::AllocationInfo allocation_info;
-	#ifdef LUMIX_DEBUG
+	#ifdef AETHERION_DEBUG
 		TagAllocator tag_allocator;
 	#endif
 };
@@ -109,4 +109,4 @@ struct PagedList
 };
 
 
-} // namespace Lumix
+} // namespace Aetherion

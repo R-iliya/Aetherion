@@ -6,7 +6,7 @@
 #endif
 
 
-namespace Lumix
+namespace Aetherion
 {
 	
 namespace Fiber
@@ -34,4 +34,4 @@ bool isValid(Handle handle);
 } // namespace Fiber
 
 
-} // namespace Lumix
+} // namespace Aetherion

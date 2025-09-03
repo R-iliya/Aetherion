@@ -2,7 +2,7 @@
 
 #include "core.h"
 
-namespace Lumix {
+namespace Aetherion {
 
 struct IAllocator;
 struct OutputMemoryStream;
@@ -11,33 +11,33 @@ template <typename T> struct Span;
 namespace profiler {
 // writing API
 
-LUMIX_CORE_API void init(IAllocator& allocator);
-LUMIX_CORE_API void shutdown();
+AETHERION_CORE_API void init(IAllocator& allocator);
+AETHERION_CORE_API void shutdown();
 
-LUMIX_CORE_API void setThreadName(const char* name);
-LUMIX_CORE_API void showInProfiler(bool show);
+AETHERION_CORE_API void setThreadName(const char* name);
+AETHERION_CORE_API void showInProfiler(bool show);
 
-LUMIX_CORE_API void beginBlock(const char* name_literal);
-LUMIX_CORE_API void beginJob(i32 signal_on_finish);
-LUMIX_CORE_API void blockColor(u32 abgr);
-LUMIX_CORE_API void endBlock();
-LUMIX_FORCE_INLINE void endJob() { endBlock(); }
-LUMIX_CORE_API void frame();
-LUMIX_CORE_API void pushString(const char* value);
-LUMIX_CORE_API void pushInt(const char* key_literal, int value);
-LUMIX_CORE_API void pushMutexEvent(u64 mutex_id, u64 begin_enter_time, u64 end_enter_time, u64 begin_exit_time, u64 end_exit_time);
+AETHERION_CORE_API void beginBlock(const char* name_literal);
+AETHERION_CORE_API void beginJob(i32 signal_on_finish);
+AETHERION_CORE_API void blockColor(u32 abgr);
+AETHERION_CORE_API void endBlock();
+AETHERION_FORCE_INLINE void endJob() { endBlock(); }
+AETHERION_CORE_API void frame();
+AETHERION_CORE_API void pushString(const char* value);
+AETHERION_CORE_API void pushInt(const char* key_literal, int value);
+AETHERION_CORE_API void pushMutexEvent(u64 mutex_id, u64 begin_enter_time, u64 end_enter_time, u64 begin_exit_time, u64 end_exit_time);
 
 enum { INVALID_COUNTER = 0xffFFffFF };
-LUMIX_CORE_API u32 createCounter(const char* key_literal, float min);
-LUMIX_CORE_API u32 getCounterHandle(const char* key, float* last_value = nullptr);
-LUMIX_CORE_API void pushCounter(u32 counter, float value);
+AETHERION_CORE_API u32 createCounter(const char* key_literal, float min);
+AETHERION_CORE_API u32 getCounterHandle(const char* key, float* last_value = nullptr);
+AETHERION_CORE_API void pushCounter(u32 counter, float value);
 
-LUMIX_CORE_API void beginGPUBlock(const char* name, u64 timestamp, i64 profiler_link);
-LUMIX_CORE_API void endGPUBlock(u64 timestamp);
-LUMIX_CORE_API void gpuStats(u64 primitives_generated);
-LUMIX_CORE_API void link(i64 link);
-LUMIX_CORE_API i64 createNewLinkID();
-LUMIX_CORE_API void serialize(OutputMemoryStream& blob);
+AETHERION_CORE_API void beginGPUBlock(const char* name, u64 timestamp, i64 profiler_link);
+AETHERION_CORE_API void endGPUBlock(u64 timestamp);
+AETHERION_CORE_API void gpuStats(u64 primitives_generated);
+AETHERION_CORE_API void link(i64 link);
+AETHERION_CORE_API i64 createNewLinkID();
+AETHERION_CORE_API void serialize(OutputMemoryStream& blob);
 
 struct FiberSwitchData {
 	i32 id;
@@ -46,11 +46,11 @@ struct FiberSwitchData {
 	i32 signal;
 };
 
-LUMIX_CORE_API void beforeFiberSwitch();
-LUMIX_CORE_API void signalTriggered(i32 job_system_signal);
-LUMIX_CORE_API FiberSwitchData beginFiberWait(i32 job_system_signal);
-LUMIX_CORE_API void endFiberWait(const FiberSwitchData& switch_data);
-LUMIX_CORE_API float getLastFrameDuration();
+AETHERION_CORE_API void beforeFiberSwitch();
+AETHERION_CORE_API void signalTriggered(i32 job_system_signal);
+AETHERION_CORE_API FiberSwitchData beginFiberWait(i32 job_system_signal);
+AETHERION_CORE_API void endFiberWait(const FiberSwitchData& switch_data);
+AETHERION_CORE_API float getLastFrameDuration();
 
 struct Scope
 {
@@ -61,9 +61,9 @@ struct Scope
 
 // reading API
 
-LUMIX_CORE_API u32 getOpenBlocks(Span<const char*> output);
-LUMIX_CORE_API bool contextSwitchesEnabled();
-LUMIX_CORE_API u64 frequency();
+AETHERION_CORE_API u32 getOpenBlocks(Span<const char*> output);
+AETHERION_CORE_API bool contextSwitchesEnabled();
+AETHERION_CORE_API u64 frequency();
 
 struct GPUScopeStats {
 	const char* name;
@@ -72,7 +72,7 @@ struct GPUScopeStats {
 	float avg;
 };
 
-LUMIX_CORE_API u32 getGPUScopeStats(Span<GPUScopeStats> out);
+AETHERION_CORE_API u32 getGPUScopeStats(Span<GPUScopeStats> out);
 
 struct ContextSwitchRecord
 {
@@ -164,12 +164,12 @@ struct EventHeader
 };
 #pragma pack()
 
-#define LUMIX_CONCAT2(a, b) a ## b
-#define LUMIX_CONCAT(a, b) LUMIX_CONCAT2(a, b)
+#define AETHERION_CONCAT2(a, b) a ## b
+#define AETHERION_CONCAT(a, b) AETHERION_CONCAT2(a, b)
 
 #define PROFILE_FUNCTION() profiler::Scope profile_scope(__FUNCTION__);
-#define PROFILE_BLOCK(name) profiler::Scope LUMIX_CONCAT(profile_scope, __LINE__)(name);
+#define PROFILE_BLOCK(name) profiler::Scope AETHERION_CONCAT(profile_scope, __LINE__)(name);
 
 
 } // namespace profiler
-} // namespace Lumix
+} // namespace Aetherion
