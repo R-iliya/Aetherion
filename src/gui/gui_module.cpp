@@ -19,7 +19,7 @@
 #include "imgui/IconsFontAwesome5.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -695,10 +695,10 @@ struct GUIModuleImpl final : GUIModule {
 	~GUIModuleImpl() {
 		for (GUIRect* rect : m_rects) {
 			if (rect->flags & GUIRect::IS_VALID) {
-				LUMIX_DELETE(m_allocator, rect->input_field);
-				LUMIX_DELETE(m_allocator, rect->image);
-				LUMIX_DELETE(m_allocator, rect->text);
-				LUMIX_DELETE(m_allocator, rect);
+				AETHERION_DELETE(m_allocator, rect->input_field);
+				AETHERION_DELETE(m_allocator, rect->image);
+				AETHERION_DELETE(m_allocator, rect->text);
+				AETHERION_DELETE(m_allocator, rect);
 			}
 		}
 	}
@@ -957,7 +957,7 @@ struct GUIModuleImpl final : GUIModule {
 			rect = iter.value();
 		}
 		else {
-			rect = LUMIX_NEW(m_allocator, GUIRect);
+			rect = AETHERION_NEW(m_allocator, GUIRect);
 			m_rects.insert(entity, rect);
 		}
 		rect->top = {0, 0};
@@ -979,7 +979,7 @@ struct GUIModuleImpl final : GUIModule {
 			iter = m_rects.find(entity);
 		}
 		GUIRect& rect = *iter.value();
-		rect.text = LUMIX_NEW(m_allocator, GUIText)(m_allocator);
+		rect.text = AETHERION_NEW(m_allocator, GUIText)(m_allocator);
 
 		m_world.onComponentCreated(entity, GUI_TEXT_TYPE, this);
 	}
@@ -1031,7 +1031,7 @@ struct GUIModuleImpl final : GUIModule {
 			iter = m_rects.find(entity);
 		}
 		GUIRect& rect = *iter.value();
-		rect.input_field = LUMIX_NEW(m_allocator, GUIInputField);
+		rect.input_field = AETHERION_NEW(m_allocator, GUIInputField);
 
 		m_world.onComponentCreated(entity, GUI_INPUT_FIELD_TYPE, this);
 	}
@@ -1046,7 +1046,7 @@ struct GUIModuleImpl final : GUIModule {
 			iter = m_rects.find(entity);
 		}
 		GUIRect& rect = *iter.value();
-		rect.image = LUMIX_NEW(m_allocator, GUIImage);
+		rect.image = AETHERION_NEW(m_allocator, GUIImage);
 		rect.image->flags |= GUIImage::IS_ENABLED;
 
 		m_world.onComponentCreated(entity, GUI_IMAGE_TYPE, this);
@@ -1059,7 +1059,7 @@ struct GUIModuleImpl final : GUIModule {
 		rect->flags &= ~GUIRect::IS_VALID;
 		if (!rect->image && !rect->text && !rect->input_field && !rect->render_target)
 		{
-			LUMIX_DELETE(m_allocator, rect);
+			AETHERION_DELETE(m_allocator, rect);
 			m_rects.erase(entity);
 		}
 		m_world.onComponentDestroyed(entity, GUI_RECT_TYPE, this);
@@ -1089,7 +1089,7 @@ struct GUIModuleImpl final : GUIModule {
 	void destroyInputField(EntityRef entity)
 	{
 		GUIRect* rect = m_rects[entity];
-		LUMIX_DELETE(m_allocator, rect->input_field);
+		AETHERION_DELETE(m_allocator, rect->input_field);
 		rect->input_field = nullptr;
 		m_world.onComponentDestroyed(entity, GUI_INPUT_FIELD_TYPE, this);
 		checkGarbage(*rect);
@@ -1104,7 +1104,7 @@ struct GUIModuleImpl final : GUIModule {
 		if (rect.flags & GUIRect::IS_VALID) return;
 			
 		const EntityRef e = rect.entity;
-		LUMIX_DELETE(m_allocator, &rect);
+		AETHERION_DELETE(m_allocator, &rect);
 		m_rects.erase(e);
 	}
 
@@ -1112,7 +1112,7 @@ struct GUIModuleImpl final : GUIModule {
 	void destroyImage(EntityRef entity)
 	{
 		GUIRect* rect = m_rects[entity];
-		LUMIX_DELETE(m_allocator, rect->image);
+		AETHERION_DELETE(m_allocator, rect->image);
 		rect->image = nullptr;
 		m_world.onComponentDestroyed(entity, GUI_IMAGE_TYPE, this);
 		checkGarbage(*rect);
@@ -1122,7 +1122,7 @@ struct GUIModuleImpl final : GUIModule {
 	void destroyText(EntityRef entity)
 	{
 		GUIRect* rect = m_rects[entity];
-		LUMIX_DELETE(m_allocator, rect->text);
+		AETHERION_DELETE(m_allocator, rect->text);
 		rect->text = nullptr;
 		m_world.onComponentDestroyed(entity, GUI_TEXT_TYPE, this);
 		checkGarbage(*rect);
@@ -1196,7 +1196,7 @@ struct GUIModuleImpl final : GUIModule {
 			entity = entity_map.get(entity);
 			auto iter = m_rects.find(entity);
 			if (!iter.isValid()) {
-				GUIRect* rect = LUMIX_NEW(m_allocator, GUIRect);
+				GUIRect* rect = AETHERION_NEW(m_allocator, GUIRect);
 				iter = m_rects.insert(entity, rect);
 			}
 			GUIRect* rect = iter.value();
@@ -1214,7 +1214,7 @@ struct GUIModuleImpl final : GUIModule {
 			bool has_image = serializer.read<bool>();
 			if (has_image)
 			{
-				rect->image = LUMIX_NEW(m_allocator, GUIImage);
+				rect->image = AETHERION_NEW(m_allocator, GUIImage);
 				const char* tmp = serializer.readString();
 				if (tmp[0] == '\0')
 				{
@@ -1233,13 +1233,13 @@ struct GUIModuleImpl final : GUIModule {
 			bool has_input_field = serializer.read<bool>();
 			if (has_input_field)
 			{
-				rect->input_field = LUMIX_NEW(m_allocator, GUIInputField);
+				rect->input_field = AETHERION_NEW(m_allocator, GUIInputField);
 				m_world.onComponentCreated(rect->entity, GUI_INPUT_FIELD_TYPE, this);
 			}
 			bool has_text = serializer.read<bool>();
 			if (has_text)
 			{
-				rect->text = LUMIX_NEW(m_allocator, GUIText)(m_allocator);
+				rect->text = AETHERION_NEW(m_allocator, GUIText)(m_allocator);
 				GUIText& text = *rect->text;
 				const char* tmp = serializer.readString();
 				serializer.read(text.horizontal_align);
@@ -1375,49 +1375,49 @@ void GUIModule::reflect() {
 		}
 	};
 
-	LUMIX_MODULE(GUIModuleImpl, "gui")
-		.LUMIX_EVENT(GUIModule::buttonClicked)
-		.LUMIX_EVENT(GUIModule::rectHovered)
-		.LUMIX_EVENT(GUIModule::rectHoveredOut)
-		.LUMIX_EVENT(GUIModule::rectMouseDown)
-		.LUMIX_EVENT(GUIModule::mousedButtonUnhandled)
-		.LUMIX_FUNC_EX(GUIModule::getRectAt, "getRectAt")
-		.LUMIX_FUNC(isOver)
+	AETHERION_MODULE(GUIModuleImpl, "gui")
+		.AETHERION_EVENT(GUIModule::buttonClicked)
+		.AETHERION_EVENT(GUIModule::rectHovered)
+		.AETHERION_EVENT(GUIModule::rectHoveredOut)
+		.AETHERION_EVENT(GUIModule::rectMouseDown)
+		.AETHERION_EVENT(GUIModule::mousedButtonUnhandled)
+		.AETHERION_FUNC_EX(GUIModule::getRectAt, "getRectAt")
+		.AETHERION_FUNC(isOver)
 		.function<&GUIModuleImpl::getSystemPtr>("getSystem", "GUIModule::getSystem")
-		.LUMIX_CMP(RenderTarget, "gui_render_target", "GUI / Render taget")
-		.LUMIX_CMP(Text, "gui_text", "GUI / Text")
+		.AETHERION_CMP(RenderTarget, "gui_render_target", "GUI / Render taget")
+		.AETHERION_CMP(Text, "gui_text", "GUI / Text")
 			.icon(ICON_FA_FONT)
-			.LUMIX_PROP(Text, "Text").multilineAttribute()
-			.LUMIX_PROP(TextFontPath, "Font").resourceAttribute(FontResource::TYPE)
-			.LUMIX_PROP(TextFontSize, "Font Size")
-			.LUMIX_ENUM_PROP(TextHAlign, "Horizontal align").attribute<TextHAlignEnum>()
-			.LUMIX_ENUM_PROP(TextVAlign, "Vertical align").attribute<TextVAlignEnum>()
-			.LUMIX_PROP(TextColorRGBA, "Color").colorAttribute()
-		.LUMIX_CMP(InputField, "gui_input_field", "GUI / Input field").icon(ICON_FA_KEYBOARD)
-		.LUMIX_CMP(Canvas, "gui_canvas", "GUI / Canvas")
+			.AETHERION_PROP(Text, "Text").multilineAttribute()
+			.AETHERION_PROP(TextFontPath, "Font").resourceAttribute(FontResource::TYPE)
+			.AETHERION_PROP(TextFontSize, "Font Size")
+			.AETHERION_ENUM_PROP(TextHAlign, "Horizontal align").attribute<TextHAlignEnum>()
+			.AETHERION_ENUM_PROP(TextVAlign, "Vertical align").attribute<TextVAlignEnum>()
+			.AETHERION_PROP(TextColorRGBA, "Color").colorAttribute()
+		.AETHERION_CMP(InputField, "gui_input_field", "GUI / Input field").icon(ICON_FA_KEYBOARD)
+		.AETHERION_CMP(Canvas, "gui_canvas", "GUI / Canvas")
 			.var_prop<&GUIModule::getCanvas, &GUICanvas::is_3d>("Is 3D")
 			.var_prop<&GUIModule::getCanvas, &GUICanvas::orient_to_camera>("Orient to camera")
 			.var_prop<&GUIModule::getCanvas, &GUICanvas::virtual_size>("Virtual size")
-		.LUMIX_CMP(Button, "gui_button", "GUI / Button")
-			.LUMIX_PROP(ButtonHoveredColorRGBA, "Hovered color").colorAttribute()
-			.LUMIX_ENUM_PROP(ButtonHoveredCursor, "Cursor").attribute<CursorEnum>()
-		.LUMIX_CMP(Image, "gui_image", "GUI / Image")
+		.AETHERION_CMP(Button, "gui_button", "GUI / Button")
+			.AETHERION_PROP(ButtonHoveredColorRGBA, "Hovered color").colorAttribute()
+			.AETHERION_ENUM_PROP(ButtonHoveredCursor, "Cursor").attribute<CursorEnum>()
+		.AETHERION_CMP(Image, "gui_image", "GUI / Image")
 			.icon(ICON_FA_IMAGE)
 			.prop<&GUIModule::isImageEnabled, &GUIModule::enableImage>("Enabled")
-			.LUMIX_PROP(ImageColorRGBA, "Color").colorAttribute()
-			.LUMIX_PROP(ImageSprite, "Sprite").resourceAttribute(Sprite::TYPE)
-		.LUMIX_CMP(Rect, "gui_rect", "GUI / Rect")
+			.AETHERION_PROP(ImageColorRGBA, "Color").colorAttribute()
+			.AETHERION_PROP(ImageSprite, "Sprite").resourceAttribute(Sprite::TYPE)
+		.AETHERION_CMP(Rect, "gui_rect", "GUI / Rect")
 			.prop<&GUIModule::isRectEnabled, &GUIModule::enableRect>("Enabled")
-			.LUMIX_PROP(RectClip, "Clip content")
-			.LUMIX_PROP(RectTopPoints, "Top Points")
-			.LUMIX_PROP(RectTopRelative, "Top Relative")
-			.LUMIX_PROP(RectRightPoints, "Right Points")
-			.LUMIX_PROP(RectRightRelative, "Right Relative")
-			.LUMIX_PROP(RectBottomPoints, "Bottom Points")
-			.LUMIX_PROP(RectBottomRelative, "Bottom Relative")
-			.LUMIX_PROP(RectLeftPoints, "Left Points")
-			.LUMIX_PROP(RectLeftRelative, "Left Relative")
+			.AETHERION_PROP(RectClip, "Clip content")
+			.AETHERION_PROP(RectTopPoints, "Top Points")
+			.AETHERION_PROP(RectTopRelative, "Top Relative")
+			.AETHERION_PROP(RectRightPoints, "Right Points")
+			.AETHERION_PROP(RectRightRelative, "Right Relative")
+			.AETHERION_PROP(RectBottomPoints, "Bottom Points")
+			.AETHERION_PROP(RectBottomRelative, "Bottom Relative")
+			.AETHERION_PROP(RectLeftPoints, "Left Points")
+			.AETHERION_PROP(RectLeftRelative, "Left Relative")
 	;
 }
 
-} // namespace Lumix
+} // namespace Aetherion

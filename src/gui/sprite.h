@@ -4,7 +4,7 @@
 #include "engine/resource.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 struct Sprite final : Resource {
@@ -42,4 +42,4 @@ private:
 };
 
 
-} // namespace Lumix
+} // namespace Aetherion

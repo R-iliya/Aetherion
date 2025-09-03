@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/lumix.h"
+#include "engine/aetherion.h"
 
 #include "core/math.h"
 #include "core/metaprogramming.h"
@@ -9,7 +9,7 @@
 #include <lua.h>
 #include <lualib.h>
 
-namespace Lumix {
+namespace Aetherion {
 
 struct World;
 struct CameraParams;
@@ -19,7 +19,7 @@ template <typename T> struct Array;
 namespace LuaWrapper {
 
 
-#ifdef LUMIX_DEBUG
+#ifdef AETHERION_DEBUG
 	struct DebugGuard {
 		DebugGuard(lua_State* L);
 		DebugGuard(lua_State* L, int offset);
@@ -869,4 +869,4 @@ template <auto t> int wrapMethodClosure(lua_State* L)
 
 
 } // namespace LuaWrapper
-} // namespace Lumix
+} // namespace Aetherion

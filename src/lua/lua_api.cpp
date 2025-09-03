@@ -18,7 +18,7 @@
 #include <imgui/imgui.h>
 
 
-namespace Lumix {
+namespace Aetherion {
 
 namespace LuaImGui {
 
@@ -824,7 +824,7 @@ static int LUA_loadWorld(lua_State* L)
 					}
 				}
 			}
-			LUMIX_DELETE(engine->getAllocator(), this);
+			AETHERION_DELETE(engine->getAllocator(), this);
 		}
 
 		Engine* engine;
@@ -835,7 +835,7 @@ static int LUA_loadWorld(lua_State* L)
 	};
 
 	FileSystem& fs = engine->getFileSystem();
-	Callback* inst = LUMIX_NEW(engine->getAllocator(), Callback);
+	Callback* inst = AETHERION_NEW(engine->getAllocator(), Callback);
 	inst->engine = engine;
 	inst->world = world;
 	inst->path = Path(path);
@@ -902,10 +902,10 @@ void registerEngineAPI(lua_State* L, Engine* engine)
 	lua_pushcfunction(L, &LUA_loadstring, "loadstring");
 	lua_setglobal(L, "loadstring");
 
-	LuaWrapper::createSystemVariable(L, "LumixAPI", "engine", engine);
+	LuaWrapper::createSystemVariable(L, "AetherionAPI", "engine", engine);
 
 	#define REGISTER_FUNCTION(name) \
-		LuaWrapper::createSystemFunction(L, "LumixAPI", #name, \
+		LuaWrapper::createSystemFunction(L, "AetherionAPI", #name, \
 			&LuaWrapper::wrap<LUA_##name>); \
 
 	REGISTER_FUNCTION(networkClose);
@@ -942,63 +942,63 @@ void registerEngineAPI(lua_State* L, Engine* engine)
 	REGISTER_FUNCTION(setTimeMultiplier);
 	REGISTER_FUNCTION(startGame);
 	REGISTER_FUNCTION(unloadResource);
-	LuaWrapper::createSystemClosure(L, "LumixAPI", engine, "getResourcePath", &LuaWrapper::wrap<LUA_getResourcePath>);
+	LuaWrapper::createSystemClosure(L, "AetherionAPI", engine, "getResourcePath", &LuaWrapper::wrap<LUA_getResourcePath>);
 
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getComponent", &LuaWrapper::wrap<LUA_getComponent>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getNumComponents", &LuaWrapper::wrap<LUA_getNumComponents>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getNumProperties", &LuaWrapper::wrap<LUA_getNumProperties>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getNumComponentFunctions", &LuaWrapper::wrap<LUA_getNumComponentFunctions>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getComponentName", &LuaWrapper::wrap<LUA_getComponentName>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getComponentLabel", &LuaWrapper::wrap<LUA_getComponentLabel>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getComponentIcon", &LuaWrapper::wrap<LUA_getComponentIcon>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getProperty", &LuaWrapper::wrap<LUA_getProperty>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getComponentFunction", &LuaWrapper::wrap<LUA_getComponentFunction>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getFunctionName", &LuaWrapper::wrap<LUA_getFunctionName>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getFunctionArgCount", &LuaWrapper::wrap<LUA_getFunctionArgCount>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getFunctionReturnType", &LUA_getFunctionReturnType);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getFunctionArgType", &LuaWrapper::wrap<LUA_getFunctionArgType>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getPropertyType", &LuaWrapper::wrap<LUA_getPropertyType>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getPropertyName", &LuaWrapper::wrap<LUA_getPropertyName>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getComponent", &LuaWrapper::wrap<LUA_getComponent>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getNumComponents", &LuaWrapper::wrap<LUA_getNumComponents>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getNumProperties", &LuaWrapper::wrap<LUA_getNumProperties>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getNumComponentFunctions", &LuaWrapper::wrap<LUA_getNumComponentFunctions>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getComponentName", &LuaWrapper::wrap<LUA_getComponentName>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getComponentLabel", &LuaWrapper::wrap<LUA_getComponentLabel>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getComponentIcon", &LuaWrapper::wrap<LUA_getComponentIcon>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getProperty", &LuaWrapper::wrap<LUA_getProperty>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getComponentFunction", &LuaWrapper::wrap<LUA_getComponentFunction>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getFunctionName", &LuaWrapper::wrap<LUA_getFunctionName>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getFunctionArgCount", &LuaWrapper::wrap<LUA_getFunctionArgCount>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getFunctionReturnType", &LUA_getFunctionReturnType);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getFunctionArgType", &LuaWrapper::wrap<LUA_getFunctionArgType>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getPropertyType", &LuaWrapper::wrap<LUA_getPropertyType>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getPropertyName", &LuaWrapper::wrap<LUA_getPropertyName>);
 	
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getFirstModule", &LuaWrapper::wrap<reflection::getFirstModule>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getNextModule", &LUA_getNextModule);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getThisTypeName", &LUA_getThisTypeName);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getReturnTypeName", &LUA_getReturnTypeName);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getNumModuleFunctions", &LuaWrapper::wrap<LUA_getNumModuleFunctions>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getModuleFunction", &LuaWrapper::wrap<LUA_getModuleFunction>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getModuleName", &LuaWrapper::wrap<LUA_getModuleName>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getFirstModule", &LuaWrapper::wrap<reflection::getFirstModule>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getNextModule", &LUA_getNextModule);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getThisTypeName", &LUA_getThisTypeName);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getReturnTypeName", &LUA_getReturnTypeName);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getNumModuleFunctions", &LuaWrapper::wrap<LUA_getNumModuleFunctions>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getModuleFunction", &LuaWrapper::wrap<LUA_getModuleFunction>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getModuleName", &LuaWrapper::wrap<LUA_getModuleName>);
 	
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getNumFunctions", &LuaWrapper::wrap<LUA_getNumFunctions>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getFunction", &LuaWrapper::wrap<LUA_getFunction>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getNumFunctions", &LuaWrapper::wrap<LUA_getNumFunctions>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getFunction", &LuaWrapper::wrap<LUA_getFunction>);
 	
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getNumStructs", &LuaWrapper::wrap<LUA_getNumStructs>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getStruct", &LuaWrapper::wrap<LUA_getStruct>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getStructName", &LuaWrapper::wrap<LUA_getStructName>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getNumStructMembers", &LuaWrapper::wrap<LUA_getNumStructMembers>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getStructMember", &LuaWrapper::wrap<LUA_getStructMember>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getStructMemberName", &LuaWrapper::wrap<LUA_getStructMemberName>);
-	LuaWrapper::createSystemFunction(L, "LumixReflection", "getStructMemberType", &LuaWrapper::wrap<LUA_getStructMemberType>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getNumStructs", &LuaWrapper::wrap<LUA_getNumStructs>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getStruct", &LuaWrapper::wrap<LUA_getStruct>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getStructName", &LuaWrapper::wrap<LUA_getStructName>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getNumStructMembers", &LuaWrapper::wrap<LUA_getNumStructMembers>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getStructMember", &LuaWrapper::wrap<LUA_getStructMember>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getStructMemberName", &LuaWrapper::wrap<LUA_getStructMemberName>);
+	LuaWrapper::createSystemFunction(L, "AetherionReflection", "getStructMemberType", &LuaWrapper::wrap<LUA_getStructMemberType>);
 	
-	LuaWrapper::createSystemFunction(L, "LumixAPI", "resourceTypeFromString", &LUA_resourceTypeFromString);
-	LuaWrapper::createSystemFunction(L, "LumixAPI", "beginProfilerBlock", LuaWrapper::wrap<&profiler::endBlock>);
-	LuaWrapper::createSystemFunction(L, "LumixAPI", "endProfilerBlock", LuaWrapper::wrap<&profiler::beginBlock>);
-	LuaWrapper::createSystemFunction(L, "LumixAPI", "createProfilerCounter", LuaWrapper::wrap<&profiler::createCounter>);
-	LuaWrapper::createSystemFunction(L, "LumixAPI", "pushProfilerCounter", LuaWrapper::wrap<&profiler::pushCounter>);
-	LuaWrapper::createSystemFunction(L, "LumixAPI", "networkRead", &LUA_networkRead);
-	LuaWrapper::createSystemFunction(L, "LumixAPI", "packU32", &LUA_packU32);
-	LuaWrapper::createSystemFunction(L, "LumixAPI", "unpackU32", &LUA_unpackU32);
-	LuaWrapper::createSystemFunction(L, "LumixAPI", "networkConnect", &LUA_networkConnect);
-	LuaWrapper::createSystemFunction(L, "LumixAPI", "networkListen", &LUA_networkListen);
-	LuaWrapper::createSystemClosure(L, "LumixAPI", engine, "loadWorld", LUA_loadWorld);
-	LuaWrapper::createSystemClosure(L, "LumixAPI", engine, "hasFilesystemWork", LUA_hasFilesystemWork);
-	LuaWrapper::createSystemClosure(L, "LumixAPI", engine, "processFilesystemWork", LUA_processFilesystemWork);
-	LuaWrapper::createSystemClosure(L, "LumixAPI", engine, "pause", LUA_pause);
-	LuaWrapper::createSystemClosure(L, "LumixAPI", engine, "writeFile", LUA_writeFile);
+	LuaWrapper::createSystemFunction(L, "AetherionAPI", "resourceTypeFromString", &LUA_resourceTypeFromString);
+	LuaWrapper::createSystemFunction(L, "AetherionAPI", "beginProfilerBlock", LuaWrapper::wrap<&profiler::endBlock>);
+	LuaWrapper::createSystemFunction(L, "AetherionAPI", "endProfilerBlock", LuaWrapper::wrap<&profiler::beginBlock>);
+	LuaWrapper::createSystemFunction(L, "AetherionAPI", "createProfilerCounter", LuaWrapper::wrap<&profiler::createCounter>);
+	LuaWrapper::createSystemFunction(L, "AetherionAPI", "pushProfilerCounter", LuaWrapper::wrap<&profiler::pushCounter>);
+	LuaWrapper::createSystemFunction(L, "AetherionAPI", "networkRead", &LUA_networkRead);
+	LuaWrapper::createSystemFunction(L, "AetherionAPI", "packU32", &LUA_packU32);
+	LuaWrapper::createSystemFunction(L, "AetherionAPI", "unpackU32", &LUA_unpackU32);
+	LuaWrapper::createSystemFunction(L, "AetherionAPI", "networkConnect", &LUA_networkConnect);
+	LuaWrapper::createSystemFunction(L, "AetherionAPI", "networkListen", &LUA_networkListen);
+	LuaWrapper::createSystemClosure(L, "AetherionAPI", engine, "loadWorld", LUA_loadWorld);
+	LuaWrapper::createSystemClosure(L, "AetherionAPI", engine, "hasFilesystemWork", LUA_hasFilesystemWork);
+	LuaWrapper::createSystemClosure(L, "AetherionAPI", engine, "processFilesystemWork", LUA_processFilesystemWork);
+	LuaWrapper::createSystemClosure(L, "AetherionAPI", engine, "pause", LUA_pause);
+	LuaWrapper::createSystemClosure(L, "AetherionAPI", engine, "writeFile", LUA_writeFile);
 
 
 	#undef REGISTER_FUNCTION
 
-	LuaWrapper::createSystemClosure(L, "LumixAPI", engine, "instantiatePrefab", &LUA_instantiatePrefab);
+	LuaWrapper::createSystemClosure(L, "AetherionAPI", engine, "instantiatePrefab", &LUA_instantiatePrefab);
 
 	lua_newtable(L);
 	lua_pushvalue(L, -1);
@@ -1088,143 +1088,143 @@ void registerEngineAPI(lua_State* L, Engine* engine)
 	lua_pop(L, 1);
 
 	const char* entity_src = R"#(
-		Lumix = {}
-		Lumix.Entity = {}
-		function Lumix.Entity:new(world, entity)
+		Aetherion = {}
+		Aetherion.Entity = {}
+		function Aetherion.Entity:new(world, entity)
 			local e = { _entity = entity, _world = world }
 			setmetatable(e, self)
 			return e
 		end
-		function Lumix.Entity:destroy()
-			LumixAPI.destroyEntity(self._world, self._entity)
+		function Aetherion.Entity:destroy()
+			AetherionAPI.destroyEntity(self._world, self._entity)
 			self._entity = 0xffFFffFF
 		end
-		function Lumix.Entity:createComponent(cmp)
-			LumixAPI.createComponent(self._world, self._entity, cmp)
-			return Lumix[cmp]:new(self._world, self._entity)
+		function Aetherion.Entity:createComponent(cmp)
+			AetherionAPI.createComponent(self._world, self._entity, cmp)
+			return Aetherion[cmp]:new(self._world, self._entity)
 		end
-		function Lumix.Entity:getComponent(cmp)
-			if not LumixAPI.hasComponent(self._world, self._entity, cmp) then return nil end
-			return Lumix[cmp]:new(self._world, self._entity)
+		function Aetherion.Entity:getComponent(cmp)
+			if not AetherionAPI.hasComponent(self._world, self._entity, cmp) then return nil end
+			return Aetherion[cmp]:new(self._world, self._entity)
 		end
-		function Lumix.Entity:hasComponent(cmp)
-			return LumixAPI.hasComponent(self._world, self._entity, cmp)
+		function Aetherion.Entity:hasComponent(cmp)
+			return AetherionAPI.hasComponent(self._world, self._entity, cmp)
 		end
-		Lumix.Entity.__index = function(table, key)
+		Aetherion.Entity.__index = function(table, key)
 			if key == "position" then
-				return LumixAPI.getEntityPosition(table._world, table._entity)
+				return AetherionAPI.getEntityPosition(table._world, table._entity)
 			elseif key == "local_position" then
-				return LumixAPI.getEntityLocalPosition(table._world, table._entity)
+				return AetherionAPI.getEntityLocalPosition(table._world, table._entity)
 			elseif key == "parent" then
-				local p = LumixAPI.getParent(table._world, table._entity)
+				local p = AetherionAPI.getParent(table._world, table._entity)
 				if p < 0 then return nil end
-				return Lumix.Entity:new(table._world, p)
+				return Aetherion.Entity:new(table._world, p)
 			elseif key == "first_child" then
-				local p = LumixAPI.getFirstChild(table._world, table._entity)
+				local p = AetherionAPI.getFirstChild(table._world, table._entity)
 				if p < 0 then return nil end
-				return Lumix.Entity:new(table._world, p)
+				return Aetherion.Entity:new(table._world, p)
 			elseif key == "next_sibling" then
-				local p = LumixAPI.getNextSibling(table._world, table._entity)
+				local p = AetherionAPI.getNextSibling(table._world, table._entity)
 				if p < 0 then return nil end
-				return Lumix.Entity:new(table._world, p)
+				return Aetherion.Entity:new(table._world, p)
 			elseif key == "rotation" then
-				return LumixAPI.getEntityRotation(table._world, table._entity)
+				return AetherionAPI.getEntityRotation(table._world, table._entity)
 			elseif key == "name" then
-				return LumixAPI.getEntityName(table._world, table._entity)
+				return AetherionAPI.getEntityName(table._world, table._entity)
 			elseif key == "scale" then
-				return LumixAPI.getEntityScale(table._world, table._entity)
+				return AetherionAPI.getEntityScale(table._world, table._entity)
 			elseif key == "world" then
-				return Lumix.World:new(table._world)
+				return Aetherion.World:new(table._world)
 			elseif key == "_world" or key == "_entity" then
 				return rawget(table, key)
-			elseif Lumix.Entity[key] ~= nil then
-				return Lumix.Entity[key]
+			elseif Aetherion.Entity[key] ~= nil then
+				return Aetherion.Entity[key]
 			else 
-				if LumixAPI.hasComponent(table._world, table._entity, key) then
-					return Lumix[key]:new(table._world, table._entity)
+				if AetherionAPI.hasComponent(table._world, table._entity, key) then
+					return Aetherion[key]:new(table._world, table._entity)
 				else
 					return nil
 				end
 			end
 		end
-		Lumix.Entity.INVALID = Lumix.Entity:new(nil, -1)
-		Lumix.Entity.NULL = Lumix.Entity.INVALID
+		Aetherion.Entity.INVALID = Aetherion.Entity:new(nil, -1)
+		Aetherion.Entity.NULL = Aetherion.Entity.INVALID
 
-		Lumix.Entity.__eq = function(a, b)
+		Aetherion.Entity.__eq = function(a, b)
 			return a._entity == b._entity and a._world == b._world
 		end
 
-		Lumix.Entity.__newindex = function(table, key, value)
+		Aetherion.Entity.__newindex = function(table, key, value)
 			if key == "position" then
-				LumixAPI.setEntityPosition(table._world, table._entity, value)
+				AetherionAPI.setEntityPosition(table._world, table._entity, value)
 			elseif key == "local_position" then
-				LumixAPI.setEntityLocalPosition(table._world, table._entity, value)
+				AetherionAPI.setEntityLocalPosition(table._world, table._entity, value)
 			elseif key == "name" then
-				LumixAPI.setEntityName(table._world, table._entity, value)
+				AetherionAPI.setEntityName(table._world, table._entity, value)
 			elseif key == "rotation" then
-				LumixAPI.setEntityRotation(table._world, table._entity, value)
+				AetherionAPI.setEntityRotation(table._world, table._entity, value)
 			elseif key == "scale" then
-				LumixAPI.setEntityScale(table._world, table._entity, value)
+				AetherionAPI.setEntityScale(table._world, table._entity, value)
 			elseif key == "parent" then
-				LumixAPI.setParent(table._world, value._entity, table._entity)
-			elseif Lumix.Entity[key] ~= nil then
-				Lumix.Entity[key] = value
+				AetherionAPI.setParent(table._world, value._entity, table._entity)
+			elseif Aetherion.Entity[key] ~= nil then
+				Aetherion.Entity[key] = value
 			else
 				error("key " .. tostring(key) .. " not found")
 			end
 		end
 
-		Lumix.World = {}
-		function Lumix.World:create() 
-			local u = LumixAPI.createWorld(LumixAPI.engine)
-			return Lumix.World:new(u)
+		Aetherion.World = {}
+		function Aetherion.World:create() 
+			local u = AetherionAPI.createWorld(AetherionAPI.engine)
+			return Aetherion.World:new(u)
 		end
-		function Lumix.World:destroy()
-			LumixAPI.destroyWorld(LumixAPI.engine, self.value)
+		function Aetherion.World:destroy()
+			AetherionAPI.destroyWorld(AetherionAPI.engine, self.value)
 		end
-		function Lumix.World:load(path, callback_fn)
-			LumixAPI.loadWorld(self.value, path, callback_fn)
+		function Aetherion.World:load(path, callback_fn)
+			AetherionAPI.loadWorld(self.value, path, callback_fn)
 		end
-		function Lumix.World:new(_world)
+		function Aetherion.World:new(_world)
 			local u = { value = _world }
 			setmetatable(u, self)
 			return u
 		end
-		function Lumix.World:setActivePartition(partition)
-			LumixAPI.setActivePartition(self.value, partition)
+		function Aetherion.World:setActivePartition(partition)
+			AetherionAPI.setActivePartition(self.value, partition)
 		end
-		function Lumix.World:getActivePartition()
-			return LumixAPI.getActivePartition(self.value)
+		function Aetherion.World:getActivePartition()
+			return AetherionAPI.getActivePartition(self.value)
 		end
-		function Lumix.World:createPartition(name)
-			return LumixAPI.createPartition(self.value, name)
+		function Aetherion.World:createPartition(name)
+			return AetherionAPI.createPartition(self.value, name)
 		end
-		function Lumix.World:instantiatePrefab(position, prefab)
-			return LumixAPI.instantiatePrefab(self, position, prefab._handle)
+		function Aetherion.World:instantiatePrefab(position, prefab)
+			return AetherionAPI.instantiatePrefab(self, position, prefab._handle)
 		end
-		function Lumix.World:createEntity()
-			local e = LumixAPI.createEntity(self.value)
-			return Lumix.Entity:new(self.value, e)
+		function Aetherion.World:createEntity()
+			local e = AetherionAPI.createEntity(self.value)
+			return Aetherion.Entity:new(self.value, e)
 		end
-		function Lumix.World.__index(table, key)
-			if Lumix.World[key] ~= nil then
-				return Lumix.World[key]
+		function Aetherion.World.__index(table, key)
+			if Aetherion.World[key] ~= nil then
+				return Aetherion.World[key]
 			else
-				if LumixModules[key] == nil then return nil end
-				local module = LumixAPI.getModule(table.value, key)
-				return LumixModules[key]:new(module)
+				if AetherionModules[key] == nil then return nil end
+				local module = AetherionAPI.getModule(table.value, key)
+				return AetherionModules[key]:new(module)
 			end
 		end
-		function Lumix.World:getModule(name)
-			local module = LumixAPI.getModule(self.value, name)	
-			return LumixModules[name]:new(module)
+		function Aetherion.World:getModule(name)
+			local module = AetherionAPI.getModule(self.value, name)	
+			return AetherionModules[name]:new(module)
 		end
-		function Lumix.World:findEntityByName(parent, name)
-			local p = LumixAPI.findByName(self.value, parent._entity or -1, name)
+		function Aetherion.World:findEntityByName(parent, name)
+			local p = AetherionAPI.findByName(self.value, parent._entity or -1, name)
 			if p < 0 then return nil end
-			return Lumix.Entity:new(self.value, p)
+			return Aetherion.Entity:new(self.value, p)
 		end
-		function Lumix.World:createEntityEx(desc)
+		function Aetherion.World:createEntityEx(desc)
 			local ent = self:createEntity()
 			for k, v in pairs(desc) do
 				if k == "position" then
@@ -1243,23 +1243,23 @@ void registerEngineAPI(lua_State* L, Engine* engine)
 			return ent
 		end
 
-		Lumix.Resource = {}
-		function Lumix.Resource:new(handle, type)
-			local r = { _handle = handle, _type = LumixAPI.resourceTypeFromString(type) }
+		Aetherion.Resource = {}
+		function Aetherion.Resource:new(handle, type)
+			local r = { _handle = handle, _type = AetherionAPI.resourceTypeFromString(type) }
 			setmetatable(r, self)
 			return r
 		end
-		function Lumix.Resource:newEmpty(type)
-			local r = { _handle = -1, _type = LumixAPI.resourceTypeFromString(type) }
+		function Aetherion.Resource:newEmpty(type)
+			local r = { _handle = -1, _type = AetherionAPI.resourceTypeFromString(type) }
 			setmetatable(r, self)
 			return r
 		end
-		function Lumix.Resource:getPath()
-			return LumixAPI.getResourcePath(self._handle)
+		function Aetherion.Resource:getPath()
+			return AetherionAPI.getResourcePath(self._handle)
 		end
-		function Lumix.Resource.__index(table, key)
-			if Lumix.Resource[key] ~= nil then
-				return Lumix.Resource[key]
+		function Aetherion.Resource.__index(table, key)
+			if Aetherion.Resource[key] ~= nil then
+				return Aetherion.Resource[key]
 			end
 			if key == "path" then
 				return table:getPath()
@@ -1276,4 +1276,4 @@ void registerEngineAPI(lua_State* L, Engine* engine)
 }
 
 
-} // namespace Lumix
+} // namespace Aetherion

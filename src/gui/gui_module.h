@@ -4,7 +4,7 @@
 #include "engine/plugin.h"
 #include "renderer/gpu/gpu.h"
 
-namespace Lumix
+namespace Aetherion
 {
 
 namespace os { enum class CursorType : u32; }
@@ -130,4 +130,4 @@ struct GUIModule : IModule {
 };
 
 
-} // namespace Lumix
+} // namespace Aetherion

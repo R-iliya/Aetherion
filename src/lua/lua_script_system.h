@@ -11,7 +11,7 @@
 struct lua_State;
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -90,4 +90,4 @@ struct LuaScriptModule : IModule {
 };
 
 
-} // namespace Lumix
+} // namespace Aetherion

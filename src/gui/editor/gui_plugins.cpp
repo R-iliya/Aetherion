@@ -27,7 +27,7 @@
 #include "renderer/renderer.h"
 #include "renderer/texture.h"
 
-using namespace Lumix;
+using namespace Aetherion;
 
 
 namespace {
@@ -1171,8 +1171,8 @@ struct StudioAppPlugin : StudioApp::IPlugin
 } // anonymous namespace
 
 
-LUMIX_STUDIO_ENTRY(gui) {
+AETHERION_STUDIO_ENTRY(gui) {
 	PROFILE_FUNCTION();
 	IAllocator& allocator = app.getAllocator();
-	return LUMIX_NEW(allocator, StudioAppPlugin)(app);
+	return AETHERION_NEW(allocator, StudioAppPlugin)(app);
 }

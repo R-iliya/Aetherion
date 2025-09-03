@@ -6,7 +6,7 @@
 #include "core/tag_allocator.h"
 
 
-namespace Lumix
+namespace Aetherion
 {
 
 
@@ -31,4 +31,4 @@ private:
 };
 
 
-} // namespace Lumix
+} // namespace Aetherion

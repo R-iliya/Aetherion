@@ -25,7 +25,7 @@
 #include <luacode.h>
 
 
-namespace Lumix {
+namespace Aetherion {
 
 static const char* toString(InputSystem::Device::Type type) {
 	switch (type) {
@@ -349,23 +349,23 @@ static int lua_struct_var_getter(lua_State* L) {
 
 static void createClasses(lua_State* L) {
 	LuaWrapper::DebugGuard guard(L);
-	lua_getglobal(L, "LumixAPI");
+	lua_getglobal(L, "AetherionAPI");
 	for (auto* s : reflection::allStructs()) {
-		if (LuaWrapper::getField(L, -1, s->name) != LUA_TTABLE) { // [LumixAPI, obj|nil ]
-			lua_pop(L, 1);						// [LumixAPI]
-			lua_newtable(L);					// [LumixAPI, obj]
-			lua_pushvalue(L, -1);				// [LumixAPI, obj, obj]
-			lua_setfield(L, -3, s->name); // [LumixAPI, obj]
+		if (LuaWrapper::getField(L, -1, s->name) != LUA_TTABLE) { // [AetherionAPI, obj|nil ]
+			lua_pop(L, 1);						// [AetherionAPI]
+			lua_newtable(L);					// [AetherionAPI, obj]
+			lua_pushvalue(L, -1);				// [AetherionAPI, obj, obj]
+			lua_setfield(L, -3, s->name); // [AetherionAPI, obj]
 			
-			lua_pushlightuserdata(L, s); // [LumixAPI, obj, refl::struct]
-			lua_pushcclosure(L, lua_struct_var_getter, "struct_var_getter", 1); // [LumixAPI, obj, var_getter]
-			lua_setfield(L, -2, "__index"); // [LumixAPI, obj]
+			lua_pushlightuserdata(L, s); // [AetherionAPI, obj, refl::struct]
+			lua_pushcclosure(L, lua_struct_var_getter, "struct_var_getter", 1); // [AetherionAPI, obj, var_getter]
+			lua_setfield(L, -2, "__index"); // [AetherionAPI, obj]
 
-			lua_pushlightuserdata(L, s); // [LumixAPI, obj, refl::struct]
-			lua_pushcclosure(L, lua_struct_var_setter, "struct_var_setter", 1); // [LumixAPI, obj, var_setter]
-			lua_setfield(L, -2, "__newindex"); // [LumixAPI, obj]
+			lua_pushlightuserdata(L, s); // [AetherionAPI, obj, refl::struct]
+			lua_pushcclosure(L, lua_struct_var_setter, "struct_var_setter", 1); // [AetherionAPI, obj, var_setter]
+			lua_setfield(L, -2, "__newindex"); // [AetherionAPI, obj]
 			
-			lua_pushvalue(L, -1); // [LumixAPI, obj, obj]
+			lua_pushvalue(L, -1); // [AetherionAPI, obj, obj]
 			auto creator = [](lua_State* L) -> int {
 				auto* s = LuaWrapper::getClosureObject<reflection::StructBase>(L);
 				void* obj = s->createInstance(getGlobalAllocator());
@@ -384,14 +384,14 @@ static void createClasses(lua_State* L) {
 				return 0;
 			};
 
-			lua_pushlightuserdata(L, s); // [LumixAPI, obj, obj, refl::struct]
-			lua_pushcclosure(L, creator, "create", 1); // [LumixAPI, obj, obj, closure]
-			lua_setfield(L, -2, "create"); // [LumixAPI, obj, obj]
+			lua_pushlightuserdata(L, s); // [AetherionAPI, obj, obj, refl::struct]
+			lua_pushcclosure(L, creator, "create", 1); // [AetherionAPI, obj, obj, closure]
+			lua_setfield(L, -2, "create"); // [AetherionAPI, obj, obj]
 
-			lua_pushlightuserdata(L, s); // [LumixAPI, obj, obj, refl::struct]
-			lua_pushcclosure(L, destroyer, "destroy", 1); // [LumixAPI, obj, obj, closure]
-			lua_setfield(L, -2, "destroy"); // [LumixAPI, obj, obj]
-			lua_pop(L, 1); // [LumixAPI, obj ]
+			lua_pushlightuserdata(L, s); // [AetherionAPI, obj, obj, refl::struct]
+			lua_pushcclosure(L, destroyer, "destroy", 1); // [AetherionAPI, obj, obj, closure]
+			lua_setfield(L, -2, "destroy"); // [AetherionAPI, obj, obj]
+			lua_pop(L, 1); // [AetherionAPI, obj ]
 		}
 		lua_pop(L, 1);
 	}
@@ -399,16 +399,16 @@ static void createClasses(lua_State* L) {
 	for (auto* f : reflection::allFunctions()) {
 		char obj_type_name[128];
 		copyString(Span(obj_type_name), f->getThisType().type_name);
-		if (LuaWrapper::getField(L, -1, obj_type_name) != LUA_TTABLE) { // [LumixAPI, obj|nil ]
-			lua_pop(L, 1);						// [LumixAPI]
-			lua_newtable(L);					// [LumixAPI, obj]
-			lua_pushvalue(L, -1);				// [LumixAPI, obj, obj]
-			lua_setfield(L, -3, obj_type_name); // [LumixAPI, obj]
-			lua_pushvalue(L, -1); // [LumixAPI, obj, obj]
-			lua_setfield(L, -2, "__index"); // [LumixAPI, obj]
+		if (LuaWrapper::getField(L, -1, obj_type_name) != LUA_TTABLE) { // [AetherionAPI, obj|nil ]
+			lua_pop(L, 1);						// [AetherionAPI]
+			lua_newtable(L);					// [AetherionAPI, obj]
+			lua_pushvalue(L, -1);				// [AetherionAPI, obj, obj]
+			lua_setfield(L, -3, obj_type_name); // [AetherionAPI, obj]
+			lua_pushvalue(L, -1); // [AetherionAPI, obj, obj]
+			lua_setfield(L, -2, "__index"); // [AetherionAPI, obj]
 		}
-		lua_pushlightuserdata(L, f);				// [LumixAPI, obj, f]
-		lua_pushcclosure(L, luaMethodClosure, f->name, 1); // [LumixAPI, obj, closure]
+		lua_pushlightuserdata(L, f);				// [AetherionAPI, obj, f]
+		lua_pushcclosure(L, luaMethodClosure, f->name, 1); // [AetherionAPI, obj, closure]
 		lua_setfield(L, -2, f->name);
 		lua_pop(L, 1);
 	}
@@ -482,11 +482,11 @@ struct LuaScriptManager final : ResourceManager
 	}
 
 	Resource* createResource(const Path& path) override {
-		return LUMIX_NEW(m_allocator, LuaScript)(path, *this, m_allocator);
+		return AETHERION_NEW(m_allocator, LuaScript)(path, *this, m_allocator);
 	}
 
 	void destroyResource(Resource& resource) override {
-		LUMIX_DELETE(m_allocator, static_cast<LuaScript*>(&resource));
+		AETHERION_DELETE(m_allocator, static_cast<LuaScript*>(&resource));
 	}
 
 	IAllocator& m_allocator;
@@ -503,7 +503,7 @@ static void registerRendererAPI(lua_State* L, Engine& engine) {
 
 static void registerInputAPI(lua_State* state) {
 	#define REGISTER_KEYCODE(KEYCODE) \
-		LuaWrapper::createSystemVariable(state, "LumixAPI", "INPUT_KEYCODE_" #KEYCODE, (int)os::Keycode::KEYCODE);
+		LuaWrapper::createSystemVariable(state, "AetherionAPI", "INPUT_KEYCODE_" #KEYCODE, (int)os::Keycode::KEYCODE);
 
 		REGISTER_KEYCODE(LBUTTON); 
 		REGISTER_KEYCODE(RBUTTON); 
@@ -826,14 +826,14 @@ struct LuaScriptModuleImpl final : LuaScriptModule {
 			lua_setfield(m_state, -2, "__index");  // [env]
 
 			// set this
-			lua_getglobal(m_state, "Lumix"); // [env, Lumix]
-			lua_getfield(m_state, -1, "Entity"); // [env, Lumix, Lumix.Entity]
-			lua_remove(m_state, -2); // [env, Lumix.Entity]
-			lua_getfield(m_state, -1, "new"); // [env, Lumix.Entity, Entity.new]
-			lua_pushvalue(m_state, -2); // [env, Lumix.Entity, Entity.new, Lumix.Entity]
-			lua_remove(m_state, -3); // [env, Entity.new, Lumix.Entity]
-			LuaWrapper::push(m_state, &module.m_world); // [env, Entity.new, Lumix.Entity, world]
-			LuaWrapper::push(m_state, cmp.m_entity.index); // [env, Entity.new, Lumix.Entity, world, entity_index]
+			lua_getglobal(m_state, "Aetherion"); // [env, Aetherion]
+			lua_getfield(m_state, -1, "Entity"); // [env, Aetherion, Aetherion.Entity]
+			lua_remove(m_state, -2); // [env, Aetherion.Entity]
+			lua_getfield(m_state, -1, "new"); // [env, Aetherion.Entity, Entity.new]
+			lua_pushvalue(m_state, -2); // [env, Aetherion.Entity, Entity.new, Aetherion.Entity]
+			lua_remove(m_state, -3); // [env, Entity.new, Aetherion.Entity]
+			LuaWrapper::push(m_state, &module.m_world); // [env, Entity.new, Aetherion.Entity, world]
+			LuaWrapper::push(m_state, cmp.m_entity.index); // [env, Entity.new, Aetherion.Entity, world, entity_index]
 			const bool error = !LuaWrapper::pcall(m_state, 3, 1); // [env, entity]
 			ASSERT(!error);
 			lua_setfield(m_state, -2, "this"); // [env]
@@ -928,14 +928,14 @@ struct LuaScriptModuleImpl final : LuaScriptModule {
 			lua_setfield(m_state, -2, "__index");	  // [env]
 
 			// set this
-			lua_getglobal(m_state, "Lumix");					  // [env, Lumix]
-			lua_getfield(m_state, -1, "Entity");				  // [env, Lumix, Lumix.Entity]
-			lua_remove(m_state, -2);							  // [env, Lumix.Entity]
-			lua_getfield(m_state, -1, "new");					  // [env, Lumix.Entity, Entity.new]
-			lua_pushvalue(m_state, -2);							  // [env, Lumix.Entity, Entity.new, Lumix.Entity]
-			lua_remove(m_state, -3);							  // [env, Entity.new, Lumix.Entity]
-			LuaWrapper::push(m_state, &module.m_world);		  // [env, Entity.new, Lumix.Entity, world]
-			LuaWrapper::push(m_state, entity.index);		  // [env, Entity.new, Lumix.Entity, world, entity_index]
+			lua_getglobal(m_state, "Aetherion");					  // [env, Aetherion]
+			lua_getfield(m_state, -1, "Entity");				  // [env, Aetherion, Aetherion.Entity]
+			lua_remove(m_state, -2);							  // [env, Aetherion.Entity]
+			lua_getfield(m_state, -1, "new");					  // [env, Aetherion.Entity, Entity.new]
+			lua_pushvalue(m_state, -2);							  // [env, Aetherion.Entity, Entity.new, Aetherion.Entity]
+			lua_remove(m_state, -3);							  // [env, Entity.new, Aetherion.Entity]
+			LuaWrapper::push(m_state, &module.m_world);		  // [env, Entity.new, Aetherion.Entity, world]
+			LuaWrapper::push(m_state, entity.index);		  // [env, Entity.new, Aetherion.Entity, world, entity_index]
 			const bool error = !LuaWrapper::pcall(m_state, 3, 1); // [env, entity]
 			ASSERT(!error);
 			lua_setfield(m_state, -2, "this"); // [env]
@@ -1027,8 +1027,8 @@ struct LuaScriptModuleImpl final : LuaScriptModule {
 		bool isResource(lua_State* L, i32 idx, ResourceType* resource_type) {
 			ASSERT(resource_type);
 			lua_getmetatable(L, idx); // mt
-			lua_getglobal(L, "Lumix");  // mt, Lumix
-			lua_getfield(L, -1, "Resource"); // mt, Lumix, Resource
+			lua_getglobal(L, "Aetherion");  // mt, Aetherion
+			lua_getfield(L, -1, "Resource"); // mt, Aetherion, Resource
 			bool is_instance = lua_equal(L, -1, -3);
 			lua_pop(L, 3);
 			if (!is_instance) return false;
@@ -1038,10 +1038,10 @@ struct LuaScriptModuleImpl final : LuaScriptModule {
 			return true;
 		}
 
-		bool isLumixClass(lua_State* L, i32 idx, const char* class_name) {
+		bool isAetherionClass(lua_State* L, i32 idx, const char* class_name) {
 			lua_getmetatable(L, idx); // mt
-			lua_getglobal(L, "Lumix");  // mt, Lumix
-			lua_getfield(L, -1, class_name); // mt, Lumix, class
+			lua_getglobal(L, "Aetherion");  // mt, Aetherion
+			lua_getfield(L, -1, class_name); // mt, Aetherion, class
 			bool is_instance = lua_equal(L, -1, -3);
 			lua_pop(L, 3);
 			return is_instance;
@@ -1094,7 +1094,7 @@ struct LuaScriptModuleImpl final : LuaScriptModule {
 							case LUA_TBOOLEAN: existing_prop.type = Property::BOOLEAN; break;
 							case LUA_TSTRING: existing_prop.type = Property::STRING; break;
 							case LUA_TTABLE: {
-								if (isLumixClass(inst.m_state, -1, "Entity")) existing_prop.type = Property::ENTITY;
+								if (isAetherionClass(inst.m_state, -1, "Entity")) existing_prop.type = Property::ENTITY;
 								else if (isResource(inst.m_state, -1, &existing_prop.resource_type)) existing_prop.type = Property::RESOURCE;
 								else existing_prop.type = Property::COLOR;
 								break;
@@ -1114,7 +1114,7 @@ struct LuaScriptModuleImpl final : LuaScriptModule {
 							case LUA_TBOOLEAN: prop.type = Property::BOOLEAN; break;
 							case LUA_TSTRING: prop.type = Property::STRING; break;
 							case LUA_TTABLE: {
-								if (isLumixClass(inst.m_state, -1, "Entity")) prop.type = Property::ENTITY;
+								if (isAetherionClass(inst.m_state, -1, "Entity")) prop.type = Property::ENTITY;
 								else if (isResource(inst.m_state, -1, &prop.resource_type)) prop.type = Property::RESOURCE;
 								else prop.type = Property::COLOR;
 								break;
@@ -1302,7 +1302,7 @@ struct LuaScriptModuleImpl final : LuaScriptModule {
 		Path invalid_path;
 		for (auto* script_cmp : m_scripts) {
 			ASSERT(script_cmp);
-			LUMIX_DELETE(m_system.m_allocator, script_cmp);
+			AETHERION_DELETE(m_system.m_allocator, script_cmp);
 		}
 	}
 
@@ -1903,12 +1903,12 @@ struct LuaScriptModuleImpl final : LuaScriptModule {
 
 		reflection::Module* module = reflection::getFirstModule();
 		lua_newtable(L);
-		lua_setglobal(L, "LumixModules");
+		lua_setglobal(L, "AetherionModules");
 		while (module) {
 			lua_newtable(L); // [ module ]
-			lua_getglobal(L, "LumixModules"); // [ module, Lumix ]
-			lua_pushvalue(L, -2); // [ module, Lumix, module]
-			lua_setfield(L, -2, module->name); // [ module, Lumix ]
+			lua_getglobal(L, "AetherionModules"); // [ module, Aetherion ]
+			lua_pushvalue(L, -2); // [ module, Aetherion, module]
+			lua_setfield(L, -2, module->name); // [ module, Aetherion ]
 			lua_pop(L, 1); // [ module ]
 
 			lua_pushvalue(L, -1); // [ module, module ]
@@ -1939,9 +1939,9 @@ struct LuaScriptModuleImpl final : LuaScriptModule {
 			const ComponentType cmp_type = cmp.cmp->component_type;
 
 			lua_newtable(L); // [ cmp ]
-			lua_getglobal(L, "Lumix"); // [ cmp, Lumix ]
-			lua_pushvalue(L, -2); // [ cmp, Lumix, cmp]
-			lua_setfield(L, -2, cmp_name); // [ cmp, Lumix ]
+			lua_getglobal(L, "Aetherion"); // [ cmp, Aetherion ]
+			lua_pushvalue(L, -2); // [ cmp, Aetherion, cmp]
+			lua_setfield(L, -2, cmp_name); // [ cmp, Aetherion ]
 			lua_pop(L, 1); // [ cmp ]
 
 			lua_pushcfunction(L, lua_new_cmp, "new"); // [ cmp, fn_new_cmp ]
@@ -2241,7 +2241,7 @@ struct LuaScriptModuleImpl final : LuaScriptModule {
 		}
 	}
 
-	LUMIX_FORCE_INLINE void onGUIEvent(EntityRef e, const char* event)
+	Aetherion_FORCE_INLINE void onGUIEvent(EntityRef e, const char* event)
 	{
 		auto* inline_call = beginFunctionCallInlineScript(e, event);
 		if (inline_call) {
@@ -2301,14 +2301,14 @@ struct LuaScriptModuleImpl final : LuaScriptModule {
 
 	void createScriptComponent(EntityRef entity) {
 		auto& allocator = m_system.m_allocator;
-		ScriptComponent* script = LUMIX_NEW(allocator, ScriptComponent)(*this, entity, allocator);
+		ScriptComponent* script = Aetherion_NEW(allocator, ScriptComponent)(*this, entity, allocator);
 		m_scripts.insert(entity, script);
 		m_world.onComponentCreated(entity, LUA_SCRIPT_TYPE, this);
 	}
 
 	void destroyScriptComponent(EntityRef entity) {
 		ScriptComponent* cmp = m_scripts[entity];
-		LUMIX_DELETE(m_system.m_allocator, cmp);
+		Aetherion_DELETE(m_system.m_allocator, cmp);
 		m_scripts.erase(entity);
 		m_world.onComponentDestroyed(entity, LUA_SCRIPT_TYPE, this);
 		m_to_start.eraseItems([entity](DeferredStart& element){
@@ -2442,7 +2442,7 @@ struct LuaScriptModuleImpl final : LuaScriptModule {
 			EntityRef entity;
 			serializer.read(entity);
 			entity = entity_map.get(entity);
-			ScriptComponent* script = LUMIX_NEW(allocator, ScriptComponent)(*this, entity, allocator);
+			ScriptComponent* script = Aetherion_NEW(allocator, ScriptComponent)(*this, entity, allocator);
 
 			m_scripts.insert(script->m_entity, script);
 			int scr_count;
@@ -2855,7 +2855,7 @@ struct LuaScriptModuleImpl final : LuaScriptModule {
 		const i32 res_idx = path[0] ? m_system.addLuaResource(Path(path), resource_type) : -1;
 		
 		lua_newtable(L);
-		lua_getglobal(L, "Lumix");
+		lua_getglobal(L, "Aetherion");
 		lua_getfield(L, -1, "Resource");
 		lua_setmetatable(L, -3);
 		lua_pop(L, 1);
@@ -3269,14 +3269,14 @@ LuaScriptSystemImpl::LuaScriptSystemImpl(Engine& engine)
 
 	m_script_manager.create(LuaScript::TYPE, engine.getResourceManager());
 
-	LUMIX_MODULE(LuaScriptModuleImpl, "lua_script")
-		.LUMIX_CMP(InlineScriptComponent, "lua_script_inline", "Lua Script / Inline") 
-			.LUMIX_PROP(InlineScriptCode, "Code").multilineAttribute()
-		.LUMIX_CMP(ScriptComponent, "lua_script", "Lua Script / File") 
-			.LUMIX_FUNC_EX(LuaScriptModule::getScriptPath, "getScriptPath")
+	AETHERION_MODULE(LuaScriptModuleImpl, "lua_script")
+		.AETHERION_CMP(InlineScriptComponent, "lua_script_inline", "Lua Script / Inline") 
+			.AETHERION_PROP(InlineScriptCode, "Code").multilineAttribute()
+		.AETHERION_CMP(ScriptComponent, "lua_script", "Lua Script / File") 
+			.AETHERION_FUNC_EX(LuaScriptModule::getScriptPath, "getScriptPath")
 			.begin_array<&LuaScriptModule::getScriptCount, &LuaScriptModule::addScript, &LuaScriptModule::removeScript>("scripts")
 				.prop<&LuaScriptModule::isScriptEnabled, &LuaScriptModule::enableScript>("Enabled")
-				.LUMIX_PROP(ScriptPath, "Path").resourceAttribute(LuaScript::TYPE)
+				.AETHERION_PROP(ScriptPath, "Path").resourceAttribute(LuaScript::TYPE)
 				.blob_property<&LuaScriptModuleImpl::getScriptBlob, &LuaScriptModuleImpl::setScriptBlob>("script_blob")
 			.end_array();
 }
@@ -3298,9 +3298,9 @@ void LuaScriptSystemImpl::createModules(World& world)
 }
 
 
-LUMIX_PLUGIN_ENTRY(lua) {
+AETHERION_PLUGIN_ENTRY(lua) {
 	PROFILE_FUNCTION();
-	return LUMIX_NEW(engine.getAllocator(), LuaScriptSystemImpl)(engine);
+	return AETHERION_NEW(engine.getAllocator(), LuaScriptSystemImpl)(engine);
 }
 
-} // namespace Lumix
+} // namespace Aetherion
