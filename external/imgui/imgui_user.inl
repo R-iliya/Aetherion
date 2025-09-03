@@ -8,12 +8,12 @@
 static constexpr float HANDLE_RADIUS = 4;
 using namespace ImGui;
 
-ImVec2::ImVec2(const Lumix::Vec2& f) 
+ImVec2::ImVec2(const Aetherion::Vec2& f) 
 	: x(f.x)
 	, y(f.y) 
 {}
 
-ImVec2::operator Lumix::Vec2() const {
+ImVec2::operator Aetherion::Vec2() const {
 	return {x, y};
 }                                               
 
@@ -52,7 +52,7 @@ namespace ImGuiEx {
 		return *g_node_editor.canvas_offset;
 	}
 
-	void TextCentered(Lumix::StringView str) {
+	void TextCentered(Aetherion::StringView str) {
 		const float text_w = ImGui::CalcTextSize(str.begin, str.end).x;
 		const float area_w = ImGui::GetContentRegionAvail().x;
 		float x = ImGui::GetCursorPosX();
@@ -61,7 +61,7 @@ namespace ImGuiEx {
 		ImGui::TextUnformatted(str.begin, str.end);
 	}
 
-	void TextUnformatted(Lumix::StringView str) {
+	void TextUnformatted(Aetherion::StringView str) {
 		ImGui::TextUnformatted(str.begin, str.end);
 	}
 
@@ -1154,9 +1154,9 @@ namespace ImGuiEx {
 	}
 
 	bool InputAngle(const char* label, float* angle_radians) {
-		float deg = Lumix::radiansToDegrees(*angle_radians);
+		float deg = Aetherion::radiansToDegrees(*angle_radians);
 		if (DragFloat(label, &deg)) {
-			*angle_radians = Lumix::degreesToRadians(deg);
+			*angle_radians = Aetherion::degreesToRadians(deg);
 			return true;
 		}
 		return false;
@@ -1164,14 +1164,14 @@ namespace ImGuiEx {
 
 
 	bool InputRotation(const char* label, float* feuler) {
-		Lumix::Vec3 euler = radiansToDegrees(*(Lumix::Vec3*)feuler);
+		Aetherion::Vec3 euler = radiansToDegrees(*(Aetherion::Vec3*)feuler);
 		const float rot_change_speed = GetIO().KeyAlt ? 10.f : 1.f; // we won't have precision without this
 		if (DragFloat3(label, &euler.x, rot_change_speed, 0, 0, "%.2f")) {
 			if (euler.x <= -90.0f || euler.x >= 90.0f) euler.y = 0;
-			euler.x = Lumix::degreesToRadians(Lumix::clamp(euler.x, -90.0f, 90.0f));
-			euler.y = Lumix::degreesToRadians(fmodf(euler.y + 180, 360.0f) - 180);
-			euler.z = Lumix::degreesToRadians(fmodf(euler.z + 180, 360.0f) - 180);
-			*(Lumix::Vec3*)feuler = euler;
+			euler.x = Aetherion::degreesToRadians(Aetherion::clamp(euler.x, -90.0f, 90.0f));
+			euler.y = Aetherion::degreesToRadians(fmodf(euler.y + 180, 360.0f) - 180);
+			euler.z = Aetherion::degreesToRadians(fmodf(euler.z + 180, 360.0f) - 180);
+			*(Aetherion::Vec3*)feuler = euler;
 			return true;
 		}
 		return false;
