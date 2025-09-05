@@ -1129,8 +1129,7 @@ struct PhysicsModuleImpl final : PhysicsModule
 
 
 	EntityPtr getJointConnectedBody(EntityRef entity) override { return m_joints[entity].connected_body; }
-
-
+	
 	void setJointConnectedBody(EntityRef joint_entity, EntityPtr connected_body) override
 	{
 		int idx = m_joints.find(joint_entity);
@@ -1139,14 +1138,12 @@ struct PhysicsModuleImpl final : PhysicsModule
 		if (m_is_game_running) initJoint(joint_entity, joint);
 	}
 
-
 	void setJointAxisPosition(EntityRef entity, const Vec3& value) override
 	{
 		auto& joint = m_joints[entity];
 		joint.local_frame0.p = toPhysx(value);
 		joint.physx->setLocalPose(PxJointActorIndex::eACTOR0, joint.local_frame0);
 	}
-
 
 	void setJointAxisDirection(EntityRef entity, const Vec3& value) override
 	{
@@ -1156,8 +1153,61 @@ struct PhysicsModuleImpl final : PhysicsModule
 	}
 
 
-	Vec3 getJointAxisPosition(EntityRef entity) override { return fromPhysx(m_joints[entity].local_frame0.p); }
+	EntityPtr getHingeJointConnectedBody(EntityRef entity) override { return m_joints[entity].connected_body; }
+	void setHingeJointConnectedBody(EntityRef joint_entity, EntityPtr connected_body) override {
+		setJointConnectedBody(joint_entity, connected_body);
+	}
+	void setHingeJointAxisPosition(EntityRef entity, const Vec3& value) override {
+		setJointAxisPosition(entity, value);
+	}
+	void setHingeJointAxisDirection(EntityRef entity, const Vec3& value) override {
+		setJointAxisDirection(entity, value);
+	}
+	Vec3 getHingeJointAxisPosition(EntityRef entity) override { return fromPhysx(m_joints[entity].local_frame0.p); }
+	Vec3 getHingeJointAxisDirection(EntityRef entity) override {
+		return getJointAxisDirection(entity);
+	}
 
+	EntityPtr getSphericalJointConnectedBody(EntityRef entity) override { return m_joints[entity].connected_body; }
+	void setSphericalJointConnectedBody(EntityRef joint_entity, EntityPtr connected_body) override {
+		setJointConnectedBody(joint_entity, connected_body);
+	}
+	void setSphericalJointAxisPosition(EntityRef entity, const Vec3& value) override {
+		setJointAxisPosition(entity, value);
+	}
+	void setSphericalJointAxisDirection(EntityRef entity, const Vec3& value) override {
+		setJointAxisDirection(entity, value);
+	}
+	Vec3 getSphericalJointAxisPosition(EntityRef entity) override { return fromPhysx(m_joints[entity].local_frame0.p); }
+	Vec3 getSphericalJointAxisDirection(EntityRef entity) override {
+		return getJointAxisDirection(entity);
+	}
+
+	EntityPtr getD6JointConnectedBody(EntityRef entity) override { return m_joints[entity].connected_body; }
+	void setD6JointConnectedBody(EntityRef joint_entity, EntityPtr connected_body) override {
+		setJointConnectedBody(joint_entity, connected_body);
+	}
+	void setD6JointAxisPosition(EntityRef entity, const Vec3& value) override {
+		setJointAxisPosition(entity, value);
+	}
+	void setD6JointAxisDirection(EntityRef entity, const Vec3& value) override {
+		setJointAxisDirection(entity, value);
+	}
+	Vec3 getD6JointAxisPosition(EntityRef entity) override { return fromPhysx(m_joints[entity].local_frame0.p); }
+	Vec3 getD6JointAxisDirection(EntityRef entity) override {
+		return getJointAxisDirection(entity);
+	}
+
+	EntityPtr getDistanceJointConnectedBody(EntityRef entity) override { return m_joints[entity].connected_body; }
+	void setDistanceJointConnectedBody(EntityRef joint_entity, EntityPtr connected_body) override {
+		setJointConnectedBody(joint_entity, connected_body);
+	}
+	void setDistanceJointAxisPosition(EntityRef entity, const Vec3& value) override {
+		setJointAxisPosition(entity, value);
+	}
+	Vec3 getDistanceJointAxisPosition(EntityRef entity) override { return fromPhysx(m_joints[entity].local_frame0.p); }
+
+	Vec3 getJointAxisPosition(EntityRef entity) override { return fromPhysx(m_joints[entity].local_frame0.p); }
 
 	Vec3 getJointAxisDirection(EntityRef entity) override
 	{
@@ -3791,7 +3841,6 @@ struct PhysicsModuleImpl final : PhysicsModule
 	World& m_world;
 	HitReport m_hit_report;
 	PhysxContactCallback m_contact_callback;
-	BoneOrientation m_new_bone_orientation = BoneOrientation::X;
 	PxScene* m_scene;
 	LuaScriptModule* m_script_module;
 	PhysicsSystem* m_system;
@@ -3895,46 +3944,6 @@ void PhysicsModule::reflect() {
 			PhysicsModule* module = (PhysicsModule*)cmp.module;
 			PhysicsSystem& system = (PhysicsSystem&)module->getSystem();
 			return system.getCollisionLayerName(idx);
-		}
-	};
-
-	struct DynamicTypeEnum : reflection::EnumAttribute {
-		u32 count(ComponentUID cmp) const override { return 3; }
-		const char* name(ComponentUID cmp, u32 idx) const override { 
-			switch ((PhysicsModule::DynamicType)idx) {
-				case PhysicsModule::DynamicType::DYNAMIC: return "Dynamic";
-				case PhysicsModule::DynamicType::STATIC: return "Static";
-				case PhysicsModule::DynamicType::KINEMATIC: return "Kinematic";
-			}
-			ASSERT(false);
-			return "N/A";
-		}
-	};
-
-	struct D6MotionEnum : reflection::EnumAttribute {
-		u32 count(ComponentUID cmp) const override { return 3; }
-		const char* name(ComponentUID cmp, u32 idx) const override { 
-			switch ((PhysicsModule::D6Motion)idx) {
-				case PhysicsModule::D6Motion::LOCKED: return "Locked";
-				case PhysicsModule::D6Motion::LIMITED: return "Limited";
-				case PhysicsModule::D6Motion::FREE: return "Free";
-			}
-			ASSERT(false);
-			return "N/A";
-		}
-	};
-
-	struct WheelSlotEnum : reflection::EnumAttribute {
-		u32 count(ComponentUID cmp) const override { return 4; }
-		const char* name(ComponentUID cmp, u32 idx) const override { 
-			switch ((PhysicsModule::WheelSlot)idx) {
-				case PhysicsModule::WheelSlot::FRONT_LEFT: return "Front left";
-				case PhysicsModule::WheelSlot::FRONT_RIGHT: return "Front right";
-				case PhysicsModule::WheelSlot::REAR_LEFT: return "Rear left";
-				case PhysicsModule::WheelSlot::REAR_RIGHT: return "Rear right";
-			}
-			ASSERT(false);
-			return "N/A";
 		}
 	};
 	

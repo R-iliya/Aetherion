@@ -231,8 +231,7 @@ struct AnimationModuleImpl final : AnimationModule {
 	}
 
 
-	void destroyPropertyAnimator(EntityRef entity)
-	{
+	void destroyPropertyAnimator(EntityRef entity) override {
 		int idx = m_property_animators.find(entity);
 		auto& animator = m_property_animators.at(idx);
 		unloadResource(animator.animation);
@@ -241,8 +240,7 @@ struct AnimationModuleImpl final : AnimationModule {
 	}
 
 
-	void destroyAnimable(EntityRef entity)
-	{
+	void destroyAnimable(EntityRef entity) override {
 		auto& animable = m_animables[entity];
 		unloadResource(animable.animation);
 		m_animables.erase(entity);
@@ -250,8 +248,7 @@ struct AnimationModuleImpl final : AnimationModule {
 	}
 
 
-	void destroyAnimator(EntityRef entity)
-	{
+	void destroyAnimator(EntityRef entity) override {
 		const u32 idx = m_animator_map[entity];
 		Animator& animator = m_animators[idx];
 		unloadResource(animator.resource);
@@ -386,7 +383,7 @@ struct AnimationModuleImpl final : AnimationModule {
 		return animator.resource ? animator.resource->getPath() : Path("");
 	}
 
-	bool isPropertyAnimatorLooped(EntityRef entity) override {
+	bool getPropertyAnimatorLooped(EntityRef entity) override {
 		return isFlagSet(m_property_animators[entity].flags, PropertyAnimator::LOOPED);
 	}
 
@@ -795,8 +792,7 @@ struct AnimationModuleImpl final : AnimationModule {
 	}
 
 
-	void createPropertyAnimator(EntityRef entity)
-	{
+	void createPropertyAnimator(EntityRef entity) override {
 		PropertyAnimator& animator = m_property_animators.emplace(entity, m_allocator);
 		animator.animation = nullptr;
 		animator.time = 0;
@@ -804,8 +800,7 @@ struct AnimationModuleImpl final : AnimationModule {
 	}
 
 
-	void createAnimable(EntityRef entity)
-	{
+	void createAnimable(EntityRef entity) override {
 		Animable& animable = m_animables.insert(entity);
 		animable.time = Time::fromSeconds(0);
 		animable.animation = nullptr;
@@ -815,8 +810,7 @@ struct AnimationModuleImpl final : AnimationModule {
 	}
 
 
-	void createAnimator(EntityRef entity)
-	{
+	void createAnimator(EntityRef entity) override {
 		m_animator_map.insert(entity, m_animators.size());
 		Animator& animator = m_animators.emplace();
 		animator.entity = entity;

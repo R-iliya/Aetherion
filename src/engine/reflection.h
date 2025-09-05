@@ -402,7 +402,6 @@ struct FunctionBase {
 	// we can use this in Delegate::bindRaw, so there's less overhead
 	virtual DummyFnType getDelegateStub() = 0;
 
-	const char* decl_code;
 	const char* name;
 };
 
@@ -670,12 +669,11 @@ AETHERION_ENGINE_API Array<FunctionBase*>& allFunctions();
 AETHERION_ENGINE_API Array<StructBase*>& allStructs();
 
 template <auto func>
-auto& function(const char* decl_code, const char* name)
+auto& function(const char* name)
 {
 	static Function<func> ret;
 	allFunctions().push(&ret);
-	ret.decl_code = decl_code;
-	ret.name = name && name[0] ? name : declCodeToName(decl_code);
+	ret.name = name;
 	return ret;
 }
 

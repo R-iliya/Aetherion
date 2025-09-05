@@ -202,8 +202,7 @@ struct AudioModuleImpl final : AudioModule
 	}
 
 
-	void createListener(EntityRef entity)
-	{
+	void createListener(EntityRef entity) override {
 		m_listener.entity = entity;
 		m_world.onComponentCreated(entity, LISTENER_TYPE, this);
 	}
@@ -271,16 +270,14 @@ struct AudioModuleImpl final : AudioModule
 	}
 
 
-	void destroyChorusZone(EntityRef entity)
-	{
+	void destroyChorusZone(EntityRef entity) override {
 		int idx = m_chorus_zones.find(entity);
 		m_chorus_zones.eraseAt(idx);
 		m_world.onComponentDestroyed(entity, CHORUS_ZONE_TYPE, this);
 	}
 
 
-	void createAmbientSound(EntityRef entity)
-	{
+	void createAmbientSound(EntityRef entity) override {
 		AmbientSound& sound = m_ambient_sounds.insert(entity);
 		sound.entity = entity;
 		sound.clip = nullptr;
@@ -289,15 +286,13 @@ struct AudioModuleImpl final : AudioModule
 	}
 
 
-	void destroyListener(EntityRef entity)
-	{
+	void destroyListener(EntityRef entity) override {
 		m_listener.entity = INVALID_ENTITY;
 		m_world.onComponentDestroyed(entity, LISTENER_TYPE, this);
 	}
 
 
-	void destroyAmbientSound(EntityRef entity)
-	{
+	void destroyAmbientSound(EntityRef entity) override {
 		m_ambient_sounds.erase(entity);
 		m_world.onComponentDestroyed(entity, AMBIENT_SOUND_TYPE, this);
 	}
