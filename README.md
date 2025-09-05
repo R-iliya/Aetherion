@@ -5,12 +5,11 @@ Aetherion studio is a 3D Game Engine and a fork of Lumix Engine
 ![authoor](https://img.shields.io/badge/By:-R._iliya-green)
 ![lumix](https://img.shields.io/badge/forked_from-Lumix_Engine-red)
 
-[![wiki](https://img.shields.io/badge/Brief_Limux_Wiki-4A2BE3)](https://github.com/nem0/LumixEngine/wiki) 
-[![Features](https://img.shields.io/badge/Features-4A2BE3)](https://github.com/nem0/LumixEngine/wiki/Features) 
-[![Getting started](https://img.shields.io/badge/Getting_Started-4A2BE3)](https://nem0.github.io/LumixEngine/getting_started.html) 
-[![Video](https://img.shields.io/badge/Video-4A2BE3)](https://www.youtube.com/watch?v=OjQKTA5ia2U) 
-[![Documentation](https://img.shields.io/badge/Lumix_Documentation-4A2BE3)](https://nem0.github.io/LumixEngine/) 
-[![Videos](https://img.shields.io/badge/Videos-4A2BE3)](https://www.youtube.com/channel/UCtjtIy0ldsq-9siM1Gm_rXg/videos) 
+[![Features](https://img.shields.io/badge/Lumix_Features-4A2BE3)](https://github.com/nem0/LumixEngine/wiki/Features) 
+[![Getting started](https://img.shields.io/badge/Getting_Started-4A2BE3)](https://github.com/R-iliya/Aetherion/blob/master/docs/getting_started.md) 
+[![Documentation](https://img.shields.io/badge/Documentation-4A2BE3)](https://github.com/R-iliya/Aetherion/tree/master/docs) 
+[![Video](https://img.shields.io/badge/Lumix's_Video-4A2BE3)](https://www.youtube.com/watch?v=OjQKTA5ia2U) 
+[![Videos](https://img.shields.io/badge/Lumix's_Videos-4A2BE3)](https://www.youtube.com/channel/UCtjtIy0ldsq-9siM1Gm_rXg/videos) 
 
 ## This engine is provided for educational, hobbyist, and commercial purposes. The authors take no responsibility for how this software is used, including misuse or illegal activities.
 ---------
