@@ -8,10 +8,9 @@ Aetherion studio is a 3D Game Engine and a fork of Lumix Engine
 ## This engine is provided for educational, hobbyist, and commercial purposes. The authors take no responsibility for how this software is used, including misuse or illegal activities.
 ---------
 
-
-* [Getting started](getting_started.md)
-* [Plugins](plugins.md)
-* [3rd party libraries](3rdparty.md)
+* [![Getting started](https://img.shields.io/badge/Getting_started-4A2BE3)](getting_started.md)
+* [![Plugins](https://img.shields.io/badge/Plugins-4A2BE3)](plugins.md)
+* [![3rd party libraries](https://img.shields.io/badge/3rd_party_libraries-4A2BE3)](3rdparty.md)
 
 # Engine
 * [File paths](file_paths.md)
