@@ -1,6 +1,6 @@
 # Non-programmers
 
-You can get aetherion Engine from [itch.io](https://mikulasflorek.itch.io/aetherion-engine) or download standalone zip file from [actions](https://github.com/nem0/aetherionEngine/actions/workflows/deploy.yml).
+You can get aetherion Engine from the https://github.com/R-iliya/Aetherion/.
 
 # Programmers - Windows
 
